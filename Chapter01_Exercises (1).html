@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 1 — Exercises &amp; Essays</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   CHAPTER 1 · STATISTICAL REASONING EXERCISES
+   Interactive learning module · single standalone file · no libraries
+   ───────────────────────────────────────────────────────────────────
+   COLOUR SYSTEM — approximately 80% royal blue and gold. Royal blue
+   leads navigation, headings, controls and most content surfaces; gold
+   marks emphasis and active states. Red and green are retained only as
+   functional feedback colours for errors and correct answers.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  /* --- seven blue/gold surfaces + two functional feedback tints --- */
+  --p1:#FBE3E0;  /* functional red → mistakes and warnings           */
+  --p2:#DCE6FF;  /* royal-blue tint → core concepts                  */
+  --p3:#E1F2E5;  /* functional green → correct answers and recaps     */
+  --p4:#C9D8FF;  /* royal-blue tint → key terms                      */
+  --p5:#FFF1B8;  /* gold tint → applied cases                        */
+  --p6:#EAF0FF;  /* pale royal blue → summaries and highlights       */
+  --p7:#D7E2FF;  /* blue-grey → references and tables                */
+  --p8:#FFE7A3;  /* warm gold → activities                           */
+  --p9:#F2F5FF;  /* light blue → neutral surfaces                    */
+
+  /* --- accessible ink variants --- */
+  --i1:#9F2D24; --i2:#173E8C; --i3:#23663A; --i4:#244A9B; --i5:#765500;
+  --i6:#254A94; --i7:#28477F; --i8:#765000; --i9:#3F4F72;
+
+  /* --- primary course colours --- */
+  --gold:#D4AF37;
+  --gold-ink:#765500;
+  --blue:#4169E1;
+  --blue-ink:#173E8C;
+  --blue-dark:#102A63;
+  --blue-grad:linear-gradient(135deg,#173E8C 0%,#4169E1 72%,#6F8DF0 100%);
+  --gold-grad:linear-gradient(135deg,#F1D675,#D4AF37);
+
+  --ink:#17233D;      /* body text            */
+  --ink-soft:#4D5E80; /* secondary text       */
+  --line:#C9D6F5;     /* blue hairline rules  */
+  --bg:#F4F7FF;       /* pale blue page       */
+  --radius:16px;
+  --shadow:0 1px 2px rgba(23,62,140,.07), 0 8px 24px rgba(23,62,140,.10);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:96px;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16.5px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+
+/* ── PROGRESS BAR ────────────────────────────────────────────────── */
+#progress{
+  position:fixed; top:0; left:0; height:5px; width:0%; z-index:200;
+  background:linear-gradient(90deg,var(--blue-dark),var(--blue),var(--gold));
+  transition:width .12s linear;
+}
+
+/* ── STICKY NAV ──────────────────────────────────────────────────── */
+nav#topnav{
+  position:sticky; top:0; z-index:150; background:rgba(16,42,99,.96);
+  backdrop-filter:blur(10px); border-bottom:3px solid var(--gold);
+}
+.navwrap{max-width:1080px; margin:0 auto; padding:9px 20px; display:flex; align-items:center; gap:14px;}
+.navbrand{font-weight:800; font-size:.86rem; letter-spacing:.4px; white-space:nowrap; color:#fff;}
+.navlinks{display:flex; gap:5px; overflow-x:auto; scrollbar-width:none; flex:1;}
+.navlinks::-webkit-scrollbar{display:none;}
+.navlinks a{
+  font-size:.78rem; font-weight:600; text-decoration:none; color:#DCE6FF;
+  padding:5px 11px; border-radius:999px; white-space:nowrap; transition:.15s;
+}
+.navlinks a:hover{background:rgba(255,255,255,.13); color:#fff;}
+.navlinks a.on{background:var(--gold-grad); color:#3F3000;}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────── */
+.wrap{max-width:1080px; margin:0 auto; padding:0 20px 100px;}
+section{scroll-margin-top:96px;}
+
+/* ── HERO ────────────────────────────────────────────────────────── */
+.hero{
+  margin:26px 0 34px; padding:38px 34px; border-radius:26px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(circle at 90% 6%,rgba(241,214,117,.48) 0,transparent 34%),
+    radial-gradient(circle at 4% 96%,rgba(111,141,240,.55) 0,transparent 44%),
+    var(--blue-grad);
+}
+.hero .eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.72);
+  padding:5px 15px; border-radius:999px; font-size:.74rem; font-weight:800;
+  letter-spacing:1.3px; text-transform:uppercase; color:var(--blue-ink);
+}
+.hero h1{
+  font-size:clamp(1.9rem,4.6vw,3.05rem); line-height:1.12; margin:16px 0 10px;
+  font-weight:850; letter-spacing:-.9px; color:#fff;
+}
+.hero .sub{font-size:1.04rem; max-width:62ch; color:#EEF3FF; margin:0 0 20px;}
+.chips{display:flex; flex-wrap:wrap; gap:9px;}
+.chip{
+  background:rgba(255,255,255,.82); border-radius:999px; padding:7px 15px;
+  font-size:.79rem; font-weight:700; color:var(--blue-ink); display:inline-flex; align-items:center; gap:7px;
+}
+
+/* ── HEADINGS ────────────────────────────────────────────────────── */
+h2.sec{
+  font-size:1.62rem; font-weight:840; letter-spacing:-.5px; margin:52px 0 6px;
+  display:flex; align-items:center; gap:13px; line-height:1.25;
+}
+h2.sec .n{
+  flex:none; width:46px; height:46px; border-radius:14px; display:grid; place-items:center;
+  font-size:1.02rem; font-weight:850; background:var(--blue); color:#fff;
+}
+h3.sub{font-size:1.13rem; font-weight:800; margin:30px 0 8px; color:var(--i2); letter-spacing:-.2px;}
+h4.mini{font-size:.79rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-soft); margin:22px 0 7px;}
+p{margin:0 0 14px;}
+.lead{font-size:1.08rem; color:#37414D;}
+
+/* ── CARDS / CALLOUTS ────────────────────────────────────────────── */
+.card{border-radius:var(--radius); padding:19px 22px; margin:18px 0; border:1px solid rgba(0,0,0,.05);}
+.card .hd{display:flex; align-items:center; gap:9px; font-weight:840; font-size:.87rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:9px;}
+.card p:last-child,.card ul:last-child,.card ol:last-child{margin-bottom:0;}
+.c-tldr{background:var(--p6);} .c-tldr .hd{color:var(--i6);}
+.c-concept{background:var(--p2);} .c-concept .hd{color:var(--i2);}
+.c-recap{background:var(--p3);} .c-recap .hd{color:var(--i3);}
+.c-term{background:var(--p4);} .c-term .hd{color:var(--i4);}
+.c-case{background:var(--p5);} .c-case .hd{color:var(--i5);}
+.c-warn{background:var(--p1);} .c-warn .hd{color:var(--i1);}
+.c-try{background:var(--p8);} .c-try .hd{color:var(--i8);}
+.c-ref{background:var(--p7);} .c-ref .hd{color:var(--i7);}
+.c-neutral{background:var(--p9);} .c-neutral .hd{color:var(--i9);}
+
+/* ── INLINE BITS ─────────────────────────────────────────────────── */
+.kt{background:var(--p4); color:var(--i4); font-weight:750; padding:1px 7px; border-radius:6px; white-space:nowrap;}
+.hl{background:var(--p6); padding:1px 5px; border-radius:5px; font-weight:650;}
+.no{color:var(--i1); font-weight:750;}
+.yes{color:var(--i3); font-weight:750;}
+code,.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.9em; background:var(--p9); padding:2px 6px; border-radius:5px;}
+.formula{
+  background:#fff; border:2px dashed var(--gold); border-radius:12px; padding:13px 18px;
+  margin:14px 0; text-align:center; font-family:"Cambria Math",Georgia,serif; font-size:1.06rem;
+}
+
+/* ── TABLES ──────────────────────────────────────────────────────── */
+.tbl-scroll{overflow-x:auto; margin:16px 0; border-radius:14px; border:1px solid var(--line);}
+table{width:100%; border-collapse:collapse; font-size:.92rem; background:#fff; min-width:560px;}
+th{background:var(--blue-ink); color:#fff; text-align:left; padding:11px 14px; font-weight:820; font-size:.78rem; letter-spacing:.7px; text-transform:uppercase;}
+td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top;}
+tbody tr:nth-child(even) td{background:#FAFBFC;}
+td.ctr,th.ctr{text-align:center;}
+
+/* ── ACCORDION ───────────────────────────────────────────────────── */
+details.acc{background:#fff; border:1px solid var(--line); border-radius:14px; margin:11px 0; overflow:hidden;}
+details.acc>summary{
+  cursor:pointer; padding:14px 18px; font-weight:750; list-style:none;
+  display:flex; align-items:center; gap:11px; transition:.15s;
+}
+details.acc>summary::-webkit-details-marker{display:none;}
+details.acc>summary::after{content:"＋"; margin-left:auto; font-weight:800; color:var(--ink-soft); font-size:1.1rem;}
+details.acc[open]>summary::after{content:"−";}
+details.acc>summary:hover{background:var(--p9);}
+details.acc[open]>summary{background:var(--p9); border-bottom:1px solid var(--line);}
+.acc-body{padding:16px 18px 18px;}
+.acc-body p:last-child,.acc-body ul:last-child{margin-bottom:0;}
+
+/* ── GRID ────────────────────────────────────────────────────────── */
+.grid{display:grid; gap:14px; margin:18px 0;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(255px,1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(195px,1fr));}
+.g4{grid-template-columns:repeat(auto-fit,minmax(158px,1fr));}
+.tile{border-radius:14px; padding:16px 17px; border:1px solid rgba(0,0,0,.05);}
+.tile .ic{font-size:1.5rem; line-height:1; display:block; margin-bottom:8px;}
+.tile b{display:block; font-size:.98rem; margin-bottom:4px;}
+.tile span.d{font-size:.85rem; color:#4A5461; line-height:1.55;}
+
+/* ── STEPS ───────────────────────────────────────────────────────── */
+.steps{counter-reset:s; padding:0; margin:16px 0; list-style:none;}
+.steps li{counter-increment:s; position:relative; padding-left:48px; margin-bottom:15px;}
+.steps li::before{
+  content:counter(s); position:absolute; left:0; top:-1px; width:33px; height:33px;
+  border-radius:11px; background:var(--p5); color:var(--i5);
+  display:grid; place-items:center; font-weight:850; font-size:.94rem;
+}
+
+/* ── QUIZ ────────────────────────────────────────────────────────── */
+.quizbar{
+  position:sticky; top:52px; z-index:90; background:#fff; border:1px solid var(--line);
+  border-radius:14px; padding:12px 17px; margin:18px 0; display:flex; flex-wrap:wrap;
+  align-items:center; gap:12px; box-shadow:var(--shadow);
+}
+.quizbar .score{font-weight:850; font-size:1rem;}
+.quizbar .meter{flex:1; min-width:130px; height:9px; background:var(--p9); border-radius:99px; overflow:hidden;}
+.quizbar .meter i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--gold),var(--blue)); transition:width .3s;}
+.btn{
+  border:none; border-radius:999px; padding:8px 17px; font-size:.83rem; font-weight:750;
+  cursor:pointer; font-family:inherit; transition:.15s; background:var(--p9); color:var(--ink);
+}
+.btn:hover{filter:brightness(.96);}
+.btn.primary{background:var(--blue); color:#fff;}
+.btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft);}
+
+.q{background:#fff; border:1px solid var(--line); border-radius:16px; padding:19px 21px; margin:14px 0;}
+.q .qhead{display:flex; gap:12px; align-items:flex-start; margin-bottom:13px;}
+.q .qnum{
+  flex:none; width:32px; height:32px; border-radius:10px; background:var(--p4); color:var(--i4);
+  display:grid; place-items:center; font-weight:850; font-size:.86rem;
+}
+.q .qtext{font-weight:620; line-height:1.6;}
+.q .qtext .scen{display:block; color:var(--ink-soft); font-weight:450; font-size:.93rem; margin-bottom:6px;}
+.q .bloom{
+  display:inline-block; font-size:.66rem; font-weight:850; letter-spacing:1px; text-transform:uppercase;
+  background:var(--p7); color:var(--i7); padding:3px 9px; border-radius:999px; margin-bottom:8px;
+}
+.opts{display:grid; gap:8px;}
+.opt{
+  display:flex; gap:11px; align-items:flex-start; padding:11px 14px; border-radius:11px;
+  border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.14s;
+  font-size:.94rem; line-height:1.5; text-align:left; font-family:inherit; color:var(--ink); width:100%;
+}
+.opt:hover:not(.locked){background:var(--p9); border-color:#CDD5DE;}
+.opt .ltr{
+  flex:none; width:24px; height:24px; border-radius:7px; background:var(--p9); color:var(--ink-soft);
+  display:grid; place-items:center; font-weight:850; font-size:.78rem;
+}
+.opt.correct{background:var(--p3); border-color:var(--i3);}
+.opt.correct .ltr{background:var(--i3); color:#fff;}
+.opt.wrong{background:var(--p1); border-color:var(--i1);}
+.opt.wrong .ltr{background:var(--i1); color:#fff;}
+.opt.locked{cursor:default;}
+.expl{margin-top:13px; border-radius:12px; padding:15px 17px; background:var(--p9); display:none;}
+.expl.show{display:block;}
+.expl .vt{font-weight:850; font-size:.85rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:7px; display:flex; align-items:center; gap:7px;}
+.expl .vt.ok{color:var(--i3);} .expl .vt.no{color:var(--i1);}
+.expl p{font-size:.93rem; margin:0 0 9px;}
+.expl .dis{margin-top:10px; padding-top:10px; border-top:1px dashed #CFD6DE;}
+.expl .dis div{font-size:.885rem; margin-bottom:5px; color:#404A56;}
+.expl .dis b{color:var(--i1);}
+
+/* ── ESSAY ───────────────────────────────────────────────────────── */
+.essay{background:#fff; border:1px solid var(--line); border-left:6px solid var(--p5); border-radius:16px; padding:21px 23px; margin:18px 0;}
+.essay .etag{font-size:.72rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--i5); margin-bottom:7px;}
+.essay .eq{font-size:1.04rem; font-weight:750; margin-bottom:11px; line-height:1.5;}
+.rubric{font-size:.88rem;}
+.rubric td,.rubric th{padding:8px 12px;}
+
+/* ── GLOSSARY ────────────────────────────────────────────────────── */
+.gloss{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); margin:16px 0;}
+.gitem{background:var(--p7); border-radius:12px; padding:13px 15px;}
+.gitem b{display:block; color:var(--i7); font-size:.95rem; margin-bottom:3px;}
+.gitem span{font-size:.87rem; color:#3E4854; line-height:1.55;}
+
+/* ── MISC ────────────────────────────────────────────────────────── */
+.palette{display:flex; gap:5px; margin:12px 0 0; flex-wrap:wrap;}
+.sw{width:38px; height:38px; border-radius:9px; border:1px solid rgba(0,0,0,.07);}
+hr.div{border:none; border-top:1px solid var(--line); margin:44px 0;}
+footer.end{margin-top:56px; padding:30px 0 0; border-top:1px solid var(--line); font-size:.86rem; color:var(--ink-soft);}
+.backtop{position:fixed; right:18px; bottom:18px; z-index:120; width:46px; height:46px; border-radius:50%;
+  background:var(--blue); color:#fff; border:2px solid var(--gold); font-size:1.15rem; cursor:pointer; box-shadow:var(--shadow); display:none;}
+.backtop.on{display:block;}
+
+@media(max-width:640px){
+  body{font-size:16px;}
+  .hero{padding:28px 22px; border-radius:20px;}
+  h2.sec{font-size:1.36rem;}
+  h2.sec .n{width:38px; height:38px; font-size:.9rem;}
+  .card{padding:16px 17px;}
+  .q{padding:16px 15px;}
+  .quizbar{top:50px;}
+}
+/* ── PRINT / PDF ─────────────────────────────────────────────────
+   Turns the interactive module into a static answer-key workbook:
+   every explanation, model answer and rubric is forced open, all
+   chrome is stripped, and nothing that must be read together is
+   allowed to break across a page.                                  */
+@page{ size:Letter; margin:14mm 12mm 15mm; }
+
+@media print{
+  /* strip interactive chrome */
+  nav#topnav,#progress,.backtop,.quizbar{ display:none !important; }
+
+  /* force every hidden layer open */
+  .expl{ display:block !important; }
+  details.acc{ page-break-inside:avoid; }
+  details.acc>summary::after{ content:"" !important; }
+  details.acc>summary{ background:var(--p9) !important; border-bottom:1px solid var(--line); }
+  details.acc:not([open])>.acc-body{ display:block !important; }
+
+  /* keep tint fills — they carry the semantic colour coding */
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+
+  body{ font-size:10pt; line-height:1.5; background:#fff; }
+  .wrap{ max-width:none; padding:0 0 8pt; }
+  html{ scroll-behavior:auto; }
+
+  /* never split a unit of meaning across pages */
+  .card,.essay,.tile,.gitem,.formula,.acc-body,
+  .hero,.opts,.expl,.steps li{ page-break-inside:avoid; break-inside:avoid; }
+  /* Long reference tables must be allowed to flow. This chapter has several that
+     exceed a full page (the formula card, the case model answers); forcing them
+     whole strands the page before each one. Rows stay intact and the header
+     repeats on every page the table spans. */
+  .tbl-scroll{ break-inside:auto; page-break-inside:auto; }
+  /* An item may split, but only at the seam between its options and its
+     explanation — the stem+options block and the explanation each stay whole. */
+  .q{ break-inside:auto; }
+  .q .qhead{ break-after:avoid; }
+  /* Essay model answers and rubrics run close to a full page; keeping them
+     atomic would strand half a page before each. Let them flow, but keep
+     their internal tables and paragraphs whole. */
+  .essay details.acc, .essay .acc-body{ break-inside:auto; page-break-inside:auto; }
+  .essay details.acc>summary{ break-after:avoid; }
+  .essay .acc-body p, .essay .acc-body li{ break-inside:avoid; }
+  h2.sec,h3.sub,h4.mini{ page-break-after:avoid; break-after:avoid; }
+  tr,thead{ page-break-inside:avoid; }
+  thead{ display:table-header-group; }
+
+  /* major sections start a fresh page */
+  #cheat,#hots,#drill,#case{ page-break-before:always; }
+  hr.div{ display:none; }
+
+  /* tighten spacing that only exists for on-screen scrolling */
+  h2.sec{ margin:20pt 0 4pt; font-size:15pt; }
+  h3.sub{ margin:14pt 0 4pt; }
+  .card,.q,.essay{ margin:8pt 0; }
+  section{ scroll-margin-top:0; }
+  table{ min-width:0; font-size:8.6pt; }
+  .tbl-scroll{ overflow:visible; }
+  .grid{ gap:8pt; }
+
+  /* Quiz items are the bulk of the page count. Because each item is kept
+     whole (page-break-inside:avoid), an item taller than half a page wastes
+     the remainder. These densities are tuned so two reinforcement items fit
+     per page while the item stays comfortably readable. */
+  .q{ padding:11px 13px; margin:6pt 0; }
+  .q .qhead{ margin-bottom:8px; }
+  .q .qnum{ width:26px; height:26px; font-size:.78rem; }
+  .q .qtext{ font-size:9.5pt; line-height:1.45; }
+  .q .qtext .scen{ font-size:9pt; margin-bottom:4px; }
+  .q .bloom{ font-size:.62rem; padding:2px 7px; margin-bottom:5px; }
+  .opts{ gap:5px; }
+  .expl{ margin-top:9px; padding:10px 12px; }
+  .expl .vt{ font-size:.78rem; margin-bottom:5px; }
+  .expl p{ font-size:8.9pt; line-height:1.45; margin-bottom:6px; }
+  .expl .dis{ margin-top:7px; padding-top:7px; }
+  .expl .dis div{ font-size:8.5pt; line-height:1.42; margin-bottom:4px; }
+
+
+  figure.fig, .figcard, .figpair, .calc, pre.term{ page-break-inside:avoid; break-inside:avoid; }
+  .figpair.side{ grid-template-columns:1fr 1fr; }
+  figure.fig svg, .figcard svg{ max-height:none; }
+
+  /* answer key styling: correct option stays clearly marked */
+  .opt{ border-width:1px; padding:5px 10px; font-size:8.9pt; line-height:1.4; }
+  .opt .ltr{ width:20px; height:20px; font-size:.7rem; }
+  .opt.correct{ background:var(--p3) !important; border-color:var(--i3) !important; }
+  .opt.correct .ltr{ background:var(--i3) !important; color:#fff !important; }
+}
+
+/* ── CHART SERIES PALETTE ────────────────────────────────────────
+   Blue-led course palette with gold contrast. Direct labels should be
+   retained whenever these colours are used in a data figure.          */
+:root{
+  --s1:#4169E1; --s2:#D4AF37; --s3:#173E8C; --s4:#6F8DF0; --s5:#9B7A12;
+}
+
+/* ── FIGURES ─────────────────────────────────────────────────────── */
+figure.fig{ margin:18px 0; }
+figure.fig svg{ border:1px solid var(--line); border-radius:14px; background:#fff; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:7px; line-height:1.55; }
+figcaption b{ color:var(--ink); }
+.figpair{ display:grid; gap:14px; grid-template-columns:1fr; margin:18px 0; }
+@media(min-width:900px){ .figpair.side{ grid-template-columns:1fr 1fr; } }
+.figcard{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; }
+.figcard>.tag{
+  font-size:.74rem; font-weight:850; letter-spacing:1.1px; text-transform:uppercase;
+  padding:7px 13px; display:flex; align-items:center; gap:7px;
+}
+.figcard.bad>.tag{ background:var(--p1); color:var(--i1); }
+.figcard.good>.tag{ background:var(--p3); color:var(--i3); }
+.figcard svg{ border:none; border-radius:0; }
+.figcard>.note{ font-size:.83rem; color:#404A56; padding:10px 13px 12px; line-height:1.55; border-top:1px solid var(--line); }
+.figcard>.note b{ color:var(--ink); }
+.swatchrow{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:10px 0; }
+.swatchrow .s{ width:30px; height:30px; border-radius:8px; border:1px solid rgba(0,0,0,.08); }
+.swatchrow .arrow{ color:var(--ink-soft); font-weight:800; }
+pre.term{
+  background:#1D2530; color:#D8DEE6; border-radius:12px; padding:13px 15px; margin:12px 0;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.74rem;
+  line-height:1.65; overflow-x:auto; white-space:pre;
+}
+pre.term .pass{ color:#8FD68F; } pre.term .fail{ color:#FF9A94; } pre.term .warn{ color:#F3D07A; }
+.calc{
+  background:#fff; border:1px solid var(--line); border-left:5px solid var(--gold);
+  border-radius:12px; padding:14px 17px; margin:14px 0;
+  font-family:"Cambria Math",Georgia,serif; font-size:.97rem; line-height:1.85;
+}
+.calc .step{ display:block; }
+.calc .res{ font-weight:800; color:var(--i2); font-family:inherit; }
+.calc .lbl{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:.74rem; font-weight:850; letter-spacing:.9px; text-transform:uppercase;
+  color:var(--ink-soft); display:block; margin-bottom:4px; }
+
+/* ── Z-TABLE ─────────────────────────────────────────────────────── */
+table.ztab{ font-size:.68rem; min-width:640px; font-variant-numeric:tabular-nums; }
+table.ztab th{ font-size:.62rem; padding:5px 3px; text-align:center; letter-spacing:0; }
+table.ztab td{ padding:3.5px 3px; text-align:center; border-color:#EDF0F4; }
+table.ztab td.zh{ background:var(--p4); color:var(--i4); font-weight:850; }
+table.ztab td.hi{ background:var(--p6); font-weight:800; }
+table.ztab tbody tr:nth-child(even) td{ background:#FAFBFC; }
+table.ztab tbody tr:nth-child(even) td.zh{ background:var(--p4); }
+table.ztab tbody tr:nth-child(even) td.hi{ background:var(--p6); }
+
+/* ── DESIGN / CONCEPT CARDS ──────────────────────────────────────── */
+.dist{ border:1px solid var(--line); border-radius:16px; overflow:hidden; margin:14px 0; background:#fff; }
+.dist>.dh{ padding:9px 14px; font-weight:850; font-size:.92rem; display:flex; align-items:center; gap:9px; }
+.dist>.db{ padding:13px 15px; }
+.dist>.db p:last-child{ margin-bottom:0; }
+.dist.binom>.dh{ background:var(--p2); color:var(--i2); }
+.dist.pois>.dh{ background:var(--p3); color:var(--i3); }
+.dist.norm>.dh{ background:var(--p4); color:var(--i4); }
+.dist.warn>.dh{ background:var(--p1); color:var(--i1); }
+
+/* ── THE THREE-DISTRIBUTION DISAMBIGUATION STRIP ─────────────────── */
+.three{ display:grid; gap:0; grid-template-columns:1fr; border:1px solid var(--line);
+  border-radius:16px; overflow:hidden; margin:16px 0; background:#fff; }
+@media(min-width:760px){ .three{ grid-template-columns:repeat(3,1fr); } }
+.three>div{ padding:14px 16px; border-top:1px solid var(--line); }
+@media(min-width:760px){ .three>div{ border-top:none; border-left:1px solid var(--line); }
+  .three>div:first-child{ border-left:none; } }
+.three .tt{ font-weight:850; font-size:.9rem; margin-bottom:6px; display:flex; align-items:center; gap:7px; }
+.three .tf{ font-family:"Cambria Math",Georgia,serif; background:var(--p9); border-radius:8px;
+  padding:6px 9px; margin:8px 0; font-size:.92rem; text-align:center; }
+.three p{ font-size:.87rem; margin:0; color:#414B57; line-height:1.55; }
+
+/* ── TWO-VIEW TAB BAR (Lecture / Exercises) ─────────────────────── */
+.navtabs{ display:flex; gap:7px; margin-left:auto; flex:none; }
+.navtabs a{
+  display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  font-size:.8rem; font-weight:800; letter-spacing:.2px; padding:7px 15px;
+  border-radius:999px; color:var(--blue-ink); background:var(--p2);
+  border:1px solid transparent; white-space:nowrap; transition:.15s;
+}
+.navtabs a:hover{ filter:brightness(.97); }
+.navtabs a.active{ background:var(--gold-grad); color:#3A2D06; box-shadow:0 1px 4px rgba(120,90,10,.3); }
+@media(max-width:720px){ .navtabs a .lbl2{ display:none; } }
+@media(max-width:640px){ .navtabs a{ padding:6px 11px; font-size:.74rem; } }
+
+/* ── PER-TOPIC VIDEO CARD ───────────────────────────────────────── */
+.vidbox{
+  display:flex; gap:14px; align-items:center; text-decoration:none; color:inherit;
+  background:#fff; border:1px solid var(--line); border-left:5px solid var(--gold);
+  border-radius:13px; padding:12px 16px; margin:16px 0; transition:.15s;
+}
+.vidbox:hover{ background:var(--p6); box-shadow:var(--shadow); }
+.vidbox .play{
+  flex:none; width:46px; height:46px; border-radius:12px; background:#E12D2D;
+  display:grid; place-items:center; color:#fff; font-size:1.15rem;
+}
+.vidbox .vmeta{ min-width:0; }
+.vidbox .vk{ font-size:.68rem; font-weight:850; letter-spacing:1.1px; text-transform:uppercase; color:var(--gold-ink); display:block; margin-bottom:2px; }
+.vidbox .vt{ font-weight:750; font-size:.97rem; line-height:1.35; display:block; color:var(--ink); }
+.vidbox .vch{ font-size:.83rem; color:var(--ink-soft); }
+.vidbox .go{ margin-left:auto; flex:none; color:var(--ink-soft); font-weight:800; font-size:1.1rem; }
+@media(max-width:640px){ .vidbox .go{ display:none; } }
+@media print{ .vidbox,.navtabs{ display:none !important; } }
+
+/* ── static MCQ options + answer dropdowns (exercises pages) ─────── */
+.optrow{display:flex;gap:11px;align-items:flex-start;padding:9px 13px;border:1.5px solid var(--line);
+  border-radius:11px;margin:7px 0;background:#fff;font-size:.95rem;line-height:1.5;}
+.optrow .ltr{flex:none;width:24px;height:24px;border-radius:7px;background:var(--p9);color:var(--ink-soft);
+  display:grid;place-items:center;font-weight:850;font-size:.78rem;}
+.q .opts{display:block;margin-top:4px;}
+details.acc.ans{margin:12px 0 2px;}
+details.acc.ans>summary{color:var(--blue-ink);font-weight:800;}
+.ansbody .key,.acc-body .key{font-weight:850;color:var(--i3);}
+.exbar{position:sticky;top:52px;z-index:90;background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:11px 16px;margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:var(--shadow);}
+.exbar .lbl{font-weight:850;}
+@media print{.exbar{display:none!important;} details.acc.ans>.acc-body{display:block!important;}}
+
+</style>
+</head>
+<body data-palette="#4169E1,#D4AF37,#173E8C,#6F8DF0,#9B7A12">
+<nav id="topnav"><div class="navwrap"><span class="navbrand">✍️ CH 1 · EXERCISES &amp; ESSAYS</span><div class="navlinks"><a href="#exstart" class="on">Overview</a><a href="#reinf">⚡ Reinforcement</a><a href="#case">✍️ Case &amp; Essays</a></div><div class="navtabs"><a href="Chapter01.html">📖 <span class="lbl2">Lecture &amp; </span>Notes</a><a href="Chapter01_Exercises.html" class="active">✍️ <span class="lbl2">Exercises &amp; </span>Essays</a></div></div></nav>
+<div class="wrap">
+<section id="exstart"><div class="hero"><span class="eyebrow">✍️ Chapter 1 · Practice &amp; Assessment</span><h1>Statistical Reasoning<br>Exercises &amp; Essays</h1><p class="sub">Twenty higher-order multiple-choice items test statistical reasoning, followed by an applied-case essay assessment. For each question, decide on your answer first, then open the dropdown to check it and read a brief explanation. The full teaching material is on the <a href="Chapter01.html"><b>Lecture &amp; Notes</b></a> tab.</p><div class="chips"><span class="chip">⚡ 20 higher-order items</span><span class="chip">🧮 1 applied case</span><span class="chip">✍️ 3 essays</span></div></div></section>
+<section id="reinf"><hr class="div"><h2 class="sec"><span class="n" style="background:var(--gold-grad); color:#3A2D06;">⚡</span>Part I · Reinforcement Exercises — Higher-Order Thinking</h2><p class="lead">Twenty multiple-choice items. Most turn on a judgement, not a formula. Choose your answer, then use the dropdown to check it and read why.</p><div class="exbar"><span class="lbl">20 items</span><button class="btn primary" onclick="exAll(true)">Reveal all answers</button><button class="btn ghost" onclick="exAll(false)">Hide all</button></div><div class="q"><div class="qhead"><div class="qnum">1</div><div class="qtext"><span class="scen">A music-streaming service wants to report how satisfied all of its Philippine subscribers are. It emails a satisfaction survey only to subscribers who logged in during the previous seven days. Twelve per cent of those emailed respond.</span>Which statement identifies the deepest flaw in this design?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The response rate is too low for the results to be statistically valid.</span></div><div class="optrow"><span class="ltr">B</span><span>The sampling frame excludes inactive subscribers, who are systematically more likely to be dissatisfied.</span></div><div class="optrow"><span class="ltr">C</span><span>Email surveys produce less reliable answers than telephone surveys.</span></div><div class="optrow"><span class="ltr">D</span><span>The company failed to disclose the achieved sample size.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> The sampling frame excludes inactive subscribers, who are systematically more likely to be dissatisfied.</p><p style="margin:0">The frame — subscribers active in the past seven days — is not the population the company wants to describe. Inactivity is itself a symptom of dissatisfaction, so the people most likely to drag the average down were structurally excluded before a single response arrived. This is coverage error, and it produces bias, not noise. Bias is deeper than any of the other problems listed because no amount of additional data corrects it.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">2</div><div class="qtext"><span class="scen">An HR director writes: “Our 1,842 employees have a mean tenure of 4.7 years. From a random sample of 200 of them, mean engagement score is 3.9.”</span>How should these two numbers be classified?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>4.7 is a statistic and 3.9 is a parameter.</span></div><div class="optrow"><span class="ltr">B</span><span>Both 4.7 and 3.9 are statistics.</span></div><div class="optrow"><span class="ltr">C</span><span>Both 4.7 and 3.9 are parameters.</span></div><div class="optrow"><span class="ltr">D</span><span>4.7 is a parameter and 3.9 is a statistic.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> 4.7 is a parameter and 3.9 is a statistic.</p><p style="margin:0">Tenure was computed from all 1,842 employees — that is a census of the population, so 4.7 is a parameter and there is nothing to infer about it. Engagement was computed from a random sample of 200, so 3.9 is a statistic that estimates an unknown population parameter. The classification depends entirely on whether the number came from the whole group or a subset, not on what the number measures.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">3</div><div class="qtext"><span class="scen">A loyalty programme codes tiers as Bronze = 1, Silver = 2, Gold = 3, Platinum = 4. An analyst reports: “Mean customer tier rose from 2.1 to 2.4, so customers moved up 0.3 tiers on average.”</span>What is the strongest objection to this analysis?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The analyst should have used the mode, because the mode is always the correct measure for customer data.</span></div><div class="optrow"><span class="ltr">B</span><span>Four categories is too few for a mean to be computed.</span></div><div class="optrow"><span class="ltr">C</span><span>The mean should have been weighted by each customer’s spending.</span></div><div class="optrow"><span class="ltr">D</span><span>Tier is ordinal: the intervals between tiers are not equal, so a change of 0.3 has no consistent meaning.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Tier is ordinal: the intervals between tiers are not equal, so a change of 0.3 has no consistent meaning.</p><p style="margin:0">The codes 1, 2, 3, 4 are rank labels, not measured quantities. The conceptual distance from Bronze to Silver is almost certainly not the same as the distance from Gold to Platinum — those thresholds are set by spend requirements that are typically far apart at the top. Averaging the codes silently invents an equal-interval property nobody measured, so “0.3 tiers” does not correspond to any real quantity.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">4</div><div class="qtext"><span class="scen">An HR consultancy publishes an Engagement Index standardised so that the national average is 100 with a standard deviation of 15. Company A scores 120; Company B scores 60.</span>Which claim is defensible given the measurement level of this index?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Company A scored 60 index points above Company B.</span></div><div class="optrow"><span class="ltr">B</span><span>Company B has zero engagement.</span></div><div class="optrow"><span class="ltr">C</span><span>Company A is 100% more engaged than Company B.</span></div><div class="optrow"><span class="ltr">D</span><span>Company A is twice as engaged as Company B.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Company A scored 60 index points above Company B.</p><p style="margin:0">A standardised index anchored to an arbitrary average is interval-level: the gaps between points are treated as equal, but zero is a construction of the scoring formula, not an absence of engagement. Interval data makes <em>differences</em> meaningful — and permits means, which are built from differences about a centre — so a statement about the 60-point gap is exactly what the scale licenses. Note that summing two index scores would be just as meaningless as dividing them.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">5</div><div class="qtext"><span class="scen">An e-commerce marketplace runs an A/B test on checkout-button colour with 12 million users, split evenly between the two variants. Variant B converts at 2.41%, variant A at 2.38%. The test returns p &lt; 0.001.</span>Which is the most professionally sound interpretation?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The result is highly significant, so the effect on conversion is large.</span></div><div class="optrow"><span class="ltr">B</span><span>The evidence that a real difference exists is strong, but a 0.03-percentage-point gap must be weighed against implementation and maintenance cost before acting.</span></div><div class="optrow"><span class="ltr">C</span><span>The result is invalid because the observed difference is too small to be real.</span></div><div class="optrow"><span class="ltr">D</span><span>Because p &lt; 0.001, there is a 99.9% probability that variant B is genuinely better.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> The evidence that a real difference exists is strong, but a 0.03-percentage-point gap must be weighed against implementation and maintenance cost before acting.</p><p style="margin:0">This is the classic large-sample trap. With six million users per arm, the test has enough power to detect differences far smaller than anything worth acting on. The p-value speaks to the strength of the evidence that some difference exists; it says nothing about magnitude. The professional move is to separate the two questions and evaluate the second using subject-matter judgement and decision criteria.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">6</div><div class="qtext"><span class="scen">A gym chain finds that members who use its mobile app attend 40% more sessions than members who do not. Management concludes that the app drives attendance and plans to promote it heavily.</span>Which consideration most undermines management’s conclusion?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>App usage is a nominal variable and therefore cannot be analysed.</span></div><div class="optrow"><span class="ltr">B</span><span>A 40% difference is not statistically significant.</span></div><div class="optrow"><span class="ltr">C</span><span>Members who are already highly motivated are both more likely to install the app and more likely to attend.</span></div><div class="optrow"><span class="ltr">D</span><span>Attendance should have been measured in minutes rather than sessions.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> Members who are already highly motivated are both more likely to install the app and more likely to attend.</p><p style="margin:0">This is self-selection, a confounder. Motivation causes both app adoption and attendance, manufacturing an association between them that has no causal content. The app did not create these members’ commitment; their commitment led them to install the app. Establishing a causal effect would require randomising who receives the app, or at minimum comparing matched adopters and non-adopters.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">7</div><div class="qtext"><span class="scen">A courier company’s system logs two fields for every trip: the delivery duration, recorded in whole minutes, and the number of parcels carried.</span>How should these variables be classified?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Both are continuous.</span></div><div class="optrow"><span class="ltr">B</span><span>Delivery duration is discrete because it is recorded in whole minutes.</span></div><div class="optrow"><span class="ltr">C</span><span>Both are discrete.</span></div><div class="optrow"><span class="ltr">D</span><span>Delivery duration is continuous in nature although recorded discretely; parcels per trip is discrete.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Delivery duration is continuous in nature although recorded discretely; parcels per trip is discrete.</p><p style="margin:0">Classification follows the nature of the variable, not the precision of the recording instrument. Time genuinely can take any value in an interval — a delivery can take 14.3 minutes — so duration is continuous even though the log rounds it. Parcels, by contrast, cannot take intermediate values: 3.5 parcels does not exist. The rounding of duration limits how precisely you may speak, but does not change what kind of variable it is.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">8</div><div class="qtext"><span class="scen">A quarterly retail report contains four sentences:<br>(i) “We recorded 41,209 transactions in Q3.”<br>(ii) “Median basket size across those transactions was ₱612.”<br>(iii) “Branch 12 had the highest transaction count.”<br>(iv) “Filipino shoppers prefer mid-range price points.”</span>Which sentence crosses from description into inference?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Sentence (ii)</span></div><div class="optrow"><span class="ltr">B</span><span>Sentence (iii)</span></div><div class="optrow"><span class="ltr">C</span><span>Sentence (iv)</span></div><div class="optrow"><span class="ltr">D</span><span>Sentence (i)</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> Sentence (iv)</p><p style="margin:0">Sentences (i) through (iii) are all statements about records the company already holds — they can be verified by re-reading the database and cannot be “wrong” except through arithmetic error. Sentence (iv) names a group, Filipino shoppers, that was never sampled. It extends a fact about this retailer’s transactions into a claim about a national population, which is precisely the inferential move.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">9</div><div class="qtext"><span class="scen">A telecommunications analyst frames the question: “Holding subscriber tenure and plan type constant, how much does each additional support ticket change the probability that a subscriber churns?”</span>Which level of the research-question hierarchy does this represent?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Describe</span></div><div class="optrow"><span class="ltr">B</span><span>Compare</span></div><div class="optrow"><span class="ltr">C</span><span>Associate</span></div><div class="optrow"><span class="ltr">D</span><span>Predict / explain</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Predict / explain</p><p style="margin:0">Two features place this at the highest level. First, it asks for the effect of one variable while holding others constant, which is the definition of a partial effect and requires a model. Second, it asks how much the outcome changes per unit of the predictor, which is a prediction statement rather than a statement that two things merely move together. This is the territory of multiple regression.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">10</div><div class="qtext">Which is the strongest justification for treating a satisfaction measure as interval-level data?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The scale has five points, and five-point scales are interval by convention.</span></div><div class="optrow"><span class="ltr">B</span><span>The statistical software computes a mean without producing an error.</span></div><div class="optrow"><span class="ltr">C</span><span>Treating satisfaction scales as interval is standard practice throughout the industry.</span></div><div class="optrow"><span class="ltr">D</span><span>The measure is a composite of seven related items, the response options are verbally and visually equally spaced, and the assumption is declared as a limitation in the methodology.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> The measure is a composite of seven related items, the response options are verbally and visually equally spaced, and the assumption is declared as a limitation in the methodology.</p><p style="margin:0">This option supplies the three things that make the assumption defensible rather than merely common. A multi-item composite behaves far more like an interval variable than any single item does; equally spaced anchors make it plausible that respondents perceive equal steps; and declaring the assumption converts a hidden weakness into an acknowledged limitation that readers can evaluate for themselves. The professional standard is not avoiding the assumption — it is making it visible.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">11</div><div class="qtext">Under the Data Privacy Act of 2012 (R.A. 10173), which of the following research practices is compliant?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Telling respondents at the point of collection exactly what data will be gathered, for what purpose, and who will access it — and collecting only the fields the research question requires.</span></div><div class="optrow"><span class="ltr">B</span><span>Publishing results described as anonymous that include each respondent’s barangay, employer and exact age.</span></div><div class="optrow"><span class="ltr">C</span><span>Collecting respondents’ birthdates because they may prove useful in a future study.</span></div><div class="optrow"><span class="ltr">D</span><span>Reusing a customer-service dataset to build a marketing model without notifying the individuals concerned.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Telling respondents at the point of collection exactly what data will be gathered, for what purpose, and who will access it — and collecting only the fields the research question requires.</p><p style="margin:0">This option satisfies all three general data privacy principles of the Act at once: <b>transparency</b> (the respondent knows what is collected, why, and who will access it), <b>legitimate purpose</b>, and <b>proportionality</b>. Transparency is also what makes valid consent possible, since a person who is not told what is being collected cannot meaningfully agree to it. Each principle does separate work — informing people is not enough if you also over-collect, and collecting little is not enough if people were never told why.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">12</div><div class="qtext"><span class="scen">A researcher replaces every student’s name with a code from S001 to S420 and stores the name-to-code key in a separate, password-protected file.</span>How should this dataset be characterised?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Pseudonymised, and therefore still personal data fully within the scope of the Act.</span></div><div class="optrow"><span class="ltr">B</span><span>Anonymised, because the key file is protected by a password.</span></div><div class="optrow"><span class="ltr">C</span><span>Outside the Act entirely, because the Act does not apply to academic research.</span></div><div class="optrow"><span class="ltr">D</span><span>Anonymised, and therefore outside the scope of the Data Privacy Act.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Pseudonymised, and therefore still personal data fully within the scope of the Act.</p><p style="margin:0">Anonymisation requires that re-identification be genuinely impossible for anyone. Here a key exists, so re-identification is not merely possible but straightforward for whoever holds it. The dataset is pseudonymised — a good security practice, and a required one, but it does not remove the data from the privacy regime. Only destroying the key and confirming that the remaining fields cannot triangulate an individual would achieve anonymisation.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">13</div><div class="qtext"><span class="scen">A researcher studying the income of jeepney drivers posts a survey link in three Facebook groups for transport operators and receives 240 responses.</span>What is the sampling frame in this study?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>All jeepney drivers in the Philippines.</span></div><div class="optrow"><span class="ltr">B</span><span>The 240 drivers who responded.</span></div><div class="optrow"><span class="ltr">C</span><span>Members of those three Facebook groups.</span></div><div class="optrow"><span class="ltr">D</span><span>All Facebook users in the Philippines.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> Members of those three Facebook groups.</p><p style="margin:0">The frame is the list or mechanism from which units could actually be drawn — here, the membership of those three groups. Everything upstream of that is aspiration and everything downstream is result. Naming the frame precisely is what exposes the study’s limits: drivers without Facebook, or without those group memberships, had exactly zero probability of selection. A <em>second</em> and separate problem sits inside the frame: whether a member ever saw the post was decided by the platform’s feed algorithm, so selection probabilities within the frame are unknown and unequal too.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">14</div><div class="qtext"><span class="scen">A bank finds that its financial-literacy training increases clients’ savings balances. Further analysis shows the effect operates because trainees gain confidence in budgeting, and that the effect is substantially stronger among clients under 30 than among older clients.</span>How should confidence and age group be classified?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Both confidence and age group are confounders.</span></div><div class="optrow"><span class="ltr">B</span><span>Confidence is a moderator; age group is a mediator.</span></div><div class="optrow"><span class="ltr">C</span><span>Confidence is a mediator; age group is a moderator.</span></div><div class="optrow"><span class="ltr">D</span><span>Both confidence and age group are mediators.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> Confidence is a mediator; age group is a moderator.</p><p style="margin:0">Confidence sits on the causal path: training raises confidence, and confidence raises savings. It carries the effect, which makes it a mediator and answers the question “how does this work?” Age group sits beside the path and changes its strength — the same training produces a bigger effect for younger clients. That makes it a moderator, answering “for whom does this work?”</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">15</div><div class="qtext"><span class="scen">A national magazine studies the 50 fastest-growing Philippine startups of the past decade, finds that most hired aggressively in their first year, and concludes that aggressive early hiring causes rapid growth.</span>What is the strongest methodological objection?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Startups that hired aggressively and then failed are absent from the sample, so the relationship between hiring and growth cannot be established.</span></div><div class="optrow"><span class="ltr">B</span><span>The study should have covered a longer time horizon than a decade.</span></div><div class="optrow"><span class="ltr">C</span><span>A sample of 50 is too small to support any conclusion.</span></div><div class="optrow"><span class="ltr">D</span><span>Growth should have been measured by revenue rather than by headcount.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Startups that hired aggressively and then failed are absent from the sample, so the relationship between hiring and growth cannot be established.</p><p style="margin:0">This is survivorship bias in its purest form. The sample was selected on the outcome — only fast growers were studied — so it is structurally incapable of revealing how often aggressive hiring precedes failure. To make the claim, the magazine would need to start from a cohort of startups defined at founding and follow all of them, including the ones that no longer exist to be interviewed.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">16</div><div class="qtext"><span class="scen">A company reports that a new sales-training programme raised close rates from 22% to 26% overall. Broken out by experience level, junior representatives fell from 18% to 17% and senior representatives fell from 34% to 33%. Substantially more senior representatives were assigned to the trained group.</span>Which statement is most accurate?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Both the overall gain and the within-group declines are arithmetically correct; the aggregate improvement is produced by the composition of the groups, so the training cannot be credited.</span></div><div class="optrow"><span class="ltr">B</span><span>The within-group figures must be wrong, because they contradict the total.</span></div><div class="optrow"><span class="ltr">C</span><span>The training worked for the company as a whole, even though it did not work for individual representatives.</span></div><div class="optrow"><span class="ltr">D</span><span>The overall figure must contain a calculation error.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Both the overall gain and the within-group declines are arithmetically correct; the aggregate improvement is produced by the composition of the groups, so the training cannot be credited.</p><p style="margin:0">This is Simpson’s paradox. Because seniors close at a much higher base rate than juniors, loading the trained group with seniors lifts its overall average even though every individual subgroup got worse. Both sets of numbers are true simultaneously — the reversal comes from group composition, not from arithmetic. The correct reading is that the training is associated with a decline in every group examined.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">17</div><div class="qtext"><span class="scen">A slide presents quarterly revenue as a bar chart with the vertical axis beginning at ₱9.8M. The bars read 9.9, 10.0, 10.1 and 10.2 million pesos. Visually the final bar appears roughly four times the height of the first. The headline reads: “Revenue quadrupled.”</span>What is the best critique of this slide?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Bar charts should never be used to display time series.</span></div><div class="optrow"><span class="ltr">B</span><span>The truncated axis converts a 3% increase into an apparent 300% increase, and the headline reads visual height as though it were quantity.</span></div><div class="optrow"><span class="ltr">C</span><span>The chart should have used a logarithmic vertical scale.</span></div><div class="optrow"><span class="ltr">D</span><span>Four quarters is too few data points to justify plotting a chart.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> The truncated axis converts a 3% increase into an apparent 300% increase, and the headline reads visual height as though it were quantity.</p><p style="margin:0">Two failures compound here. The truncated baseline exaggerates a genuine but tiny 3% rise into a dramatic visual difference — the bar heights encode distance from ₱9.8M, not revenue. The headline then compounds the distortion by describing the picture rather than the data. Bar charts encode quantity by length, so their baseline must be zero; this is not a stylistic preference but a requirement of the encoding.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">18</div><div class="qtext"><span class="scen">An analyst tests a promotional campaign’s effect across 22 customer subgroups. One subgroup — males aged 35 to 44 in Region IV-A — returns p = 0.04. The final report presents this subgroup finding as though it had been the study’s stated hypothesis from the outset.</span>Which description of the problem is most complete?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Neither applies, because subgroup analysis is standard practice in marketing research.</span></div><div class="optrow"><span class="ltr">B</span><span>This is p-hacking only.</span></div><div class="optrow"><span class="ltr">C</span><span>This is HARKing only.</span></div><div class="optrow"><span class="ltr">D</span><span>This is both: many subgroups were tested until one reached significance (p-hacking), and the result was then presented as if it had been predicted in advance (HARKing).</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> This is both: many subgroups were tested until one reached significance (p-hacking), and the result was then presented as if it had been predicted in advance (HARKing).</p><p style="margin:0">Two distinct offences occurred in sequence. Testing 22 subgroups at a 5% threshold means roughly one false positive is expected by chance alone even if the campaign did nothing at all — that is the p-hacking. Rewriting the narrative so the surviving subgroup appears to have been the original hypothesis is the HARKing, and it conceals the 21 tests that failed. Either alone would be misconduct; together they make the reported p-value uninterpretable.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">19</div><div class="qtext"><span class="scen">A retailer randomly assigns 40 of its 80 branches to receive a new point-of-sale system and compares mean checkout time in the two sets of branches after three months.</span>Which claim does this design legitimately license?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Only an association, because no customer survey was conducted.</span></div><div class="optrow"><span class="ltr">B</span><span>A prediction of checkout times for all retailers in the Philippines.</span></div><div class="optrow"><span class="ltr">C</span><span>No claim at all, because branches rather than individual customers were assigned.</span></div><div class="optrow"><span class="ltr">D</span><span>A causal claim about the effect of the point-of-sale system on checkout time in these branches.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> A causal claim about the effect of the point-of-sale system on checkout time in these branches.</p><p style="margin:0">Random assignment is what converts an association into a causal claim. Because branches were allocated by chance, the two groups should be comparable on average in every respect — size, staffing, traffic, region — so any systematic difference in checkout time that emerges can be attributed to the system rather than to pre-existing differences. This is a genuine experiment, and it is qualitatively stronger than any amount of observational data.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">20</div><div class="qtext"><span class="scen">A restaurant chain wants to know whether diners’ satisfaction improved after a menu redesign. It plans to survey diners through a QR code printed on receipts for one week following the launch.</span>Which single change would most improve the design’s ability to support a causal claim?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Add more questions to the survey instrument.</span></div><div class="optrow"><span class="ltr">B</span><span>Run the identical survey in a matched set of branches that did not receive the redesign, over the same period.</span></div><div class="optrow"><span class="ltr">C</span><span>Offer diners a ₱50 discount for completing the survey.</span></div><div class="optrow"><span class="ltr">D</span><span>Extend the survey window from one week to four weeks.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> Run the identical survey in a matched set of branches that did not receive the redesign, over the same period.</p><p style="margin:0">Without a comparison group there is no way to separate the menu redesign from everything else happening that week — weather, payday timing, a competitor’s promotion, seasonal traffic. A matched set of unchanged branches surveyed simultaneously supplies the missing counterfactual: what satisfaction would have looked like had the redesign never happened. That is what converts an uninterpretable post-launch snapshot into an evaluable comparison.</p></div></details></div></section>
+<section id="case"><hr class="div"><h2 class="sec"><span class="n" style="background:var(--p2); color:var(--i2);">✍️</span>Part II · Applied Case &amp; Essay Test</h2><p class="lead">Read the case, then answer the three essay questions. Write your response first; the dropdown under each item reveals a brief answer key — what a strong response must establish.</p><p class="lead">Everything in this chapter converges here. Read the case, then answer three essay questions. Model answers and scoring rubrics are provided — but write yours <b>before</b> you open them, or the exercise is worthless.</p><div class="card c-case">
+  <div class="hd">☕ Case: Barako Blend Coffee Co. — "Did the app work?"</div>
+
+  <p><b>Background.</b> Barako Blend operates 48 branches — 42 across Metro Manila and 6 in Cebu. In June it launched <em>Kapehan Rewards</em>, a mobile loyalty app. By December the app had <b>21,500 registered users</b>. Internal POS data estimates the chain serves roughly <b>140,000 unique customers per month</b> across all branches. Three underperforming branches were closed in September.</p>
+
+  <p><b>The study.</b> From 1–5 December, an in-app survey was pushed to the <b>8,400 users who opened the app during that window</b>. <b>1,120 completed it</b> (a 13.3% response rate). The survey contained five items:</p>
+  <div class="tbl-scroll" style="margin:12px 0;">
+  <table>
+    <thead><tr><th style="width:8%">Item</th><th style="width:52%">Question</th><th>Response format</th></tr></thead>
+    <tbody>
+      <tr><td class="ctr"><b>Q1</b></td><td>Overall, how satisfied are you with Barako Blend?</td><td>5-point scale, Very dissatisfied → Very satisfied, coded 1–5</td></tr>
+      <tr><td class="ctr"><b>Q2</b></td><td>How many times did you visit last month?</td><td>Open numeric (whole visits)</td></tr>
+      <tr><td class="ctr"><b>Q3</b></td><td>Which branch do you visit most often?</td><td>Dropdown list of 48 branches</td></tr>
+      <tr><td class="ctr"><b>Q4</b></td><td>Approximately how much do you spend on coffee per month?</td><td>Open numeric, in pesos</td></tr>
+      <tr><td class="ctr"><b>Q5</b></td><td>How would you rate our baristas?</td><td>5-point scale, Poor → Excellent, coded 1–5</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><b>The result.</b> Mean Q1 = <b>4.31</b>. This was compared against last year's pre-app benchmark of <b>4.19</b>, which came from a <b>mall-intercept survey of 600 customers</b> conducted the previous <b>March</b> by a field agency. An independent-samples <em>t</em>-test on the two means returned <b>p = 0.03</b>.</p>
+
+  <p><b>The memo.</b> The Marketing Head circulated this to the Executive Committee:</p>
+  <div style="background:#fff; border-radius:12px; padding:16px 18px; margin:12px 0; font-style:italic; border-left:4px solid var(--i5);">
+    "Customer satisfaction among Barako Blend customers has significantly increased since the Kapehan Rewards launch (p = 0.03). The app produced a 0.12-point improvement — a 2.9% lift — and satisfaction is now 4.31 out of 5, meaning our customers are nearly twice as satisfied as the neutral midpoint. Recommend doubling the app marketing budget to ₱12M for the coming fiscal year."
+  </div>
+
+  <p style="margin:0"><b>One more thing.</b> To enrich the analysis, the analytics team joined each survey response to the respondent's loyalty ID and full 6-month purchase history. The survey's only introductory text was: <em>"Help us serve you better! 2-minute survey. 🙌"</em></p>
+</div><div class="essay"><div class="etag">Essay 1 · 15 points · Analyse</div><div class="eq">Identify the population, the sampling frame, and the sample in the Barako Blend study. Explain precisely which groups of customers had <b>zero probability</b> of appearing in the results, and state the narrowest population about which the company may honestly make a claim. Explain why increasing the survey push from 8,400 to 20,000 users would <b>not</b> solve the core problem.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>All three blocks named <em>separately and specifically</em>, not blurred together.</li>
+        <li>At least three distinct excluded groups, each with a reason.</li>
+        <li>A directional argument: does the exclusion bias satisfaction up or down, and why?</li>
+        <li>An explicitly narrowed population statement written as a sentence the company could publish.</li>
+        <li>The size-vs-bias principle stated as a principle, not just asserted.</li>
+      </ul>
+    </div></details></div>
+<div class="essay"><div class="etag">Essay 2 · 15 points · Evaluate</div><div class="eq">Classify each of the five survey items by level of measurement. Then evaluate two specific claims in the Marketing Head's memo: (a) that satisfaction is <b>"nearly twice as satisfied as the neutral midpoint,"</b> and (b) that the 4.31 figure is directly comparable to the 4.19 benchmark. For each, state whether the claim is defensible, and if not, what would have to change for it to become so.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>All five items classified, with justification — including the Q2/Q4 subtlety.</li>
+        <li>The zero test applied explicitly to the "twice as satisfied" claim.</li>
+        <li>Recognition that a single Likert item is strictly ordinal, plus the conditions under which averaging is defensible.</li>
+        <li>At least three distinct threats to comparability between the two surveys.</li>
+        <li>Concrete, actionable remedies — not just criticism.</li>
+      </ul>
+    </div></details></div>
+<div class="essay"><div class="etag">Essay 3 · 20 points · Evaluate & Create</div><div class="eq">You are the analyst asked to review the memo before it reaches the Executive Committee. Write a response of roughly 400–500 words that (i) explains what <b>p = 0.03</b> does and does not establish, (ii) evaluates whether a 0.12-point difference is <b>practically</b> significant and what evidence would settle that, (iii) assesses the causal claim that <b>"the app produced"</b> the improvement, and (iv) identifies the ethical and legal problems in how the data was collected and joined, with reference to R.A. 10173. Conclude with a specific recommendation on the ₱12M budget request.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>A correct definition of what a p-value is conditional on — not "the probability the app worked".</li>
+        <li>Explicit separation of statistical from practical significance, with a stated decision threshold.</li>
+        <li>Named confounders and the design that would be needed for a causal claim.</li>
+        <li>The consent problem identified specifically, not vaguely — purpose limitation and proportionality.</li>
+        <li>A recommendation that is actionable and does not simply say "reject".</li>
+      </ul>
+    </div></details></div></section>
+<footer class="end"><p><b>Advanced Statistics</b> · Chapter 1 — Statistical Reasoning · Exercises &amp; Essays. Rizal Technological University.</p></footer>
+</div>
+<script>
+(function(){
+  function s(e){var h=this.getAttribute("href");if(!h||h[0]!=="#")return;var el=document.getElementById(h.slice(1));
+    if(el){e.preventDefault();el.scrollIntoView({behavior:"smooth",block:"start"});}}
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener("click",s);});
+  window.exAll=function(open){document.querySelectorAll("details.ans").forEach(function(d){d.open=open;});};
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 1 — Advanced Statistical Reasoning</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   CHAPTER 1 · ADVANCED STATISTICAL REASONING
+   Interactive learning module · single standalone file · no libraries
+   ───────────────────────────────────────────────────────────────────
+   COLOUR SYSTEM — approximately 80% royal blue and gold. Royal blue
+   leads navigation, headings, controls and most content surfaces; gold
+   marks emphasis and active states. Red and green are retained only as
+   functional feedback colours for errors and correct answers.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  /* --- seven blue/gold surfaces + two functional feedback tints --- */
+  --p1:#FBE3E0;  /* functional red → mistakes and warnings           */
+  --p2:#DCE6FF;  /* royal-blue tint → core concepts                  */
+  --p3:#E1F2E5;  /* functional green → correct answers and recaps     */
+  --p4:#C9D8FF;  /* royal-blue tint → key terms                      */
+  --p5:#FFF1B8;  /* gold tint → applied cases                        */
+  --p6:#EAF0FF;  /* pale royal blue → summaries and highlights       */
+  --p7:#D7E2FF;  /* blue-grey → references and tables                */
+  --p8:#FFE7A3;  /* warm gold → activities                           */
+  --p9:#F2F5FF;  /* light blue → neutral surfaces                    */
+
+  /* --- accessible ink variants --- */
+  --i1:#9F2D24; --i2:#173E8C; --i3:#23663A; --i4:#244A9B; --i5:#765500;
+  --i6:#254A94; --i7:#28477F; --i8:#765000; --i9:#3F4F72;
+
+  /* --- primary course colours --- */
+  --royal:#4169E1;
+  --royal-deep:#173E8C;
+  --royal-dark:#102A63;
+  --gold:#D4AF37;
+  --gold-light:#F1D675;
+  --blue-grad:linear-gradient(135deg,#173E8C 0%,#4169E1 72%,#6F8DF0 100%);
+  --gold-grad:linear-gradient(135deg,#F1D675,#D4AF37);
+
+  --ink:#17233D;      /* body text            */
+  --ink-soft:#4D5E80; /* secondary text       */
+  --line:#C9D6F5;     /* blue hairline rules  */
+  --bg:#F4F7FF;       /* pale blue page       */
+  --radius:16px;
+  --shadow:0 1px 2px rgba(23,62,140,.07), 0 8px 24px rgba(23,62,140,.10);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:96px;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16.5px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+
+/* ── PROGRESS BAR ────────────────────────────────────────────────── */
+#progress{
+  position:fixed; top:0; left:0; height:5px; width:0%; z-index:200;
+  background:linear-gradient(90deg,var(--royal-dark),var(--royal),var(--gold));
+  transition:width .12s linear;
+}
+
+/* ── STICKY NAV ──────────────────────────────────────────────────── */
+nav#topnav{
+  position:sticky; top:0; z-index:150; background:rgba(16,42,99,.96);
+  backdrop-filter:blur(10px); border-bottom:3px solid var(--gold);
+}
+.navwrap{max-width:1080px; margin:0 auto; padding:9px 20px; display:flex; align-items:center; gap:14px;}
+.navbrand{font-weight:800; font-size:.86rem; letter-spacing:.4px; white-space:nowrap; color:#fff;}
+.navlinks{display:flex; gap:5px; overflow-x:auto; scrollbar-width:none; flex:1;}
+.navlinks::-webkit-scrollbar{display:none;}
+.navlinks a{
+  font-size:.78rem; font-weight:600; text-decoration:none; color:#DCE6FF;
+  padding:5px 11px; border-radius:999px; white-space:nowrap; transition:.15s;
+}
+.navlinks a:hover{background:rgba(255,255,255,.13); color:#fff;}
+.navlinks a.on{background:var(--gold-grad); color:#3F3000;}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────── */
+.wrap{max-width:1080px; margin:0 auto; padding:0 20px 100px;}
+section{scroll-margin-top:96px;}
+
+/* ── HERO ────────────────────────────────────────────────────────── */
+.hero{
+  margin:26px 0 34px; padding:38px 34px; border-radius:26px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(circle at 88% 8%,rgba(241,214,117,.48) 0,transparent 34%),
+    radial-gradient(circle at 6% 92%,rgba(111,141,240,.55) 0,transparent 44%),
+    var(--blue-grad);
+}
+.hero .eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.72);
+  padding:5px 15px; border-radius:999px; font-size:.74rem; font-weight:800;
+  letter-spacing:1.3px; text-transform:uppercase; color:var(--royal-deep);
+}
+.hero h1{
+  font-size:clamp(1.9rem,4.6vw,3.05rem); line-height:1.12; margin:16px 0 10px;
+  font-weight:850; letter-spacing:-.9px; color:#fff;
+}
+.hero .sub{font-size:1.04rem; max-width:62ch; color:#EEF3FF; margin:0 0 20px;}
+.chips{display:flex; flex-wrap:wrap; gap:9px;}
+.chip{
+  background:rgba(255,255,255,.82); border-radius:999px; padding:7px 15px;
+  font-size:.79rem; font-weight:700; color:var(--royal-deep); display:inline-flex; align-items:center; gap:7px;
+}
+
+/* ── HEADINGS ────────────────────────────────────────────────────── */
+h2.sec{
+  font-size:1.62rem; font-weight:840; letter-spacing:-.5px; margin:52px 0 6px;
+  display:flex; align-items:center; gap:13px; line-height:1.25;
+}
+h2.sec .n{
+  flex:none; width:46px; height:46px; border-radius:14px; display:grid; place-items:center;
+  font-size:1.02rem; font-weight:850; background:var(--p2); color:var(--i2);
+}
+h3.sub{font-size:1.13rem; font-weight:800; margin:30px 0 8px; color:var(--royal-deep); letter-spacing:-.2px;}
+h4.mini{font-size:.79rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-soft); margin:22px 0 7px;}
+p{margin:0 0 14px;}
+.lead{font-size:1.08rem; color:#37414D;}
+
+/* ── CARDS / CALLOUTS ────────────────────────────────────────────── */
+.card{border-radius:var(--radius); padding:19px 22px; margin:18px 0; border:1px solid rgba(0,0,0,.05);}
+.card .hd{display:flex; align-items:center; gap:9px; font-weight:840; font-size:.87rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:9px;}
+.card p:last-child,.card ul:last-child,.card ol:last-child{margin-bottom:0;}
+.c-tldr{background:var(--p6);} .c-tldr .hd{color:var(--i6);}
+.c-concept{background:var(--p2);} .c-concept .hd{color:var(--i2);}
+.c-recap{background:var(--p3);} .c-recap .hd{color:var(--i3);}
+.c-term{background:var(--p4);} .c-term .hd{color:var(--i4);}
+.c-case{background:var(--p5);} .c-case .hd{color:var(--i5);}
+.c-warn{background:var(--p1);} .c-warn .hd{color:var(--i1);}
+.c-try{background:var(--p8);} .c-try .hd{color:var(--i8);}
+.c-ref{background:var(--p7);} .c-ref .hd{color:var(--i7);}
+.c-neutral{background:var(--p9);} .c-neutral .hd{color:var(--i9);}
+
+/* ── INLINE BITS ─────────────────────────────────────────────────── */
+.kt{background:var(--p4); color:var(--i4); font-weight:750; padding:1px 7px; border-radius:6px; white-space:nowrap;}
+.hl{background:var(--p6); padding:1px 5px; border-radius:5px; font-weight:650;}
+.no{color:var(--i1); font-weight:750;}
+.yes{color:var(--i3); font-weight:750;}
+code,.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.9em; background:var(--p9); padding:2px 6px; border-radius:5px;}
+.formula{
+  background:#fff; border:2px dashed var(--p2); border-radius:12px; padding:13px 18px;
+  margin:14px 0; text-align:center; font-family:"Cambria Math",Georgia,serif; font-size:1.06rem;
+}
+
+/* ── TABLES ──────────────────────────────────────────────────────── */
+.tbl-scroll{overflow-x:auto; margin:16px 0; border-radius:14px; border:1px solid var(--line);}
+table{width:100%; border-collapse:collapse; font-size:.92rem; background:#fff; min-width:560px;}
+th{background:var(--royal-deep); color:#fff; text-align:left; padding:11px 14px; font-weight:820; font-size:.78rem; letter-spacing:.7px; text-transform:uppercase;}
+td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top;}
+tbody tr:nth-child(even) td{background:#FAFBFC;}
+td.ctr,th.ctr{text-align:center;}
+
+/* ── ACCORDION ───────────────────────────────────────────────────── */
+details.acc{background:#fff; border:1px solid var(--line); border-radius:14px; margin:11px 0; overflow:hidden;}
+details.acc>summary{
+  cursor:pointer; padding:14px 18px; font-weight:750; list-style:none;
+  display:flex; align-items:center; gap:11px; transition:.15s;
+}
+details.acc>summary::-webkit-details-marker{display:none;}
+details.acc>summary::after{content:"＋"; margin-left:auto; font-weight:800; color:var(--ink-soft); font-size:1.1rem;}
+details.acc[open]>summary::after{content:"−";}
+details.acc>summary:hover{background:var(--p9);}
+details.acc[open]>summary{background:var(--p9); border-bottom:1px solid var(--line);}
+.acc-body{padding:16px 18px 18px;}
+.acc-body p:last-child,.acc-body ul:last-child{margin-bottom:0;}
+
+/* ── GRID ────────────────────────────────────────────────────────── */
+.grid{display:grid; gap:14px; margin:18px 0;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(255px,1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(195px,1fr));}
+.g4{grid-template-columns:repeat(auto-fit,minmax(158px,1fr));}
+.tile{border-radius:14px; padding:16px 17px; border:1px solid rgba(0,0,0,.05);}
+.tile .ic{font-size:1.5rem; line-height:1; display:block; margin-bottom:8px;}
+.tile b{display:block; font-size:.98rem; margin-bottom:4px;}
+.tile span.d{font-size:.85rem; color:#4A5461; line-height:1.55;}
+
+/* ── STEPS ───────────────────────────────────────────────────────── */
+.steps{counter-reset:s; padding:0; margin:16px 0; list-style:none;}
+.steps li{counter-increment:s; position:relative; padding-left:48px; margin-bottom:15px;}
+.steps li::before{
+  content:counter(s); position:absolute; left:0; top:-1px; width:33px; height:33px;
+  border-radius:11px; background:var(--p5); color:var(--i5);
+  display:grid; place-items:center; font-weight:850; font-size:.94rem;
+}
+
+/* ── QUIZ ────────────────────────────────────────────────────────── */
+.quizbar{
+  position:sticky; top:52px; z-index:90; background:#fff; border:1px solid var(--line);
+  border-radius:14px; padding:12px 17px; margin:18px 0; display:flex; flex-wrap:wrap;
+  align-items:center; gap:12px; box-shadow:var(--shadow);
+}
+.quizbar .score{font-weight:850; font-size:1rem;}
+.quizbar .meter{flex:1; min-width:130px; height:9px; background:var(--p9); border-radius:99px; overflow:hidden;}
+.quizbar .meter i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--p3),var(--p2)); transition:width .3s;}
+.btn{
+  border:none; border-radius:999px; padding:8px 17px; font-size:.83rem; font-weight:750;
+  cursor:pointer; font-family:inherit; transition:.15s; background:var(--p9); color:var(--ink);
+}
+.btn:hover{filter:brightness(.96);}
+.btn.primary{background:var(--royal); color:#fff;}
+.btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft);}
+
+.q{background:#fff; border:1px solid var(--line); border-radius:16px; padding:19px 21px; margin:14px 0;}
+.q .qhead{display:flex; gap:12px; align-items:flex-start; margin-bottom:13px;}
+.q .qnum{
+  flex:none; width:32px; height:32px; border-radius:10px; background:var(--p4); color:var(--i4);
+  display:grid; place-items:center; font-weight:850; font-size:.86rem;
+}
+.q .qtext{font-weight:620; line-height:1.6;}
+.q .qtext .scen{display:block; color:var(--ink-soft); font-weight:450; font-size:.93rem; margin-bottom:6px;}
+.q .bloom{
+  display:inline-block; font-size:.66rem; font-weight:850; letter-spacing:1px; text-transform:uppercase;
+  background:var(--p7); color:var(--i7); padding:3px 9px; border-radius:999px; margin-bottom:8px;
+}
+.opts{display:grid; gap:8px;}
+.opt{
+  display:flex; gap:11px; align-items:flex-start; padding:11px 14px; border-radius:11px;
+  border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.14s;
+  font-size:.94rem; line-height:1.5; text-align:left; font-family:inherit; color:var(--ink); width:100%;
+}
+.opt:hover:not(.locked){background:var(--p9); border-color:#CDD5DE;}
+.opt .ltr{
+  flex:none; width:24px; height:24px; border-radius:7px; background:var(--p9); color:var(--ink-soft);
+  display:grid; place-items:center; font-weight:850; font-size:.78rem;
+}
+.opt.correct{background:var(--p3); border-color:var(--i3);}
+.opt.correct .ltr{background:var(--i3); color:#fff;}
+.opt.wrong{background:var(--p1); border-color:var(--i1);}
+.opt.wrong .ltr{background:var(--i1); color:#fff;}
+.opt.locked{cursor:default;}
+.expl{margin-top:13px; border-radius:12px; padding:15px 17px; background:var(--p9); display:none;}
+.expl.show{display:block;}
+.expl .vt{font-weight:850; font-size:.85rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:7px; display:flex; align-items:center; gap:7px;}
+.expl .vt.ok{color:var(--i3);} .expl .vt.no{color:var(--i1);}
+.expl p{font-size:.93rem; margin:0 0 9px;}
+.expl .dis{margin-top:10px; padding-top:10px; border-top:1px dashed #CFD6DE;}
+.expl .dis div{font-size:.885rem; margin-bottom:5px; color:#404A56;}
+.expl .dis b{color:var(--i1);}
+
+/* ── ESSAY ───────────────────────────────────────────────────────── */
+.essay{background:#fff; border:1px solid var(--line); border-left:6px solid var(--p5); border-radius:16px; padding:21px 23px; margin:18px 0;}
+.essay .etag{font-size:.72rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--i5); margin-bottom:7px;}
+.essay .eq{font-size:1.04rem; font-weight:750; margin-bottom:11px; line-height:1.5;}
+.rubric{font-size:.88rem;}
+.rubric td,.rubric th{padding:8px 12px;}
+
+/* ── GLOSSARY ────────────────────────────────────────────────────── */
+.gloss{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); margin:16px 0;}
+.gitem{background:var(--p7); border-radius:12px; padding:13px 15px;}
+.gitem b{display:block; color:var(--i7); font-size:.95rem; margin-bottom:3px;}
+.gitem span{font-size:.87rem; color:#3E4854; line-height:1.55;}
+
+/* ── MISC ────────────────────────────────────────────────────────── */
+.palette{display:flex; gap:5px; margin:12px 0 0; flex-wrap:wrap;}
+.sw{width:38px; height:38px; border-radius:9px; border:1px solid rgba(0,0,0,.07);}
+hr.div{border:none; border-top:1px solid var(--line); margin:44px 0;}
+footer.end{margin-top:56px; padding:30px 0 0; border-top:1px solid var(--line); font-size:.86rem; color:var(--ink-soft);}
+.backtop{position:fixed; right:18px; bottom:18px; z-index:120; width:46px; height:46px; border-radius:50%;
+  background:var(--royal); color:#fff; border:2px solid var(--gold); font-size:1.15rem; cursor:pointer; box-shadow:var(--shadow); display:none;}
+.backtop.on{display:block;}
+
+@media(max-width:640px){
+  body{font-size:16px;}
+  .hero{padding:28px 22px; border-radius:20px;}
+  h2.sec{font-size:1.36rem;}
+  h2.sec .n{width:38px; height:38px; font-size:.9rem;}
+  .card{padding:16px 17px;}
+  .q{padding:16px 15px;}
+  .quizbar{top:50px;}
+}
+/* ── PRINT / PDF ─────────────────────────────────────────────────
+   Turns the interactive module into a static answer-key workbook:
+   every explanation, model answer and rubric is forced open, all
+   chrome is stripped, and nothing that must be read together is
+   allowed to break across a page.                                  */
+@page{ size:Letter; margin:14mm 12mm 15mm; }
+
+@media print{
+  /* strip interactive chrome */
+  nav#topnav,#progress,.backtop,.quizbar{ display:none !important; }
+
+  /* force every hidden layer open */
+  .expl{ display:block !important; }
+  details.acc{ page-break-inside:avoid; }
+  details.acc>summary::after{ content:"" !important; }
+  details.acc>summary{ background:var(--p9) !important; border-bottom:1px solid var(--line); }
+  details.acc:not([open])>.acc-body{ display:block !important; }
+
+  /* keep pastel fills — they carry the semantic colour coding */
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+
+  body{ font-size:10pt; line-height:1.5; background:#fff; }
+  .wrap{ max-width:none; padding:0 0 8pt; }
+  html{ scroll-behavior:auto; }
+
+  /* never split a unit of meaning across pages */
+  .card,.essay,.tile,.gitem,.formula,.tbl-scroll,.acc-body,
+  .hero,.opts,.expl,.steps li{ page-break-inside:avoid; break-inside:avoid; }
+  /* An item may split, but only at the seam between its options and its
+     explanation — the stem+options block and the explanation each stay whole. */
+  .q{ break-inside:auto; }
+  .q .qhead{ break-after:avoid; }
+  /* Essay model answers and rubrics run close to a full page; keeping them
+     atomic would strand half a page before each. Let them flow, but keep
+     their internal tables and paragraphs whole. */
+  .essay details.acc, .essay .acc-body{ break-inside:auto; page-break-inside:auto; }
+  .essay details.acc>summary{ break-after:avoid; }
+  .essay .acc-body p, .essay .acc-body li{ break-inside:avoid; }
+  h2.sec,h3.sub,h4.mini{ page-break-after:avoid; break-after:avoid; }
+  tr,thead{ page-break-inside:avoid; }
+  thead{ display:table-header-group; }
+
+  /* major sections start a fresh page */
+  #cheat,#hots,#drill,#case{ page-break-before:always; }
+  hr.div{ display:none; }
+
+  /* tighten spacing that only exists for on-screen scrolling */
+  h2.sec{ margin:20pt 0 4pt; font-size:15pt; }
+  h3.sub{ margin:14pt 0 4pt; }
+  .card,.q,.essay{ margin:8pt 0; }
+  section{ scroll-margin-top:0; }
+  table{ min-width:0; font-size:8.6pt; }
+  .tbl-scroll{ overflow:visible; }
+  .grid{ gap:8pt; }
+
+  /* Quiz items are the bulk of the page count. Because each item is kept
+     whole (page-break-inside:avoid), an item taller than half a page wastes
+     the remainder. These densities are tuned so two reinforcement items fit
+     per page while the item stays comfortably readable. */
+  .q{ padding:11px 13px; margin:6pt 0; }
+  .q .qhead{ margin-bottom:8px; }
+  .q .qnum{ width:26px; height:26px; font-size:.78rem; }
+  .q .qtext{ font-size:9.5pt; line-height:1.45; }
+  .q .qtext .scen{ font-size:9pt; margin-bottom:4px; }
+  .q .bloom{ font-size:.62rem; padding:2px 7px; margin-bottom:5px; }
+  .opts{ gap:5px; }
+  .expl{ margin-top:9px; padding:10px 12px; }
+  .expl .vt{ font-size:.78rem; margin-bottom:5px; }
+  .expl p{ font-size:8.9pt; line-height:1.45; margin-bottom:6px; }
+  .expl .dis{ margin-top:7px; padding-top:7px; }
+  .expl .dis div{ font-size:8.5pt; line-height:1.42; margin-bottom:4px; }
+
+  /* answer key styling: correct option stays clearly marked */
+  .opt{ border-width:1px; padding:5px 10px; font-size:8.9pt; line-height:1.4; }
+  .opt .ltr{ width:20px; height:20px; font-size:.7rem; }
+  .opt.correct{ background:var(--p3) !important; border-color:var(--i3) !important; }
+  .opt.correct .ltr{ background:var(--i3) !important; color:#fff !important; }
+}
+</style>
+</head>
+<body>
+<div class="rtu-instructor-banner" style="background:linear-gradient(135deg,#102A63 0%,#173E8C 60%,#4169E1 100%);color:#eaf0fb;border-bottom:3px solid #D4AF37;font-family:-apple-system,'Segoe UI',Arial,sans-serif;text-align:center;padding:9px 16px;font-size:.82rem;line-height:1.45;letter-spacing:.02em;"><span style="font-weight:800;color:#fff;">🎓 Advanced Statistics</span>&nbsp;—&nbsp; a class of <b style="color:#F1D675;">Dr.&nbsp;Ryan&nbsp;Manuel&nbsp;D.&nbsp;Guido</b><span style="opacity:.85;">&nbsp;·&nbsp; Rizal Technological University</span></div>
+<div id="progress"></div>
+
+<nav id="topnav">
+  <div class="navwrap">
+    <span class="navbrand">📊 CH 1 · STAT REASONING</span>
+    <div class="navlinks">
+      <a href="#start" class="on">Start</a>
+      <a href="#s1">1.1 Why</a>
+      <a href="#s2">1.2 Desc vs Inf</a>
+      <a href="#s3">1.3 Four Blocks</a>
+      <a href="#s4">1.4 Variables</a>
+      <a href="#s5">1.5 Scales</a>
+      <a href="#s6">1.6 Questions</a>
+      <a href="#s7">1.7 Significance</a>
+      <a href="#s8">1.8 Ethics</a>
+      <a href="#cheat">Cheat Sheet</a>
+      <a href="#hots">🎮 HOTS Test</a>
+      <a href="#drill">⚡ Drills</a>
+      <a href="#case">✍️ Case</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="start">
+<div class="hero">
+  <span class="eyebrow">🧭 Session 1 · Week 1 · 3 hours</span>
+  <h1>Advanced Statistical<br>Reasoning</h1>
+  <p class="sub">Before you ever run a test, you have to earn the right to make a claim. This chapter is about where that right comes from — and how easily people give it away without noticing.</p>
+  <div class="chips">
+    <span class="chip">⏱️ ~45 min read</span>
+    <span class="chip">🎮 40 quiz items</span>
+    <span class="chip">✍️ 1 case + 3 essays</span>
+    <span class="chip">🎯 CLO1</span>
+  </div>
+</div>
+
+<div class="card c-tldr">
+  <div class="hd">⚡ TL;DR — the whole chapter in 5 lines</div>
+  <ol style="margin:0; padding-left:19px;">
+    <li>Statistics has two jobs: <b>describe</b> what you have, and <b>infer</b> what you don't.</li>
+    <li>Inference only works if your <b>sample</b> genuinely stands in for your <b>population</b> — and the <b>sampling frame</b> is where that usually breaks.</li>
+    <li>A number from a sample is a <b>statistic</b>; the truth you're chasing is a <b>parameter</b>. Never confuse them in a sentence.</li>
+    <li>The <b>measurement scale</b> of a variable decides which maths is legal. Averaging the wrong thing is a real mistake, not a technicality.</li>
+    <li><b>Significant ≠ important</b>, and <b>legal ≠ ethical</b>. Both gaps end careers.</li>
+  </ol>
+</div>
+
+<div class="card c-concept">
+  <div class="hd">🎯 What you'll be able to do</div>
+  <div class="grid g2" style="margin:6px 0 0;">
+    <div class="tile" style="background:#fff;"><span class="ic">🔀</span><b>Separate description from inference</b><span class="d">Tell exactly where a sentence stops reporting and starts claiming.</span></div>
+    <div class="tile" style="background:#fff;"><span class="ic">🎯</span><b>Map the four blocks</b><span class="d">Name the population, sampling frame, sample, parameter and statistic in any real study.</span></div>
+    <div class="tile" style="background:#fff;"><span class="ic">📏</span><b>Classify any study variable</b><span class="d">Assign a measurement scale and state what arithmetic it permits.</span></div>
+    <div class="tile" style="background:#fff;"><span class="ic">🧩</span><b>Identify variable roles</b><span class="d">Independent, dependent, control, confounder, moderator, mediator.</span></div>
+    <div class="tile" style="background:#fff;"><span class="ic">⚖️</span><b>Judge a claim</b><span class="d">Decide whether a finding is statistically significant, practically important, or neither.</span></div>
+    <div class="tile" style="background:#fff;"><span class="ic">🔐</span><b>Apply data ethics</b><span class="d">Spot consent, privacy and reporting violations before they ship.</span></div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ 1.1 ═══════════════ -->
+<section id="s1">
+<h2 class="sec"><span class="n">1.1</span>Why this chapter exists</h2>
+
+<p class="lead">Every field of research and professional practice is surrounded by numbers but still needs claims it can defend. The gap between data and defensible conclusions is what this course is about, and Session 1 is where that gap gets named.</p>
+
+<p>Here is the situation. A public-health researcher opens a dashboard and sees that this month's average clinic waiting time is 47 minutes. That number is <em>true</em>. It is also, on its own, limited — because it describes only the visits captured in that dashboard. The moment the researcher says <em>"patients typically wait about 47 minutes,"</em> something significant has happened. She has stopped reporting and started <span class="kt">claiming</span>. She has extended a fact about the available records into a statement about people she never observed.</p>
+
+<p>That extension is called <b>inference</b>, and it is one of the most valuable — and most abused — moves in statistical analysis. This course exists because that move can be done well or badly, and because from the outside the two look identical. Both produce a confident sentence with a number in it.</p>
+
+<div class="card c-concept">
+  <div class="hd">🧠 The core idea of the whole course</div>
+  <p style="margin:0"><b>A statistical claim is a promise about people you did not observe, backed by people you did.</b> Everything you will learn — sampling, confidence intervals, hypothesis tests, regression — exists to make that promise honest, and to attach a number to how much it might be wrong.</p>
+</div>
+
+<h3 class="sub">The "advanced" in Advanced Statistics</h3>
+<p>Your prerequisite course taught you to <em>describe</em>: means, medians, standard deviations, charts. Excellent tools. But every one of them answers a question about a data set that is already sitting in front of you. This course answers a harder question:</p>
+
+<div class="formula">Given <em>this</em> sample, what may I responsibly claim about <em>everyone</em> — and how confident may I be?</div>
+
+<p>Notice that the question has two halves, and the second half is the one people skip. Anyone can produce a claim. What separates a professional from a person with a spreadsheet is the ability to say <em>how sure they are, and why</em> — and to say it before someone spends ₱4 million acting on it.</p>
+
+<div class="card c-case">
+  <div class="hd">💼 Two sentences, one dataset</div>
+  <p><b>Sentence A:</b> "The 312 customers who answered our survey rated us 4.2 out of 5 on average."</p>
+  <p><b>Sentence B:</b> "Our customers rate us 4.2 out of 5."</p>
+  <p style="margin:0">Sentence A is a <b>description</b>. It cannot be wrong — you can verify it by re-adding the column. Sentence B is an <b>inference</b>. It can absolutely be wrong, and whether it <em>is</em> wrong depends entirely on how those 312 people ended up in the survey. Most bad analytics in the real world is Sentence A quietly re-typed as Sentence B.</p>
+</div>
+
+<div class="card c-recap">
+  <div class="hd">🏁 30-second recap</div>
+  <p style="margin:0">Description is safe and limited. Inference is powerful and risky. This course is the risk-management system for inference.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.2 ═══════════════ -->
+<section id="s2">
+<h2 class="sec"><span class="n">1.2</span>Descriptive vs. inferential statistics</h2>
+
+<p>These are not two topics. They are two <em>jobs</em>, and the same number can do either job depending on the sentence you put it in.</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:22%">&nbsp;</th><th>Descriptive statistics</th><th>Inferential statistics</th></tr></thead>
+<tbody>
+<tr><td><b>Job</b></td><td>Summarise the data you actually have</td><td>Draw a conclusion about data you don't have</td></tr>
+<tr><td><b>Scope of the claim</b></td><td>The observed set only</td><td>A larger population</td></tr>
+<tr><td><b>Can it be "wrong"?</b></td><td>Only through arithmetic error</td><td>Yes — through bad sampling, bad assumptions, or bad luck</td></tr>
+<tr><td><b>Typical tools</b></td><td>Mean, median, SD, frequency table, chart</td><td>Confidence interval, hypothesis test, regression model</td></tr>
+<tr><td><b>Needs randomness?</b></td><td>No</td><td>Yes — this is non-negotiable</td></tr>
+<tr><td><b>Example phrasing</b></td><td>"In Q3 we recorded 41,209 observations."</td><td>"We estimate the national total at 1.2M units ± 90K."</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card c-warn">
+  <div class="hd">⚠️ The mistake that starts everything</div>
+  <p style="margin:0">Computing a descriptive statistic and then <b>speaking</b> as though it were an inferential one. No formula protects you here — the error happens in the sentence, not in the maths. When you read a statistical report, underline every noun that names a group. Then ask: <em>was that group actually sampled?</em></p>
+</div>
+
+<h3 class="sub">When description is genuinely enough</h3>
+<p>An important nuance most students miss: if you have the <b>entire</b> population, inference is unnecessary. If HR has all 1,842 employee records and computes mean tenure, that mean <em>is</em> the parameter. There is nothing to infer and no margin of error to report. A <span class="kt">census</span> ends the conversation.</p>
+<p>This matters more than it sounds. Many administrative and research datasets are censuses, not samples: all admissions in a registry, all observations from a complete monitoring period, or all employees on payroll. Reporting a "margin of error" on a census is a sign the analyst does not understand what they are doing. Conversely, treating a convenience sample as though it were a census is the more common and more consequential error.</p>
+
+<div class="card c-try">
+  <div class="hd">🧪 Try it — 20 seconds</div>
+  <p style="margin:0">Which of these is inferential? <br>(a) "Our Shopee store had 12,400 visitors last week." &nbsp; (b) "Roughly 3% of Filipino online shoppers abandon carts due to shipping fees." &nbsp; (c) "Branch 7 sold the most units in October."<br><br><b>Answer:</b> only (b) — it claims something about a population nobody fully observed. (a) and (c) are counts of records already in hand.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.3 ═══════════════ -->
+<section id="s3">
+<h2 class="sec"><span class="n">1.3</span>The four building blocks</h2>
+
+<p>Almost every catastrophic analytics failure can be diagnosed by carefully writing down four things. Most people write down one.</p>
+
+<div class="grid g4">
+  <div class="tile" style="background:var(--p2);"><span class="ic">🌍</span><b>Population</b><span class="d">Everyone you want the claim to cover. Defined by <em>you</em>, in words, before you collect anything.</span></div>
+  <div class="tile" style="background:var(--p5);"><span class="ic">📋</span><b>Sampling frame</b><span class="d">The actual list you can draw from. Almost never identical to the population.</span></div>
+  <div class="tile" style="background:var(--p8);"><span class="ic">👥</span><b>Sample</b><span class="d">The units you actually observed and measured.</span></div>
+  <div class="tile" style="background:var(--p3);"><span class="ic">🔢</span><b>Parameter / statistic</b><span class="d">The unknown truth vs. your estimate of it.</span></div>
+</div>
+
+<h3 class="sub">The frame is where studies die</h3>
+<p>The <span class="kt">sampling frame</span> is the operational list from which your sample is actually drawn — the loyalty database, the payroll file, the followers of an account, the customers who happened to walk past the mall booth. Students consistently skip it because it feels like an administrative detail. It is not. It is the join between your ambition and your reality.</p>
+
+<p>When the frame excludes part of the population, you get <span class="kt">coverage error</span>, and here is the brutal part: <b>coverage error does not shrink when you collect more data.</b> Surveying 50,000 app users instead of 5,000 tells you more about app users, and exactly nothing more about the customers who never installed the app.</p>
+
+<div class="card c-case">
+  <div class="hd">💼 Case in miniature — the delivery app</div>
+  <p>A food-delivery company wants to know how satisfied <b>all its riders</b> are. It sends an in-app survey.</p>
+  <ul style="margin-bottom:0">
+    <li><b>Population:</b> all active riders in the country.</li>
+    <li><b>Frame:</b> riders who opened the app during the 5-day survey window.</li>
+    <li><b>Sample:</b> the 1,430 who tapped through and finished.</li>
+    <li><b>Who's invisible:</b> riders who quit last month (the unhappiest ones), riders on leave, riders whose phones can't run the update.</li>
+  </ul>
+  <p style="margin:12px 0 0"><b>Consequence:</b> satisfaction will be overestimated, no matter how large the sample is. The people most likely to be dissatisfied removed themselves from the frame by leaving. This specific pattern has a name — <span class="kt">survivorship bias</span> — and it is common across observational data.</p>
+</div>
+
+<h3 class="sub">Parameter vs. statistic: get the notation right now</h3>
+<p>This is the notational habit that will keep you sane for the rest of the course. <b>Greek letters describe populations. Roman letters describe samples.</b></p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Quantity</th><th class="ctr">Parameter <span style="font-weight:400">(population, unknown)</span></th><th class="ctr">Statistic <span style="font-weight:400">(sample, computed)</span></th><th>Read it as</th></tr></thead>
+<tbody>
+<tr><td>Mean</td><td class="ctr"><b>μ</b> (mu)</td><td class="ctr"><b>x̄</b> (x-bar)</td><td>Average</td></tr>
+<tr><td>Standard deviation</td><td class="ctr"><b>σ</b> (sigma)</td><td class="ctr"><b>s</b></td><td>Typical spread</td></tr>
+<tr><td>Variance</td><td class="ctr"><b>σ²</b></td><td class="ctr"><b>s²</b></td><td>Spread, squared</td></tr>
+<tr><td>Proportion</td><td class="ctr"><b>π</b> or <b>p</b></td><td class="ctr"><b>p̂</b> (p-hat)</td><td>Share / percentage</td></tr>
+<tr><td>Correlation</td><td class="ctr"><b>ρ</b> (rho)</td><td class="ctr"><b>r</b></td><td>Strength of linear link</td></tr>
+<tr><td>Size</td><td class="ctr"><b>N</b></td><td class="ctr"><b>n</b></td><td>How many</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card c-concept">
+  <div class="hd">🧠 Why this isn't pedantry</div>
+  <p style="margin:0">A parameter is a <b>fixed number you will never know</b>. A statistic is a <b>random number you happen to have computed</b> — take a different sample and it changes. Every technique in this course is a controlled argument from the random thing to the fixed thing. If you blur them in your writing, you will blur them in your thinking, and you will end up saying things like <em>"there's a 95% chance μ is between…"</em> — which is wrong, and which you'll learn to fix in Session 5.</p>
+</div>
+
+<div class="card c-recap">
+  <div class="hd">🏁 30-second recap</div>
+  <p style="margin:0">Population = ambition. Frame = reality. Sample = evidence. Parameter = the truth. Statistic = your guess. Write all five down before you compute anything.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.4 ═══════════════ -->
+<section id="s4">
+<h2 class="sec"><span class="n">1.4</span>Variables and the roles they play</h2>
+
+<p>A variable is any characteristic that takes different values across units. Trivial. What is <em>not</em> trivial is that the same variable plays different roles in different studies, and the role determines how you must treat it.</p>
+
+<div class="grid g2">
+  <div class="tile" style="background:var(--p2);"><span class="ic">🎚️</span><b>Independent variable (IV)</b><span class="d">The presumed cause or predictor. The thing you change, choose, or use to explain. <em>e.g. training hours</em></span></div>
+  <div class="tile" style="background:var(--p3);"><span class="ic">🎯</span><b>Dependent variable (DV)</b><span class="d">The outcome you care about. <em>e.g. sales per employee</em></span></div>
+  <div class="tile" style="background:var(--p6);"><span class="ic">🔒</span><b>Control variable</b><span class="d">Something you hold constant or statistically adjust for, so it can't muddy the IV→DV picture. <em>e.g. branch size</em></span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">👻</span><b>Confounder</b><span class="d">A lurking third variable that affects both IV and DV, faking a relationship. <em>e.g. peak season</em></span></div>
+  <div class="tile" style="background:var(--p4);"><span class="ic">🎛️</span><b>Moderator</b><span class="d">Changes the <em>strength or direction</em> of IV→DV. Answers "for whom / when does this work?" <em>e.g. store region</em></span></div>
+  <div class="tile" style="background:var(--p8);"><span class="ic">🔗</span><b>Mediator</b><span class="d">The mechanism <em>through which</em> IV affects DV. Answers "how does this work?" <em>e.g. employee confidence</em></span></div>
+</div>
+
+<div class="card c-warn">
+  <div class="hd">⚠️ Moderator vs. mediator — the classic mix-up</div>
+  <p style="margin:0">A <b>moderator</b> sits <em>beside</em> the arrow and bends it: <em>training raises sales, but only in high-traffic branches.</em> A <b>mediator</b> sits <em>on</em> the arrow and carries it: <em>training raises confidence, and confidence raises sales.</em> Memory hook: <b>mod</b>erator = <b>mod</b>ifies the effect; <b>med</b>iator = the <b>med</b>ium the effect travels through.</p>
+</div>
+
+<h3 class="sub">Confounders are the reason "correlation ≠ causation" exists</h3>
+<p>You've heard the slogan. Here is the machinery underneath it. Suppose aircon sales and cold-drink sales rise together across the year. Nobody thinks aircons cause thirst. A third variable — temperature — drives both. Temperature is a <span class="kt">confounder</span>: it is associated with the IV and it independently causes the DV, so it manufactures an association that has no causal content.</p>
+<p>In applied data, confounders are often ordinary and powerful: <b>seasonality</b>, <b>site size</b>, <b>baseline risk</b>, or <b>the fact that a new program was first assigned to the highest-performing sites</b>. That last one — <span class="kt">selection into treatment</span> — is among the most common confounders in reports claiming that an initiative worked.</p>
+
+<div class="card c-try">
+  <div class="hd">🧪 Try it — label the roles</div>
+  <p style="margin:0">A bank finds that clients who use its mobile app have 22% higher deposits. Someone proposes: <em>"Push the app, deposits will rise."</em><br><br><b>Where's the confounder?</b> Younger, higher-income, more financially engaged clients are both more likely to use the app <em>and</em> more likely to hold larger balances. Income and financial engagement are confounders. Without controlling for them — or randomising app adoption — the 22% is an association, not an effect.</p>
+</div>
+
+<h3 class="sub">Discrete vs. continuous</h3>
+<div class="grid g2">
+  <div class="tile" style="background:var(--p9);"><span class="ic">🔢</span><b>Discrete</b><span class="d">Countable, with gaps between possible values. Number of complaints, units sold, employees, branches. You cannot have 3.7 complaints.</span></div>
+  <div class="tile" style="background:var(--p9);"><span class="ic">📈</span><b>Continuous</b><span class="d">Can take any value in an interval, limited only by your instrument. Delivery time, revenue, weight, temperature.</span></div>
+</div>
+<p><b>The subtlety students miss:</b> a variable can be continuous <em>in nature</em> but discrete <em>as recorded</em>. Delivery time is genuinely continuous, but if your system logs it in whole minutes, the recorded data looks discrete. The right move is to treat the variable according to its nature, while remembering that the rounding limits how precisely you can speak.</p>
+
+<div class="card c-recap">
+  <div class="hd">🏁 30-second recap</div>
+  <p style="margin:0">IV explains, DV responds, controls are held fixed, confounders lie to you, moderators bend the effect, mediators carry it. Discrete = countable; continuous = measurable.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.5 ═══════════════ -->
+<section id="s5">
+<h2 class="sec"><span class="n">1.5</span>Levels of measurement — the rules of legal arithmetic</h2>
+
+<p class="lead">This is the most practically consequential idea in the chapter. The <span class="kt">level of measurement</span> of a variable determines which mathematical operations are meaningful on it. Break the rule and your output is not "slightly off" — it is <em>meaningless</em>, even though your calculator will happily produce a number.</p>
+
+<p>Four levels, increasing in power. Mnemonic: <b>NOIR</b> — Nominal, Ordinal, Interval, Ratio.</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:11%">Level</th><th style="width:20%">What it does</th><th style="width:23%">Cross-disciplinary examples</th><th style="width:21%">Legal operations</th><th>Valid centre</th></tr></thead>
+<tbody>
+<tr>
+  <td><b style="color:var(--i1)">Nominal</b><br><span style="font-size:.82rem;color:var(--ink-soft)">labels</span></td>
+  <td>Names categories. No order at all.</td>
+  <td>Branch code, payment method, department, industry, SKU, gender, region</td>
+  <td>= and ≠ only. Count, tabulate.</td>
+  <td><b>Mode</b> only</td>
+</tr>
+<tr>
+  <td><b style="color:var(--i5)">Ordinal</b><br><span style="font-size:.82rem;color:var(--ink-soft)">ranks</span></td>
+  <td>Orders categories, but the gaps between them are unknown and unequal.</td>
+  <td>Loyalty tier (Bronze→Platinum), job grade, class rank, satisfaction (Poor→Excellent), credit rating</td>
+  <td>&lt;, &gt;, plus counting. <span class="no">No arithmetic on the codes.</span></td>
+  <td><b>Median</b>, mode</td>
+</tr>
+<tr>
+  <td><b style="color:var(--i2)">Interval</b><br><span style="font-size:.82rem;color:var(--ink-soft)">equal gaps</span></td>
+  <td>Equal distances between values, but zero is arbitrary — it doesn't mean "none".</td>
+  <td>Calendar year, temperature in °C, IQ score, standardised index with an arbitrary base</td>
+  <td>Differences, and means built from them. <span class="no">Ratios are meaningless.</span></td>
+  <td><b>Mean</b>, median, mode</td>
+</tr>
+<tr>
+  <td><b style="color:var(--i3)">Ratio</b><br><span style="font-size:.82rem;color:var(--ink-soft)">true zero</span></td>
+  <td>Equal gaps <em>and</em> a meaningful zero that means "none of it".</td>
+  <td>Revenue, units sold, headcount, delivery minutes, market share, age, cost</td>
+  <td>Everything: +, −, ×, ÷</td>
+  <td><b>Mean</b>, median, mode, geometric mean</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="sub">The zero test — how to tell interval from ratio in 5 seconds</h3>
+<p>Ask: <b>does zero mean "there is none of this thing"?</b></p>
+<ul>
+  <li><span class="yes">Ratio:</span> ₱0 revenue means no revenue. So ₱800,000 really is <em>twice</em> ₱400,000.</li>
+  <li><span class="no">Interval:</span> 0 °C does not mean "no temperature". So 20 °C is <b>not</b> twice as hot as 10 °C. And the year 2000 is not "twice" the year 1000.</li>
+</ul>
+
+<div class="card c-warn">
+  <div class="hd">⚠️ Three arithmetic crimes to never commit</div>
+  <ol style="margin:0; padding-left:19px;">
+    <li><b>Averaging nominal codes.</b> If Marketing = 1, Finance = 2, IT = 3, then "mean department = 2.1" is nonsense. The numbers are name tags, not quantities.</li>
+    <li><b>Ratio statements on interval data.</b> "Satisfaction doubled from 2 to 4" assumes a true zero that a 1–5 scale does not have.</li>
+    <li><b>Ranking as if the gaps were equal.</b> The distance from Bronze to Silver is not necessarily the distance from Gold to Platinum, so treating tiers as 1-2-3-4 and averaging them invents information nobody measured.</li>
+  </ol>
+</div>
+
+<h3 class="sub">🔥 The Likert problem — the argument you'll have your whole career</h3>
+<p>Here is the honest situation, because your textbooks disagree and you should know why.</p>
+
+<p>A single Likert <b>item</b> ("Strongly disagree → Strongly agree", coded 1–5) is, strictly speaking, <b>ordinal</b>. Nobody has demonstrated that the psychological distance from "Disagree" to "Neutral" equals the distance from "Agree" to "Strongly agree". So strictly, the mean is not defensible and the median is.</p>
+
+<p>In practice, much applied and social research averages Likert data. The defensible version of that practice rests on three conditions, and you should be able to state them:</p>
+
+<ol class="steps">
+  <li><b>You are averaging a scale, not an item.</b> A composite of 5–7 related items behaves much more like an interval variable than any single item does.</li>
+  <li><b>The response options are visually and verbally equally spaced,</b> so respondents plausibly treat them as equal steps.</li>
+  <li><b>You state the assumption out loud</b> in your methodology, rather than hoping nobody notices.</li>
+</ol>
+
+<div class="card c-concept">
+  <div class="hd">🧠 The professional standard</div>
+  <p style="margin:0">Treating Likert data as interval is not automatically wrong — <b>treating it as interval silently is</b>. The mark of a competent analyst is the sentence: <em>"Following common practice, the five-item satisfaction scale was treated as interval-level; this assumption is acknowledged as a limitation."</em> That one sentence is the difference between a defensible study and an indefensible one.</p>
+</div>
+
+<h3 class="sub">Why this decides your whole analysis</h3>
+<p>Measurement level isn't a labelling exercise you do at the start and forget. It is the <b>first filter</b> in choosing a statistical technique — the one you'll formalise in Session 12's decision framework.</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>If your outcome variable is…</th><th>You are heading toward…</th><th>Not toward…</th></tr></thead>
+<tbody>
+<tr><td><b>Nominal / categorical</b></td><td>Chi-square tests, proportions, logistic regression</td><td>t-tests, ANOVA, linear regression</td></tr>
+<tr><td><b>Ordinal</b></td><td>Medians, nonparametric tests (Mann–Whitney, Kruskal–Wallis), Spearman</td><td>Means and parametric tests — unless you defend the interval assumption</td></tr>
+<tr><td><b>Interval / ratio</b></td><td>Means, t-tests, ANOVA, Pearson correlation, linear regression</td><td>Chi-square on the raw values</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card c-recap">
+  <div class="hd">🏁 30-second recap</div>
+  <p style="margin:0">NOIR. Nominal = names (mode). Ordinal = ranks (median). Interval = equal gaps, fake zero (mean, no ratios). Ratio = equal gaps, real zero (everything). Measurement level is the first gate on technique choice.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.6 ═══════════════ -->
+<section id="s6">
+<h2 class="sec"><span class="n">1.6</span>The hierarchy of research questions</h2>
+
+<p>Research questions come in four escalating levels. Each one demands more from your design than the one before, and each one licenses a stronger claim. Much analytical overreach comes from answering a Level 3 question with a Level 1 design.</p>
+
+<ol class="steps">
+  <li><b>Describe</b> — <em>"What is happening?"</em><br><span style="color:var(--ink-soft)">Average order value, churn rate, headcount by department. Needs: accurate data. Licenses: statements about the observed set.</span></li>
+  <li><b>Compare</b> — <em>"Is Group A different from Group B?"</em><br><span style="color:var(--ink-soft)">Do Region 1 and Region 2 differ in conversion? Needs: comparable groups, random sampling. Licenses: statements about population differences. → Sessions 6–8.</span></li>
+  <li><b>Associate</b> — <em>"Do these two things move together?"</em><br><span style="color:var(--ink-soft)">Does ad spend track with sales? Needs: paired measurements, adequate range. Licenses: statements about relationship, <span class="no">never about cause</span>. → Sessions 9–10.</span></li>
+  <li><b>Predict / explain</b> — <em>"Given these drivers, what will the outcome be, and which drivers matter?"</em><br><span style="color:var(--ink-soft)">Modelling turnover from tenure, pay and supervisor rating. Needs: a model, diagnostics, enough data. Licenses: conditional prediction and partial effects. → Session 11.</span></li>
+</ol>
+
+<div class="card c-case">
+  <div class="hd">💼 Same data, four questions</div>
+  <p style="margin:0">A retailer has 18 months of branch-level data on staffing, foot traffic and sales.<br>
+  <b>Describe:</b> "Mean weekly sales per branch is ₱1.4M."<br>
+  <b>Compare:</b> "Branches in malls outsell standalone branches."<br>
+  <b>Associate:</b> "Staffing level and sales are positively correlated (r = 0.62)."<br>
+  <b>Predict:</b> "Holding foot traffic constant, each additional staff member is associated with ₱38K more weekly sales."<br>
+  Only the last one comes close to guiding a hiring decision — and even it is an association until staffing is randomised or properly controlled.</p>
+</div>
+</section>
+
+<!-- ═══════════════ 1.7 ═══════════════ -->
+<section id="s7">
+<h2 class="sec"><span class="n">1.7</span>Statistical significance is not importance</h2>
+
+<p class="lead">This section will save you from the most expensive misunderstanding in applied statistics. You'll meet the formal machinery in Session 6; you need the intuition now, because it changes how you read every report you'll ever see.</p>
+
+<div class="card c-term">
+  <div class="hd">📌 Two different questions</div>
+  <p><b>Statistical significance</b> answers: <em>"Is this difference bigger than what random sampling noise would plausibly produce?"</em> It is a question about <b>evidence</b>.</p>
+  <p style="margin:0"><b>Practical significance</b> answers: <em>"Is this difference big enough to change what we do?"</em> It is a question about <b>consequences</b> — and statistics cannot answer it alone. Subject-matter judgement and explicit decision criteria are also required.</p>
+</div>
+
+<h3 class="sub">The sample-size trap</h3>
+<p>Here is the mechanism you must internalise. As your sample size grows, your ability to detect <em>tiny</em> differences grows with it. With enough data, <b>almost any difference becomes statistically significant</b> — including differences far too small to care about.</p>
+
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>Scenario</th><th class="ctr">Sample size</th><th class="ctr">Difference found</th><th class="ctr">Statistically significant?</th><th class="ctr">Worth acting on?</th></tr></thead>
+<tbody>
+<tr><td>Website A/B test on button colour</td><td class="ctr">480,000</td><td class="ctr">+0.03% conversion</td><td class="ctr"><span class="yes">Yes</span></td><td class="ctr"><span class="no">Almost certainly not</span></td></tr>
+<tr><td>Pilot of a new onboarding program</td><td class="ctr">24</td><td class="ctr">+11 days retention</td><td class="ctr"><span class="no">No</span></td><td class="ctr"><span class="yes">Possibly — investigate further</span></td></tr>
+<tr><td>Supplier defect-rate comparison</td><td class="ctr">2,100</td><td class="ctr">4.1% vs 1.2%</td><td class="ctr"><span class="yes">Yes</span></td><td class="ctr"><span class="yes">Yes — switch supplier</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Notice row 2 carefully. A non-significant result is <b>not</b> proof that nothing is happening. It may simply mean you didn't collect enough data to tell. "We found no significant difference" and "we found that there is no difference" are wildly different sentences, and confusing them kills good ideas prematurely.</p>
+
+<div class="card c-concept">
+  <div class="hd">🧠 The fix: always report an effect size</div>
+  <p style="margin:0">A <span class="kt">p-value</span> tells you whether an effect is <em>detectable</em>. An <span class="kt">effect size</span> tells you whether it is <em>meaningful</em> — how big the difference actually is, in units a manager understands. Reporting one without the other is professional negligence. You'll compute effect sizes formally in Session 7; for now, train the habit of asking <em>"significant — fine, but how big?"</em></p>
+</div>
+
+<div class="card c-warn">
+  <div class="hd">⚠️ Phrases that should trigger suspicion</div>
+  <ul style="margin:0">
+    <li>"Statistically significant" with no number attached to the size of the effect.</li>
+    <li>"Highly significant" used to mean "large". It doesn't — it means the evidence is strong, not the effect.</li>
+    <li>"No significant difference, so the two are the same."</li>
+    <li>"The p-value was 0.049, so we're 95% sure the treatment works."</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════ 1.8 ═══════════════ -->
+<section id="s8">
+<h2 class="sec"><span class="n">1.8</span>Data ethics, privacy, and the misuse of statistics</h2>
+
+<p class="lead">Statistics is unusually easy to weaponise, because the audience usually can't check. That asymmetry is exactly why the profession carries ethical obligations — and in the Philippines, legal ones.</p>
+
+<h3 class="sub">The legal floor: R.A. 10173</h3>
+<p>The <b>Data Privacy Act of 2012</b> (Republic Act No. 10173) governs how personal information may be collected, processed, stored and shared. For your purposes as a student researcher, the operative principles are:</p>
+
+<div class="grid g3">
+  <div class="tile" style="background:var(--p2);"><span class="ic">✅</span><b>Consent</b><span class="d">Freely given, specific, informed, and evidenced. Bundled or assumed consent is not consent.</span></div>
+  <div class="tile" style="background:var(--p2);"><span class="ic">🎯</span><b>Legitimate purpose</b><span class="d">Data is collected for a declared purpose and may not be quietly repurposed later.</span></div>
+  <div class="tile" style="background:var(--p2);"><span class="ic">⚖️</span><b>Proportionality</b><span class="d">Collect only what the research question actually requires. "Might be useful someday" is not a justification.</span></div>
+</div>
+
+<div class="card c-warn">
+  <div class="hd">🔐 Anonymised vs. pseudonymised — students get this wrong constantly</div>
+  <p><b>Pseudonymised:</b> you replaced names with codes, but you (or someone) keep the key. The data is <b>still personal data</b> and still fully regulated.</p>
+  <p style="margin:0"><b>Anonymised:</b> re-identification is genuinely impossible for anyone, because the key is destroyed and the remaining fields can't triangulate an individual. Only this is outside the regime. Beware: "Grade 12 female student from Barangay X who works part-time at Y" is not anonymous just because you deleted the name — a small enough cell size re-identifies people by itself.</p>
+</div>
+
+<h3 class="sub">The professional floor: how analysts cheat</h3>
+<p>These are the specific behaviours the course will penalise, and the ones your future employer will fire you for.</p>
+
+<div class="grid g2">
+  <div class="tile" style="background:var(--p1);"><span class="ic">🎣</span><b>p-hacking</b><span class="d">Running many tests, or slicing the data many ways, until something crosses p &lt; 0.05 — then reporting only that.</span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">🔮</span><b>HARKing</b><span class="d">Hypothesising After the Results are Known: inspecting the data, then writing the hypothesis as if you'd predicted it.</span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">🍒</span><b>Cherry-picking</b><span class="d">Reporting the flattering subgroup, quarter, or metric and omitting the rest.</span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">📉</span><b>Chart deception</b><span class="d">Truncated axes, dual axes chosen to imply a link, 3-D pies, missing baselines.</span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">🧟</span><b>Survivorship bias</b><span class="d">Studying only what remains — successful firms, current customers, employees who stayed.</span></div>
+  <div class="tile" style="background:var(--p1);"><span class="ic">🧮</span><b>Aggregation tricks</b><span class="d">Choosing the grouping that produces the desired story, when a different grouping reverses it.</span></div>
+</div>
+
+<div class="card c-case">
+  <div class="hd">💼 Why Simpson's paradox should scare you</div>
+  <p style="margin:0">A company reports that its new sales training raised close rates overall. Broken out by experience level, the trained group did <em>worse</em> in <b>both</b> the junior and senior segments — the overall gain came entirely from the fact that more seniors happened to be in the trained group. Both statements are arithmetically true. Which one you publish is an <b>ethical</b> choice, not a statistical one. This reversal is called <span class="kt">Simpson's paradox</span>, and you'll meet it again in Session 11 under the heading of confounding.</p>
+</div>
+
+<div class="card c-concept">
+  <div class="hd">🧭 The one-line ethical test</div>
+  <p style="margin:0">Before you publish a finding, ask: <b>"If the person most harmed by this claim saw my full method, would they say I was fair?"</b> If you would need to hide a step to survive that question, the step is the problem — not the question.</p>
+</div>
+
+<div class="card c-recap">
+  <div class="hd">🏁 30-second recap</div>
+  <p style="margin:0">R.A. 10173 sets the legal floor: consent, declared purpose, proportionality. Pseudonymised ≠ anonymised. The professional floor is higher: no p-hacking, no HARKing, no cherry-picking, no chart tricks. Legal is the minimum, not the goal.</p>
+</div>
+</section>
+
+<!-- ═══════════════ CHEAT SHEET ═══════════════ -->
+<section id="cheat">
+<hr class="div">
+<h2 class="sec"><span class="n" style="background:var(--p6); color:var(--i6);">📋</span>Chapter cheat sheet</h2>
+<p>Screenshot this. It is the whole chapter compressed to what you need during an exam.</p>
+
+<div class="grid g2">
+  <div class="card c-concept" style="margin:0">
+    <div class="hd">🔀 Describe vs. infer</div>
+    <p style="margin:0">Description = about the data you have. Inference = about people you didn't observe. Ask: <em>does this sentence name a group that wasn't fully sampled?</em> If yes → inference → needs randomness.</p>
+  </div>
+  <div class="card c-case" style="margin:0">
+    <div class="hd">🎯 The four blocks</div>
+    <p style="margin:0">Population (ambition) → Frame (reality) → Sample (evidence) → Statistic (guess) estimating Parameter (truth). Coverage error lives in the gap between population and frame, and <b>more data does not fix it</b>.</p>
+  </div>
+  <div class="card c-term" style="margin:0">
+    <div class="hd">🔤 Notation</div>
+    <p style="margin:0">Greek = population: μ, σ, σ², π, ρ, N.<br>Roman = sample: x̄, s, s², p̂, r, n.</p>
+  </div>
+  <div class="card c-ref" style="margin:0">
+    <div class="hd">📏 NOIR</div>
+    <p style="margin:0"><b>N</b>ominal → names → mode.<br><b>O</b>rdinal → ranks → median.<br><b>I</b>nterval → equal gaps, fake zero → mean, no ratios.<br><b>R</b>atio → real zero → all arithmetic.</p>
+  </div>
+  <div class="card c-try" style="margin:0">
+    <div class="hd">🧩 Variable roles</div>
+    <p style="margin:0">IV explains · DV responds · Control held fixed · Confounder fakes the link · Moderator bends it · Mediator carries it.</p>
+  </div>
+  <div class="card c-warn" style="margin:0">
+    <div class="hd">⚖️ Significance</div>
+    <p style="margin:0">Significant = detectable, not large. Big <em>n</em> makes trivia significant. Small <em>n</em> hides real effects. Always pair a p-value with an effect size.</p>
+  </div>
+</div>
+
+<h3 class="sub">🚦 The 5 questions to ask about any statistical claim</h3>
+<ol class="steps">
+  <li><b>Who is this about?</b> Name the population in words.</li>
+  <li><b>Who could actually have been picked?</b> Name the frame, and name who it excludes.</li>
+  <li><b>Is this a description or a claim?</b> If a claim, was there randomness?</li>
+  <li><b>What kind of variable is this?</b> Does the arithmetic used match its measurement level?</li>
+  <li><b>Significant — but how big?</b> Would this change the decision?</li>
+</ol>
+
+<h3 class="sub">🚫 The eight errors this chapter is designed to prevent</h3>
+<div class="tbl-scroll">
+<table>
+<thead><tr><th style="width:34%">The error</th><th>Why it happens</th><th style="width:28%">The fix</th></tr></thead>
+<tbody>
+<tr><td>Description spoken as inference</td><td>The sentence changes; the number doesn't</td><td>Underline the group noun; check it was sampled</td></tr>
+<tr><td>Ignoring the sampling frame</td><td>It feels administrative</td><td>Always write down who <em>couldn't</em> be selected</td></tr>
+<tr><td>"Big sample = good sample"</td><td>Size feels like rigour</td><td>Size fixes noise, never bias</td></tr>
+<tr><td>Averaging nominal codes</td><td>The software lets you</td><td>Check the measurement level first</td></tr>
+<tr><td>Ratio claims on interval data</td><td>"Twice as satisfied" sounds natural</td><td>Apply the zero test</td></tr>
+<tr><td>Silent Likert-as-interval</td><td>Everyone does it</td><td>Do it — but declare it as a limitation</td></tr>
+<tr><td>Confusing statistic with parameter</td><td>Sloppy writing habits</td><td>Greek vs. Roman, every single time</td></tr>
+<tr><td>Significant = important</td><td>The word "significant" is misleading in English</td><td>Demand an effect size</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="sub">🧾 Key terms glossary</h3>
+<div class="gloss">
+  <div class="gitem"><b>Population</b><span>The complete set of units a claim is meant to cover, defined by the researcher before data collection.</span></div>
+  <div class="gitem"><b>Sampling frame</b><span>The actual list or mechanism from which sample units can be drawn. The gap between it and the population is coverage error.</span></div>
+  <div class="gitem"><b>Sample</b><span>The subset of units actually observed and measured.</span></div>
+  <div class="gitem"><b>Census</b><span>Observation of every unit in the population. Makes inference unnecessary.</span></div>
+  <div class="gitem"><b>Parameter</b><span>A fixed numerical characteristic of a population; generally unknown. Greek letters.</span></div>
+  <div class="gitem"><b>Statistic</b><span>A numerical characteristic computed from a sample; varies from sample to sample. Roman letters.</span></div>
+  <div class="gitem"><b>Coverage error</b><span>Bias arising because the frame omits part of the population. Not reduced by larger samples.</span></div>
+  <div class="gitem"><b>Survivorship bias</b><span>Distortion from analysing only units that remained, ignoring those that dropped out or failed.</span></div>
+  <div class="gitem"><b>Level of measurement</b><span>The classification (nominal, ordinal, interval, ratio) that determines which operations are meaningful.</span></div>
+  <div class="gitem"><b>Confounder</b><span>A third variable associated with the predictor and independently causing the outcome, manufacturing a spurious association.</span></div>
+  <div class="gitem"><b>Moderator</b><span>A variable that changes the strength or direction of a relationship. Answers "for whom / under what conditions".</span></div>
+  <div class="gitem"><b>Mediator</b><span>A variable that transmits the effect of the predictor to the outcome. Answers "through what mechanism".</span></div>
+  <div class="gitem"><b>Statistical significance</b><span>A judgement that an observed result is unlikely under the assumption of no real effect. About evidence, not magnitude.</span></div>
+  <div class="gitem"><b>Practical significance</b><span>A judgement that an effect is large enough to matter for decisions. Requires domain knowledge, not statistics.</span></div>
+  <div class="gitem"><b>Effect size</b><span>A standardised measure of the magnitude of a difference or relationship, independent of sample size.</span></div>
+  <div class="gitem"><b>p-hacking</b><span>Repeatedly testing or slicing data until a significant result appears, then reporting only that result.</span></div>
+  <div class="gitem"><b>HARKing</b><span>Presenting a hypothesis formed after seeing the results as though it had been predicted in advance.</span></div>
+  <div class="gitem"><b>Simpson's paradox</b><span>A reversal in which an association present in aggregated data disappears or flips within every subgroup.</span></div>
+  <div class="gitem"><b>Pseudonymisation</b><span>Replacing identifiers with codes while retaining a re-identification key. Data remains personal data under R.A. 10173.</span></div>
+  <div class="gitem"><b>Anonymisation</b><span>Irreversible removal of identifiability, including through combinations of fields. Only this exits the privacy regime.</span></div>
+</div>
+</section>
+
+<!-- ═══════════════ HOTS TEST ═══════════════ -->
+<section id="hots">
+<hr class="div">
+<h2 class="sec"><span class="n" style="background:var(--p4); color:var(--i4);">🎮</span>Higher-Order Thinking Test</h2>
+<p class="lead">Twenty items. None of them can be answered by remembering a definition — every one asks you to <b>analyse a situation, evaluate a claim, or judge a design decision</b>. That's the point. Tap an option to lock it in and the full explanation opens, including why each wrong option is tempting.</p>
+
+<div class="card c-neutral">
+  <div class="hd">🧠 Bloom levels used</div>
+  <p style="margin:0"><b>APPLY</b> — use a rule in a new situation · <b>ANALYSE</b> — break a scenario apart and find the flaw · <b>EVALUATE</b> — judge which claim or fix is most defensible · <b>CREATE</b> — design or reconstruct a better approach.</p>
+</div>
+
+<div class="quizbar">
+  <span class="score" id="hotsScore">Score: 0 / 0</span>
+  <span class="meter"><i id="hotsMeter"></i></span>
+  <button class="btn primary" onclick="revealAll('hots')">👀 Reveal all</button>
+  <button class="btn ghost" onclick="resetQuiz('hots')">↺ Reset</button>
+</div>
+
+<div id="hotsBox"></div>
+
+<div class="card c-recap" id="hotsVerdict" style="display:none;">
+  <div class="hd">🏁 Your result</div>
+  <p style="margin:0" id="hotsVerdictText"></p>
+</div>
+</section>
+
+<!-- ═══════════════ REINFORCEMENT ═══════════════ -->
+<section id="drill">
+<hr class="div">
+<h2 class="sec"><span class="n" style="background:var(--p3); color:var(--i3);">⚡</span>Reinforcement Exercises</h2>
+<p class="lead">Twenty faster items to lock the fundamentals in place. Lower altitude than the HOTS test — recall, comprehension and straightforward application — but every item still carries a full explanation. Run these until you get 20/20 without hesitating.</p>
+
+<div class="quizbar">
+  <span class="score" id="drillScore">Score: 0 / 0</span>
+  <span class="meter"><i id="drillMeter"></i></span>
+  <button class="btn primary" onclick="revealAll('drill')">👀 Reveal all</button>
+  <button class="btn ghost" onclick="resetQuiz('drill')">↺ Reset</button>
+</div>
+
+<div id="drillBox"></div>
+
+<div class="card c-recap" id="drillVerdict" style="display:none;">
+  <div class="hd">🏁 Your result</div>
+  <p style="margin:0" id="drillVerdictText"></p>
+</div>
+</section>
+
+<!-- ═══════════════ CASE ANALYSIS ═══════════════ -->
+<section id="case">
+<hr class="div">
+<h2 class="sec"><span class="n" style="background:var(--p5); color:var(--i5);">✍️</span>Applied Case Analysis</h2>
+<p class="lead">Everything in this chapter converges here. Read the case, then answer three essay questions. Model answers and scoring rubrics are provided — but write yours <b>before</b> you open them, or the exercise is worthless.</p>
+
+<div class="card c-case">
+  <div class="hd">☕ Case: Barako Blend Coffee Co. — "Did the app work?"</div>
+
+  <p><b>Background.</b> Barako Blend operates 48 branches — 42 across Metro Manila and 6 in Cebu. In June it launched <em>Kapehan Rewards</em>, a mobile loyalty app. By December the app had <b>21,500 registered users</b>. Internal POS data estimates the chain serves roughly <b>140,000 unique customers per month</b> across all branches. Three underperforming branches were closed in September.</p>
+
+  <p><b>The study.</b> From 1–5 December, an in-app survey was pushed to the <b>8,400 users who opened the app during that window</b>. <b>1,120 completed it</b> (a 13.3% response rate). The survey contained five items:</p>
+  <div class="tbl-scroll" style="margin:12px 0;">
+  <table>
+    <thead><tr><th style="width:8%">Item</th><th style="width:52%">Question</th><th>Response format</th></tr></thead>
+    <tbody>
+      <tr><td class="ctr"><b>Q1</b></td><td>Overall, how satisfied are you with Barako Blend?</td><td>5-point scale, Very dissatisfied → Very satisfied, coded 1–5</td></tr>
+      <tr><td class="ctr"><b>Q2</b></td><td>How many times did you visit last month?</td><td>Open numeric (whole visits)</td></tr>
+      <tr><td class="ctr"><b>Q3</b></td><td>Which branch do you visit most often?</td><td>Dropdown list of 48 branches</td></tr>
+      <tr><td class="ctr"><b>Q4</b></td><td>Approximately how much do you spend on coffee per month?</td><td>Open numeric, in pesos</td></tr>
+      <tr><td class="ctr"><b>Q5</b></td><td>How would you rate our baristas?</td><td>5-point scale, Poor → Excellent, coded 1–5</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><b>The result.</b> Mean Q1 = <b>4.31</b>. This was compared against last year's pre-app benchmark of <b>4.19</b>, which came from a <b>mall-intercept survey of 600 customers</b> conducted the previous <b>March</b> by a field agency. An independent-samples <em>t</em>-test on the two means returned <b>p = 0.03</b>.</p>
+
+  <p><b>The memo.</b> The Marketing Head circulated this to the Executive Committee:</p>
+  <div style="background:#fff; border-radius:12px; padding:16px 18px; margin:12px 0; font-style:italic; border-left:4px solid var(--i5);">
+    "Customer satisfaction among Barako Blend customers has significantly increased since the Kapehan Rewards launch (p = 0.03). The app produced a 0.12-point improvement — a 2.9% lift — and satisfaction is now 4.31 out of 5, meaning our customers are nearly twice as satisfied as the neutral midpoint. Recommend doubling the app marketing budget to ₱12M for the coming fiscal year."
+  </div>
+
+  <p style="margin:0"><b>One more thing.</b> To enrich the analysis, the analytics team joined each survey response to the respondent's loyalty ID and full 6-month purchase history. The survey's only introductory text was: <em>"Help us serve you better! 2-minute survey. 🙌"</em></p>
+</div>
+
+<!-- ESSAY 1 -->
+<div class="essay">
+  <div class="etag">Essay 1 · 15 points · Analyse</div>
+  <div class="eq">Identify the population, the sampling frame, and the sample in the Barako Blend study. Explain precisely which groups of customers had <b>zero probability</b> of appearing in the results, and state the narrowest population about which the company may honestly make a claim. Explain why increasing the survey push from 8,400 to 20,000 users would <b>not</b> solve the core problem.</div>
+
+  <details class="acc">
+    <summary>💡 Before you look — what a strong answer must contain</summary>
+    <div class="acc-body">
+      <ul style="margin:0">
+        <li>All three blocks named <em>separately and specifically</em>, not blurred together.</li>
+        <li>At least three distinct excluded groups, each with a reason.</li>
+        <li>A directional argument: does the exclusion bias satisfaction up or down, and why?</li>
+        <li>An explicitly narrowed population statement written as a sentence the company could publish.</li>
+        <li>The size-vs-bias principle stated as a principle, not just asserted.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>✅ Model answer</summary>
+    <div class="acc-body">
+      <p><b>Population.</b> The population implied by the Marketing Head's memo is <em>all Barako Blend customers</em> — approximately 140,000 unique customers per month across 48 branches. That is the group the claim is about.</p>
+      <p><b>Sampling frame.</b> The operational frame is far narrower: the <b>8,400 registered app users who opened the app between 1 and 5 December</b>. Note that this is narrower even than the app's own user base of 21,500, because it additionally requires having opened the app in one specific five-day window.</p>
+      <p><b>Sample.</b> The <b>1,120 users who completed the survey</b> — 13.3% of those pushed, and roughly <b>0.8% of the monthly customer population</b>.</p>
+      <p><b>Who had zero probability of selection.</b></p>
+      <ul>
+        <li><b>The ~118,500 monthly customers who never registered for the app.</b> This is the largest exclusion by far. Non-adopters plausibly differ systematically — older customers, walk-ins, those without smartphones or data, and crucially those <em>less engaged with the brand</em>.</li>
+        <li><b>Registered users who did not open the app that week</b> (21,500 − 8,400 = 13,100). Lapsed or disengaged users are concentrated here, and disengagement correlates with dissatisfaction.</li>
+        <li><b>Customers of the three branches closed in September.</b> If those branches were closed for underperformance, their customers were plausibly the least satisfied — and they have been structurally deleted from the data.</li>
+        <li><b>Former customers who churned</b> before December for any reason. The unhappiest people leave, and leaving removes them from the frame.</li>
+      </ul>
+      <p><b>Direction of the bias.</b> Every one of these exclusions removes people who are <em>less</em> engaged or <em>more</em> likely to be dissatisfied. The mean of 4.31 is therefore biased <b>upward</b>. This is a textbook combination of <span class="kt">coverage error</span> and <span class="kt">survivorship bias</span>, compounded by <span class="kt">non-response bias</span> among the 86.7% who ignored the survey.</p>
+      <p><b>The narrowest honest claim.</b> <em>"Among Barako Blend loyalty-app users who opened the app during the first week of December and chose to respond, mean self-reported satisfaction was 4.31 on a five-point scale."</em> Every clause in that sentence is doing necessary work, and none may be dropped.</p>
+      <p style="margin:0"><b>Why a bigger push doesn't help.</b> Sample size governs <b>sampling error</b> — random noise, which shrinks as <em>n</em> grows. It has no effect whatsoever on <b>coverage error</b>, which is systematic and comes from <em>who is in the frame at all</em>. Pushing to 20,000 users would produce a more precise estimate of app-user satisfaction while leaving the estimate of <em>customer</em> satisfaction exactly as wrong — only now with a narrower confidence interval around the wrong number. Precision without validity is more dangerous than imprecision, because it looks authoritative. The only genuine fixes are frame-level: intercept sampling at branches, receipt-based QR invitations to all customers, or an explicit stratified design that reaches non-app users.</p>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>📊 Scoring rubric (15 pts)</summary>
+    <div class="acc-body">
+      <div class="tbl-scroll" style="margin:0">
+      <table class="rubric">
+        <thead><tr><th>Criterion</th><th class="ctr">Pts</th><th>Full marks requires</th></tr></thead>
+        <tbody>
+          <tr><td>Correct identification of the three blocks</td><td class="ctr">4</td><td>Population, frame and sample each stated distinctly with the right numbers attached</td></tr>
+          <tr><td>Excluded groups</td><td class="ctr">4</td><td>At least three groups, each with a reason for exclusion; closed branches or churned customers recognised</td></tr>
+          <tr><td>Direction of bias</td><td class="ctr">3</td><td>States that the estimate is biased upward and explains the mechanism</td></tr>
+          <tr><td>Narrowed claim</td><td class="ctr">2</td><td>A publishable sentence with all necessary qualifiers</td></tr>
+          <tr><td>Size vs. bias principle</td><td class="ctr">2</td><td>Distinguishes sampling error from coverage error; notes precision ≠ validity</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ESSAY 2 -->
+<div class="essay">
+  <div class="etag">Essay 2 · 15 points · Evaluate</div>
+  <div class="eq">Classify each of the five survey items by level of measurement. Then evaluate two specific claims in the Marketing Head's memo: (a) that satisfaction is <b>"nearly twice as satisfied as the neutral midpoint,"</b> and (b) that the 4.31 figure is directly comparable to the 4.19 benchmark. For each, state whether the claim is defensible, and if not, what would have to change for it to become so.</div>
+
+  <details class="acc">
+    <summary>💡 Before you look — what a strong answer must contain</summary>
+    <div class="acc-body">
+      <ul style="margin:0">
+        <li>All five items classified, with justification — including the Q2/Q4 subtlety.</li>
+        <li>The zero test applied explicitly to the "twice as satisfied" claim.</li>
+        <li>Recognition that a single Likert item is strictly ordinal, plus the conditions under which averaging is defensible.</li>
+        <li>At least three distinct threats to comparability between the two surveys.</li>
+        <li>Concrete, actionable remedies — not just criticism.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>✅ Model answer</summary>
+    <div class="acc-body">
+      <p><b>Classification of the five items.</b></p>
+      <div class="tbl-scroll" style="margin:10px 0">
+      <table>
+        <thead><tr><th class="ctr" style="width:8%">Item</th><th style="width:18%">Level</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td class="ctr"><b>Q1</b></td><td><b>Ordinal</b> (commonly treated as interval)</td><td>Ordered categories, but the psychological gap between "Dissatisfied" and "Neutral" is not demonstrably equal to that between "Satisfied" and "Very satisfied". Strictly the median is the defensible centre.</td></tr>
+          <tr><td class="ctr"><b>Q2</b></td><td><b>Ratio</b> (discrete)</td><td>Zero visits genuinely means no visits, and 8 visits is genuinely twice 4. Discrete because visits are countable whole numbers.</td></tr>
+          <tr><td class="ctr"><b>Q3</b></td><td><b>Nominal</b></td><td>Branch names are labels with no inherent order. Only counts, proportions and the mode are meaningful. The dropdown's internal index numbers are name tags, not quantities.</td></tr>
+          <tr><td class="ctr"><b>Q4</b></td><td><b>Ratio</b> (continuous in nature)</td><td>₱0 means no spending; ₱2,000 is twice ₱1,000. Note it is <em>self-reported</em>, which is a data-quality problem, not a measurement-level problem.</td></tr>
+          <tr><td class="ctr"><b>Q5</b></td><td><b>Ordinal</b> (commonly treated as interval)</td><td>Same reasoning as Q1.</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p><b>(a) "Nearly twice as satisfied as the neutral midpoint" — <span class="no">indefensible</span>.</b></p>
+      <p>This claim requires a <b>ratio</b> scale, and the satisfaction item does not have one. Apply the zero test: on a 1–5 scale, the value 1 does not represent <em>an absence of satisfaction</em> — it represents the label "Very dissatisfied", which is a substantive state, not zero. There is no true zero anywhere on the scale, so the ratio 4.31 ÷ 3 = 1.44 is arithmetically computable but semantically empty. Worse, the coding is arbitrary: had the same scale been coded −2 to +2, the identical responses would yield a mean of 0.31 against a midpoint of 0, and the "ratio" would be infinite. A conclusion that changes when you relabel the categories is not a finding about customers.</p>
+      <p><b>What would make it defensible:</b> nothing about this scale. The claim must be restated in the only language the data supports — <em>"the mean response falls between 'Satisfied' and 'Very satisfied'"</em> or, better, a distributional statement: <em>"68% of respondents selected 4 or 5."</em> Percentages of the top box are both more honest and more useful to management than a mean on ordinal data.</p>
+
+      <p><b>(b) Comparability of 4.31 with 4.19 — <span class="no">not defensible as it stands</span>.</b> At least four distinct threats:</p>
+      <ol>
+        <li><b>Different modes.</b> An in-app self-administered survey and a face-to-face mall intercept produce different answers from the same person. Interviewer presence reliably inflates positive responses through social-desirability bias; conversely, an app survey reaches an already-committed audience. The two modes are not interchangeable instruments.</li>
+        <li><b>Different populations.</b> The benchmark sampled mall-intercept customers — including non-app users. The new survey sampled only engaged app users. This is not the same population measured twice; it is two different populations measured once each.</li>
+        <li><b>Different seasons.</b> March versus December. December is peak Christmas trading with seasonal drinks, holiday promotions and festive store atmosphere. <b>Season is a textbook confounder</b>: it plausibly raises satisfaction independently of the app, and it is perfectly correlated with the "treatment".</li>
+        <li><b>Different instruments and anchors.</b> The case does not establish that the two surveys used identical wording, identical anchor labels, or identical question order. Any of these changes shifts a mean by more than 0.12.</li>
+      </ol>
+      <p style="margin:0"><b>What would make it defensible:</b> measure the same population, with the same instrument, in the same mode, at the same point in the annual cycle — ideally a pre-registered before-and-after design with a comparison group of non-adopters, or at minimum a December-to-December comparison. Absent that, the honest statement is that the two figures <em>cannot be differenced</em>, and the 0.12 "improvement" is not a measured quantity at all.</p>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>📊 Scoring rubric (15 pts)</summary>
+    <div class="acc-body">
+      <div class="tbl-scroll" style="margin:0">
+      <table class="rubric">
+        <thead><tr><th>Criterion</th><th class="ctr">Pts</th><th>Full marks requires</th></tr></thead>
+        <tbody>
+          <tr><td>Classification of all five items</td><td class="ctr">5</td><td>All five correct with justification; ordinal-vs-interval nuance on Q1/Q5 acknowledged</td></tr>
+          <tr><td>Evaluation of the ratio claim</td><td class="ctr">4</td><td>Applies the zero test; notes the arbitrariness of coding; supplies an honest restatement</td></tr>
+          <tr><td>Threats to comparability</td><td class="ctr">4</td><td>At least three distinct threats, with seasonality explicitly named as a confounder</td></tr>
+          <tr><td>Remedies</td><td class="ctr">2</td><td>Concrete and actionable, not generic ("do a better survey" earns nothing)</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ESSAY 3 -->
+<div class="essay">
+  <div class="etag">Essay 3 · 20 points · Evaluate &amp; Create</div>
+  <div class="eq">You are the analyst asked to review the memo before it reaches the Executive Committee. Write a response of roughly 400–500 words that (i) explains what <b>p = 0.03</b> does and does not establish, (ii) evaluates whether a 0.12-point difference is <b>practically</b> significant and what evidence would settle that, (iii) assesses the causal claim that <b>"the app produced"</b> the improvement, and (iv) identifies the ethical and legal problems in how the data was collected and joined, with reference to R.A. 10173. Conclude with a specific recommendation on the ₱12M budget request.</div>
+
+  <details class="acc">
+    <summary>💡 Before you look — what a strong answer must contain</summary>
+    <div class="acc-body">
+      <ul style="margin:0">
+        <li>A correct definition of what a p-value is conditional on — not "the probability the app worked".</li>
+        <li>Explicit separation of statistical from practical significance, with a stated decision threshold.</li>
+        <li>Named confounders and the design that would be needed for a causal claim.</li>
+        <li>The consent problem identified specifically, not vaguely — purpose limitation and proportionality.</li>
+        <li>A recommendation that is actionable and does not simply say "reject".</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>✅ Model answer</summary>
+    <div class="acc-body">
+      <p><b>(i) What p = 0.03 establishes.</b> It says that <em>if</em> the two population means were truly equal, a difference at least as large as the one observed would occur in about 3% of repeated samples. It is a statement about <b>data given an assumption</b>, not about the probability that the assumption is false. It is emphatically <em>not</em> a 97% chance that the app worked, and it says nothing about the <b>size</b> of any difference. Critically, a p-value is only meaningful when the data came from a random sample of the population of interest — which, as established in Essay 1, it did not. Applied to a self-selected sample from a coverage-deficient frame, the p-value is answering a question nobody asked.</p>
+
+      <p><b>(ii) Practical significance.</b> A 0.12-point shift on a five-point scale is 2.4% of the scale range. With n = 1,120, statistical significance is unsurprising — large samples make small differences detectable, which is exactly the trap the memo has fallen into. The relevant question is not whether the difference is detectable but whether it is <b>actionable</b>: does a 0.12-point movement in a self-reported score predict any change in revisit rate, basket size or churn? That is an empirical question the company can answer from its own POS data, and until it does, there is no basis for valuing the change at ₱12M. I would require an effect size and, ideally, a demonstrated link between satisfaction movements of this magnitude and a revenue outcome before treating the result as material.</p>
+
+      <p><b>(iii) The causal claim.</b> "The app produced" a change cannot be supported by this design. There is no control group, no randomisation, and no pre-post measurement on the same individuals. At least three confounders are live: <b>seasonality</b> (December vs March), <b>self-selection</b> (people who choose to adopt a loyalty app are already more favourable toward the brand — the app did not make them loyal, their loyalty made them install the app), and <b>survivorship</b> (three underperforming branches were closed, removing their dissatisfied customers from the data entirely). Any of these alone could generate the entire 0.12. To support a causal claim the company would need, at minimum, a comparison of adopters against matched non-adopters over the same period, and preferably a staged rollout that creates a genuine control group.</p>
+
+      <p><b>(iv) Ethical and legal problems.</b> The survey invitation stated only <em>"Help us serve you better!"</em> Respondents were not told that their answers would be linked to their loyalty ID and six months of purchase history. Under R.A. 10173 this fails on at least two counts. <b>Consent</b> must be informed and specific; consent to a two-minute satisfaction survey is not consent to behavioural profiling. <b>Purpose limitation</b> means personal data may not be processed for purposes beyond those declared at collection, and the linkage is precisely such a repurposing. <b>Proportionality</b> is also questionable: a satisfaction study does not require six months of transaction-level history. Separately, describing responses as "anonymous" would be false — retaining the loyalty ID makes the dataset <b>pseudonymised</b>, not anonymised, and it therefore remains fully regulated personal data. Beyond the law, the memo's selective framing — a favourable ratio claim, a causal verb, no limitations section — is a reporting-integrity problem in its own right.</p>
+
+      <p style="margin:0"><b>Recommendation.</b> Do not approve the ₱12M on this evidence, and do not reject the app either — the study is uninformative in both directions, which is a different verdict from "the app failed". I recommend: (1) hold the budget at current level for one quarter; (2) commission a branch-intercept survey covering non-app users, run in the same month as the follow-up, to establish an unbiased baseline; (3) run a matched adopter/non-adopter comparison on POS data, where the outcome is observed behaviour rather than self-report; (4) suspend the survey-to-purchase-history linkage immediately, consult the Data Protection Officer, and re-collect with an explicit consent statement; and (5) re-issue the memo with the claim narrowed to app users, the causal verb removed, and a limitations section attached.</p>
+    </div>
+  </details>
+
+  <details class="acc">
+    <summary>📊 Scoring rubric (20 pts)</summary>
+    <div class="acc-body">
+      <div class="tbl-scroll" style="margin:0">
+      <table class="rubric">
+        <thead><tr><th>Criterion</th><th class="ctr">Pts</th><th>Full marks requires</th></tr></thead>
+        <tbody>
+          <tr><td>Correct account of the p-value</td><td class="ctr">4</td><td>States the conditional structure; rejects the "97% sure" reading; notes it presupposes random sampling</td></tr>
+          <tr><td>Statistical vs. practical significance</td><td class="ctr">4</td><td>Explains the large-<em>n</em> mechanism; demands an effect size; proposes a decision-relevant benchmark</td></tr>
+          <tr><td>Causal evaluation</td><td class="ctr">4</td><td>Names at least two confounders and specifies the design that would license a causal claim</td></tr>
+          <tr><td>Ethics and R.A. 10173</td><td class="ctr">5</td><td>Identifies the consent failure specifically; cites purpose limitation and proportionality; distinguishes pseudonymised from anonymised</td></tr>
+          <tr><td>Recommendation</td><td class="ctr">3</td><td>Specific, actionable, and avoids both approving and reflexively rejecting; addresses the data issue</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin:12px 0 0"><b>Automatic deductions:</b> −3 for describing p = 0.03 as "a 97% chance the app worked"; −3 for accepting the causal claim without qualification; −2 for treating the linkage as acceptable because "the data was already ours".</p>
+    </div>
+  </details>
+</div>
+
+<div class="card c-recap">
+  <div class="hd">🏁 Chapter close</div>
+  <p style="margin:0">If you can now read the Barako Blend memo and immediately see four separate failures — a frame that excludes 99% of the population, a ratio claim on an ordinal scale, a causal verb with no control group, and an undisclosed data linkage — then Session 1 has done its job. Everything after this is technique. <b>This chapter was judgement.</b></p>
+</div>
+
+<footer class="end">
+  <p><b>Chapter 1 · Advanced Statistical Reasoning</b> — interactive learning module for Advanced Statistics, Rizal Technological University.</p>
+  <p>Grounded in Bluman, <em>Elementary Statistics: A Step by Step Approach</em> (Ch. 1); Agresti, <em>Statistical Methods for the Social Sciences</em>, 5th ed. (Ch. 1–2); Chan, <em>Introduction to Probability for Data Science</em>; Few, <em>Show Me the Numbers</em>. Legal reference: Republic Act No. 10173 (Data Privacy Act of 2012).</p>
+  <p style="margin:0">Palette: royal blue and gold — #102A63 · #173E8C · #4169E1 · #D4AF37 · #F1D675</p>
+  <div class="palette">
+    <span class="sw" style="background:#102A63"></span><span class="sw" style="background:#173E8C"></span>
+    <span class="sw" style="background:#4169E1"></span><span class="sw" style="background:#6F8DF0"></span>
+    <span class="sw" style="background:#D4AF37"></span><span class="sw" style="background:#F1D675"></span>
+    <span class="sw" style="background:#DCE6FF"></span><span class="sw" style="background:#FFF1B8"></span>
+    <span class="sw" style="background:#F4F7FF"></span>
+  </div>
+</footer>
+</section>
+</div><!-- /.wrap -->
+
+<button class="backtop" id="backtop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ITEM BANK
+   Each item: {b} Bloom level · {s} scenario stem (optional) · {q} question
+              {o} options array · {a} zero-based index of the key
+              {w} why the key is correct · {n} why each distractor fails
+   ═══════════════════════════════════════════════════════════════════ */
+
+const HOTS = [
+{
+ b:"ANALYSE",
+ s:"A music-streaming service wants to report how satisfied all of its Philippine subscribers are. It emails a satisfaction survey only to subscribers who logged in during the previous seven days. Twelve per cent of those emailed respond.",
+ q:"Which statement identifies the deepest flaw in this design?",
+ o:["The response rate is too low for the results to be statistically valid.",
+    "The sampling frame excludes inactive subscribers, who are systematically more likely to be dissatisfied.",
+    "Email surveys produce less reliable answers than telephone surveys.",
+    "The company failed to disclose the achieved sample size."],
+ a:1,
+ w:"The frame — subscribers active in the past seven days — is not the population the company wants to describe. Inactivity is itself a symptom of dissatisfaction, so the people most likely to drag the average down were structurally excluded before a single response arrived. This is coverage error, and it produces bias, not noise. Bias is deeper than any of the other problems listed because no amount of additional data corrects it.",
+ n:{0:"A low response rate is a genuine concern (non-response bias), but the phrasing treats it as a threshold problem — as though some magic percentage would make the study valid. There is no such threshold, and even a 100% response rate from this frame would still exclude every inactive subscriber.",
+    2:"Mode of administration does affect answers, but this is a secondary measurement concern. It does not explain why an entire segment of the population had zero chance of being contacted.",
+    3:"Failing to disclose n is a reporting shortcoming, not a design flaw. Disclosing it would not repair the frame."}
+},
+{
+ b:"ANALYSE",
+ s:"An HR director writes: “Our 1,842 employees have a mean tenure of 4.7 years. From a random sample of 200 of them, mean engagement score is 3.9.”",
+ q:"How should these two numbers be classified?",
+ o:["Both 4.7 and 3.9 are statistics.",
+    "Both 4.7 and 3.9 are parameters.",
+    "4.7 is a parameter and 3.9 is a statistic.",
+    "4.7 is a statistic and 3.9 is a parameter."],
+ a:2,
+ w:"Tenure was computed from all 1,842 employees — that is a census of the population, so 4.7 is a parameter and there is nothing to infer about it. Engagement was computed from a random sample of 200, so 3.9 is a statistic that estimates an unknown population parameter. The classification depends entirely on whether the number came from the whole group or a subset, not on what the number measures.",
+ n:{0:"This would be right only if both figures came from samples. The tenure figure covers every employee, which makes it a parameter by definition.",
+    1:"The engagement figure comes from 200 of 1,842 employees. It will change if a different 200 are drawn, which is exactly what makes a quantity a statistic rather than a parameter.",
+    3:"This reverses the two. Remember the rule: whole group = parameter, subset = statistic."}
+},
+{
+ b:"EVALUATE",
+ s:"A loyalty programme codes tiers as Bronze = 1, Silver = 2, Gold = 3, Platinum = 4. An analyst reports: “Mean customer tier rose from 2.1 to 2.4, so customers moved up 0.3 tiers on average.”",
+ q:"What is the strongest objection to this analysis?",
+ o:["The mean should have been weighted by each customer’s spending.",
+    "Tier is ordinal: the intervals between tiers are not equal, so a change of 0.3 has no consistent meaning.",
+    "The analyst should have used the mode, because the mode is always the correct measure for customer data.",
+    "Four categories is too few for a mean to be computed."],
+ a:1,
+ w:"The codes 1, 2, 3, 4 are rank labels, not measured quantities. The conceptual distance from Bronze to Silver is almost certainly not the same as the distance from Gold to Platinum — those thresholds are set by spend requirements that are typically far apart at the top. Averaging the codes silently invents an equal-interval property nobody measured, so “0.3 tiers” does not correspond to any real quantity.",
+ n:{0:"Weighting changes which customers count more. It does nothing to fix the fact that the underlying scale has unequal, unknown gaps — a weighted average of meaningless numbers is still meaningless.",
+    2:"The mode is indeed a valid statistic for ordinal data, and so is the median. But the word “always” makes this option false: the correct measure depends on the measurement level and the question, not on a blanket rule about customer data.",
+    3:"There is no minimum number of categories for computing a mean. The problem is the nature of the scale, not the count of its levels."}
+},
+{
+ b:"APPLY",
+ s:"An HR consultancy publishes an Engagement Index standardised so that the national average is 100 with a standard deviation of 15. Company A scores 120; Company B scores 60.",
+ q:"Which claim is defensible given the measurement level of this index?",
+ o:["Company A is twice as engaged as Company B.",
+    "Company A scored 60 index points above Company B.",
+    "Company B has zero engagement.",
+    "Company A is 100% more engaged than Company B."],
+ a:1,
+ w:"A standardised index anchored to an arbitrary average is interval-level: the gaps between points are treated as equal, but zero is a construction of the scoring formula, not an absence of engagement. Interval data makes <em>differences</em> meaningful — and permits means, which are built from differences about a centre — so a statement about the 60-point gap is exactly what the scale licenses. Note that summing two index scores would be just as meaningless as dividing them.",
+ n:{0:"This is a ratio statement, and ratios require a true zero. Since 0 on this index does not mean “no engagement,” 120 ÷ 60 is arithmetic without meaning.",
+    2:"Company B scored 60, which is well below average but is a substantive score, not an absence. Nothing on this scale represents zero engagement.",
+    3:"“100% more” is the same ratio claim as the “twice as engaged” option, dressed as a percentage. Restating an illegal operation in different words does not make it legal."}
+},
+{
+ b:"EVALUATE",
+ s:"An e-commerce marketplace runs an A/B test on checkout-button colour with 12 million users, split evenly between the two variants. Variant B converts at 2.41%, variant A at 2.38%. The test returns p &lt; 0.001.",
+ q:"Which is the most professionally sound interpretation?",
+ o:["The result is highly significant, so the effect on conversion is large.",
+    "The evidence that a real difference exists is strong, but a 0.03-percentage-point gap must be weighed against implementation and maintenance cost before acting.",
+    "The result is invalid because the observed difference is too small to be real.",
+    "Because p &lt; 0.001, there is a 99.9% probability that variant B is genuinely better."],
+ a:1,
+ w:"This is the classic large-sample trap. With six million users per arm, the test has enough power to detect differences far smaller than anything worth acting on. The p-value speaks to the strength of the evidence that some difference exists; it says nothing about magnitude. The professional move is to separate the two questions and evaluate the second using subject-matter judgement and decision criteria.",
+ n:{0:"“Highly significant” describes the strength of evidence, not the size of the effect. English betrays us here — in ordinary speech “significant” means large, but in statistics it means detectable.",
+    2:"Small effects are not invalid effects. The difference may well be real; the question is whether it is worth anything.",
+    3:"This misreads the p-value. It is computed assuming no difference exists, and it reports how often data at least as extreme as this would arise under that assumption — it is not the probability that a hypothesis is true."}
+},
+{
+ b:"ANALYSE",
+ s:"A gym chain finds that members who use its mobile app attend 40% more sessions than members who do not. Management concludes that the app drives attendance and plans to promote it heavily.",
+ q:"Which consideration most undermines management’s conclusion?",
+ o:["A 40% difference is not statistically significant.",
+    "Members who are already highly motivated are both more likely to install the app and more likely to attend.",
+    "Attendance should have been measured in minutes rather than sessions.",
+    "App usage is a nominal variable and therefore cannot be analysed."],
+ a:1,
+ w:"This is self-selection, a confounder. Motivation causes both app adoption and attendance, manufacturing an association between them that has no causal content. The app did not create these members’ commitment; their commitment led them to install the app. Establishing a causal effect would require randomising who receives the app, or at minimum comparing matched adopters and non-adopters.",
+ n:{0:"Nothing in the scenario suggests the difference fails a significance test — with a large membership base a 40% gap would almost certainly be significant. Significance is not the issue; interpretation is.",
+    2:"Changing the unit of measurement might refine the estimate slightly, but the same confounding applies to minutes as to sessions.",
+    3:"Nominal variables are analysed constantly — using proportions, chi-square tests and logistic regression. This option is simply false."}
+},
+{
+ b:"APPLY",
+ s:"A courier company’s system logs two fields for every trip: the delivery duration, recorded in whole minutes, and the number of parcels carried.",
+ q:"How should these variables be classified?",
+ o:["Both are discrete.",
+    "Delivery duration is continuous in nature although recorded discretely; parcels per trip is discrete.",
+    "Both are continuous.",
+    "Delivery duration is discrete because it is recorded in whole minutes."],
+ a:1,
+ w:"Classification follows the nature of the variable, not the precision of the recording instrument. Time genuinely can take any value in an interval — a delivery can take 14.3 minutes — so duration is continuous even though the log rounds it. Parcels, by contrast, cannot take intermediate values: 3.5 parcels does not exist. The rounding of duration limits how precisely you may speak, but does not change what kind of variable it is.",
+ n:{0:"This treats the recording convention as though it defined the variable. If it did, then measuring revenue to the nearest peso would make revenue discrete, which no one accepts.",
+    2:"Parcels are countable whole units with genuine gaps between possible values. There is no such thing as a fractional parcel.",
+    3:"This is the same instrument-based error as option A, stated explicitly. Rounding a continuous variable does not make it discrete."}
+},
+{
+ b:"ANALYSE",
+ s:"A quarterly retail report contains four sentences:<br>(i) “We recorded 41,209 transactions in Q3.”<br>(ii) “Median basket size across those transactions was ₱612.”<br>(iii) “Branch 12 had the highest transaction count.”<br>(iv) “Filipino shoppers prefer mid-range price points.”",
+ q:"Which sentence crosses from description into inference?",
+ o:["Sentence (i)","Sentence (ii)","Sentence (iii)","Sentence (iv)"],
+ a:3,
+ w:"Sentences (i) through (iii) are all statements about records the company already holds — they can be verified by re-reading the database and cannot be “wrong” except through arithmetic error. Sentence (iv) names a group, Filipino shoppers, that was never sampled. It extends a fact about this retailer’s transactions into a claim about a national population, which is precisely the inferential move.",
+ n:{0:"A count of the company’s own transactions describes the data in hand. Nothing is being claimed about anyone unobserved.",
+    1:"A median computed from the observed transactions is a descriptive statistic about that exact set.",
+    2:"Comparing branches on data the company holds for every branch is description — indeed it is a census of its own branches."}
+},
+{
+ b:"ANALYSE",
+ s:"A telecommunications analyst frames the question: “Holding subscriber tenure and plan type constant, how much does each additional support ticket change the probability that a subscriber churns?”",
+ q:"Which level of the research-question hierarchy does this represent?",
+ o:["Describe","Compare","Associate","Predict / explain"],
+ a:3,
+ w:"Two features place this at the highest level. First, it asks for the effect of one variable while holding others constant, which is the definition of a partial effect and requires a model. Second, it asks how much the outcome changes per unit of the predictor, which is a prediction statement rather than a statement that two things merely move together. This is the territory of multiple regression.",
+ n:{0:"Describing would be “what proportion of subscribers churned last quarter?” — no relationship is involved.",
+    1:"Comparing would be “do subscribers with more than three tickets churn more often than those with fewer?” — two groups, no controls, no per-unit estimate.",
+    2:"Associating would be “are support tickets and churn related?” The phrase “holding tenure and plan type constant” pushes this beyond association into modelling."}
+},
+{
+ b:"EVALUATE",
+ q:"Which is the strongest justification for treating a satisfaction measure as interval-level data?",
+ o:["The statistical software computes a mean without producing an error.",
+    "Treating satisfaction scales as interval is standard practice throughout the industry.",
+    "The measure is a composite of seven related items, the response options are verbally and visually equally spaced, and the assumption is declared as a limitation in the methodology.",
+    "The scale has five points, and five-point scales are interval by convention."],
+ a:2,
+ w:"This option supplies the three things that make the assumption defensible rather than merely common. A multi-item composite behaves far more like an interval variable than any single item does; equally spaced anchors make it plausible that respondents perceive equal steps; and declaring the assumption converts a hidden weakness into an acknowledged limitation that readers can evaluate for themselves. The professional standard is not avoiding the assumption — it is making it visible.",
+ n:{0:"Software will happily average anything, including nominal codes. The absence of an error message is not evidence of validity.",
+    1:"Widespread practice is a description of what people do, not an argument that it is correct. Plenty of common practices in analytics are indefensible.",
+    3:"There is no such convention, and the number of scale points has no bearing on whether the intervals between them are equal."}
+},
+{
+ b:"EVALUATE",
+ q:"Under the Data Privacy Act of 2012 (R.A. 10173), which of the following research practices is compliant?",
+ o:["Collecting respondents’ birthdates because they may prove useful in a future study.",
+    "Reusing a customer-service dataset to build a marketing model without notifying the individuals concerned.",
+    "Telling respondents at the point of collection exactly what data will be gathered, for what purpose, and who will access it — and collecting only the fields the research question requires.",
+    "Publishing results described as anonymous that include each respondent’s barangay, employer and exact age."],
+ a:2,
+ w:"This option satisfies all three general data privacy principles of the Act at once: <b>transparency</b> (the respondent knows what is collected, why, and who will access it), <b>legitimate purpose</b>, and <b>proportionality</b>. Transparency is also what makes valid consent possible, since a person who is not told what is being collected cannot meaningfully agree to it. Each principle does separate work — informing people is not enough if you also over-collect, and collecting little is not enough if people were never told why.",
+ n:{0:"This fails proportionality. “It might be useful later” is the opposite of a declared purpose, and speculative collection is exactly what the principle is designed to prevent.",
+    1:"This fails on two of the three principles. The individuals were never told their data would be used this way (transparency), and building a marketing model is not the purpose for which the data was originally declared and collected (legitimate purpose).",
+    3:"Deleting a name does not achieve anonymity. Barangay plus employer plus exact age will identify individuals in small cells, so the dataset is at best pseudonymised and the label “anonymous” is false."}
+},
+{
+ b:"APPLY",
+ s:"A researcher replaces every student’s name with a code from S001 to S420 and stores the name-to-code key in a separate, password-protected file.",
+ q:"How should this dataset be characterised?",
+ o:["Anonymised, and therefore outside the scope of the Data Privacy Act.",
+    "Pseudonymised, and therefore still personal data fully within the scope of the Act.",
+    "Anonymised, because the key file is protected by a password.",
+    "Outside the Act entirely, because the Act does not apply to academic research."],
+ a:1,
+ w:"Anonymisation requires that re-identification be genuinely impossible for anyone. Here a key exists, so re-identification is not merely possible but straightforward for whoever holds it. The dataset is pseudonymised — a good security practice, and a required one, but it does not remove the data from the privacy regime. Only destroying the key and confirming that the remaining fields cannot triangulate an individual would achieve anonymisation.",
+ n:{0:"The existence of a retained key is precisely what distinguishes pseudonymisation from anonymisation. This is the single most common misunderstanding students bring to research ethics review.",
+    2:"Password protection is a security control, not an anonymisation technique. It governs who can open the key, not whether the key exists.",
+    3:"The Act contains no blanket academic exemption. Research involving personal information of identifiable individuals is covered."}
+},
+{
+ b:"ANALYSE",
+ s:"A researcher studying the income of jeepney drivers posts a survey link in three Facebook groups for transport operators and receives 240 responses.",
+ q:"What is the sampling frame in this study?",
+ o:["All jeepney drivers in the Philippines.",
+    "The 240 drivers who responded.",
+    "Members of those three Facebook groups.",
+    "All Facebook users in the Philippines."],
+ a:2,
+ w:"The frame is the list or mechanism from which units could actually be drawn — here, the membership of those three groups. Everything upstream of that is aspiration and everything downstream is result. Naming the frame precisely is what exposes the study’s limits: drivers without Facebook, or without those group memberships, had exactly zero probability of selection. A <em>second</em> and separate problem sits inside the frame: whether a member ever saw the post was decided by the platform’s feed algorithm, so selection probabilities within the frame are unknown and unequal too.",
+ n:{0:"That is the population — the group the researcher wishes to describe. Confusing it with the frame is what allows an unwarranted claim to slip through.",
+    1:"Those 240 are the sample: the units actually observed. The frame is the larger list they were drawn from.",
+    3:"Far too broad. Only members of the three specific groups could have been reached at all."}
+},
+{
+ b:"ANALYSE",
+ s:"A bank finds that its financial-literacy training increases clients’ savings balances. Further analysis shows the effect operates because trainees gain confidence in budgeting, and that the effect is substantially stronger among clients under 30 than among older clients.",
+ q:"How should confidence and age group be classified?",
+ o:["Confidence is a moderator; age group is a mediator.",
+    "Confidence is a mediator; age group is a moderator.",
+    "Both confidence and age group are mediators.",
+    "Both confidence and age group are confounders."],
+ a:1,
+ w:"Confidence sits on the causal path: training raises confidence, and confidence raises savings. It carries the effect, which makes it a mediator and answers the question “how does this work?” Age group sits beside the path and changes its strength — the same training produces a bigger effect for younger clients. That makes it a moderator, answering “for whom does this work?”",
+ n:{0:"This reverses the two. Confidence is described as the mechanism through which the effect operates, which is the definition of mediation, not moderation.",
+    2:"Age group is not a mechanism produced by the training — training does not change a client’s age. It is a pre-existing characteristic that conditions the effect.",
+    3:"A confounder would have to affect both the training and the savings outcome while explaining away their relationship. Neither variable plays that role here: confidence is caused by the training, and age is described as modifying rather than manufacturing the effect."}
+},
+{
+ b:"EVALUATE",
+ s:"A national magazine studies the 50 fastest-growing Philippine startups of the past decade, finds that most hired aggressively in their first year, and concludes that aggressive early hiring causes rapid growth.",
+ q:"What is the strongest methodological objection?",
+ o:["A sample of 50 is too small to support any conclusion.",
+    "Growth should have been measured by revenue rather than by headcount.",
+    "Startups that hired aggressively and then failed are absent from the sample, so the relationship between hiring and growth cannot be established.",
+    "The study should have covered a longer time horizon than a decade."],
+ a:2,
+ w:"This is survivorship bias in its purest form. The sample was selected on the outcome — only fast growers were studied — so it is structurally incapable of revealing how often aggressive hiring precedes failure. To make the claim, the magazine would need to start from a cohort of startups defined at founding and follow all of them, including the ones that no longer exist to be interviewed.",
+ n:{0:"Fifty is not a trivially small sample, and in any case increasing it to 500 fast-growing startups would reproduce exactly the same bias at greater expense. The defect is in how units were selected, not how many.",
+    1:"The choice of growth metric is a reasonable secondary criticism, but revenue-defined fast growers would be selected on outcome in precisely the same way.",
+    3:"A longer window would add more survivors. It would not add any of the firms that disappeared."}
+},
+{
+ b:"ANALYSE",
+ s:"A company reports that a new sales-training programme raised close rates from 22% to 26% overall. Broken out by experience level, junior representatives fell from 18% to 17% and senior representatives fell from 34% to 33%. Substantially more senior representatives were assigned to the trained group.",
+ q:"Which statement is most accurate?",
+ o:["The overall figure must contain a calculation error.",
+    "Both the overall gain and the within-group declines are arithmetically correct; the aggregate improvement is produced by the composition of the groups, so the training cannot be credited.",
+    "The within-group figures must be wrong, because they contradict the total.",
+    "The training worked for the company as a whole, even though it did not work for individual representatives."],
+ a:1,
+ w:"This is Simpson’s paradox. Because seniors close at a much higher base rate than juniors, loading the trained group with seniors lifts its overall average even though every individual subgroup got worse. Both sets of numbers are true simultaneously — the reversal comes from group composition, not from arithmetic. The correct reading is that the training is associated with a decline in every group examined.",
+ n:{0:"No error is required to produce this pattern. A weighted average can move opposite to all of its components when the weights differ between groups.",
+    2:"The subgroup figures are the more trustworthy of the two here, because they are not distorted by differing group composition — though since representatives were assigned rather than randomised, even they cannot be read as the causal effect of the training.",
+    3:"This is the most tempting distractor and the most dangerous. Attributing a compositional artefact to the training is exactly the error the paradox sets. The company did not become better at closing; it simply put more of its already-effective seniors into one group."}
+},
+{
+ b:"EVALUATE",
+ s:"A slide presents quarterly revenue as a bar chart with the vertical axis beginning at ₱9.8M. The bars read 9.9, 10.0, 10.1 and 10.2 million pesos. Visually the final bar appears roughly four times the height of the first. The headline reads: “Revenue quadrupled.”",
+ q:"What is the best critique of this slide?",
+ o:["Bar charts should never be used to display time series.",
+    "The truncated axis converts a 3% increase into an apparent 300% increase, and the headline reads visual height as though it were quantity.",
+    "The chart should have used a logarithmic vertical scale.",
+    "Four quarters is too few data points to justify plotting a chart."],
+ a:1,
+ w:"Two failures compound here. The truncated baseline exaggerates a genuine but tiny 3% rise into a dramatic visual difference — the bar heights encode distance from ₱9.8M, not revenue. The headline then compounds the distortion by describing the picture rather than the data. Bar charts encode quantity by length, so their baseline must be zero; this is not a stylistic preference but a requirement of the encoding.",
+ n:{0:"Bar charts are perfectly acceptable for a small number of time periods. The problem is the axis, not the chart family.",
+    2:"A logarithmic scale would not repair a false headline, and would make a 3% change even harder for a general audience to read correctly.",
+    3:"Four points is a legitimate series. Removing the chart would not fix a claim that misstates the data by two orders of magnitude."}
+},
+{
+ b:"ANALYSE",
+ s:"An analyst tests a promotional campaign’s effect across 22 customer subgroups. One subgroup — males aged 35 to 44 in Region IV-A — returns p = 0.04. The final report presents this subgroup finding as though it had been the study’s stated hypothesis from the outset.",
+ q:"Which description of the problem is most complete?",
+ o:["This is p-hacking only.",
+    "This is HARKing only.",
+    "This is both: many subgroups were tested until one reached significance (p-hacking), and the result was then presented as if it had been predicted in advance (HARKing).",
+    "Neither applies, because subgroup analysis is standard practice in marketing research."],
+ a:2,
+ w:"Two distinct offences occurred in sequence. Testing 22 subgroups at a 5% threshold means roughly one false positive is expected by chance alone even if the campaign did nothing at all — that is the p-hacking. Rewriting the narrative so the surviving subgroup appears to have been the original hypothesis is the HARKing, and it conceals the 21 tests that failed. Either alone would be misconduct; together they make the reported p-value uninterpretable.",
+ n:{0:"Correct as far as it goes, but incomplete. It captures the multiple testing while ignoring the retrospective rewriting of the hypothesis, which is what makes the report actively deceptive rather than merely a finding whose false-positive rate has been inflated.",
+    1:"Also incomplete for the mirror-image reason. HARKing describes the presentation; it does not describe the search through 22 subgroups that generated the finding.",
+    3:"Subgroup analysis is indeed standard — but only when it is declared as exploratory, when the number of tests is reported, and when the significance threshold is adjusted accordingly. None of that happened here."}
+},
+{
+ b:"EVALUATE",
+ s:"A retailer randomly assigns 40 of its 80 branches to receive a new point-of-sale system and compares mean checkout time in the two sets of branches after three months.",
+ q:"Which claim does this design legitimately license?",
+ o:["No claim at all, because branches rather than individual customers were assigned.",
+    "A causal claim about the effect of the point-of-sale system on checkout time in these branches.",
+    "Only an association, because no customer survey was conducted.",
+    "A prediction of checkout times for all retailers in the Philippines."],
+ a:1,
+ w:"Random assignment is what converts an association into a causal claim. Because branches were allocated by chance, the two groups should be comparable on average in every respect — size, staffing, traffic, region — so any systematic difference in checkout time that emerges can be attributed to the system rather than to pre-existing differences. This is a genuine experiment, and it is qualitatively stronger than any amount of observational data.",
+ n:{0:"Assigning at the group level is a completely legitimate design, known as cluster randomisation. It changes how the analysis must handle within-branch correlation, but it does not void the causal logic.",
+    2:"This confuses the outcome measure with the design. Causal warrant comes from randomisation, not from whether the data were gathered by survey or by system log.",
+    3:"This overgeneralises well beyond the studied population. The experiment supports a claim about these 80 branches; extending it to every retailer in the country is an inferential leap the design does not support."}
+},
+{
+ b:"CREATE",
+ s:"A restaurant chain wants to know whether diners’ satisfaction improved after a menu redesign. It plans to survey diners through a QR code printed on receipts for one week following the launch.",
+ q:"Which single change would most improve the design’s ability to support a causal claim?",
+ o:["Extend the survey window from one week to four weeks.",
+    "Add more questions to the survey instrument.",
+    "Run the identical survey in a matched set of branches that did not receive the redesign, over the same period.",
+    "Offer diners a ₱50 discount for completing the survey."],
+ a:2,
+ w:"Without a comparison group there is no way to separate the menu redesign from everything else happening that week — weather, payday timing, a competitor’s promotion, seasonal traffic. A matched set of unchanged branches surveyed simultaneously supplies the missing counterfactual: what satisfaction would have looked like had the redesign never happened. That is what converts an uninterpretable post-launch snapshot into an evaluable comparison.",
+ n:{0:"A longer window collects more responses and therefore reduces random noise, but it does nothing about the absence of a counterfactual. A more precise estimate of an uninterpretable quantity is not progress.",
+    1:"More questions produce a richer description of satisfaction. They cannot tell you what caused it.",
+    3:"An incentive may raise the response rate, but it also changes who responds — discount-motivated diners are a distinct group. This risks trading one bias for another while leaving the causal problem untouched."}
+}
+];
+
+const DRILL = [
+{
+ b:"RECALL",
+ q:"Which statement best defines a population in statistics?",
+ o:["The largest group a researcher can afford to survey.",
+    "The complete set of units about which the researcher wishes to draw a conclusion.",
+    "The people who agreed to participate in a study.",
+    "Any group of more than 1,000 individuals."],
+ a:1,
+ w:"A population is defined by the researcher’s question, not by budget, availability or size. It is the complete set of units the eventual claim is meant to cover, and it must be stated in words before data collection begins.",
+ n:{0:"Affordability determines the sample, not the population. The population is fixed by what you want to know.",
+    2:"Those who agree to participate form the sample, and self-selection is precisely what makes them potentially unrepresentative.",
+    3:"Populations have no minimum size. The 48 branches of a retail chain are a perfectly valid population."}
+},
+{
+ b:"RECALL",
+ q:"Which symbol represents a sample mean?",
+ o:["μ","x̄","σ","π"],
+ a:1,
+ w:"x̄ (read “x-bar”) is the sample mean — a Roman letter, following the rule that Roman letters describe samples and Greek letters describe populations.",
+ n:{0:"μ (mu) is the population mean: a fixed but generally unknown parameter.",
+    2:"σ (sigma) is the population standard deviation.",
+    3:"π is the population proportion, estimated by the sample proportion p̂."}
+},
+{
+ b:"APPLY",
+ q:"An employee identification number such as EMP-4417 is measured at which level?",
+ o:["Nominal","Ordinal","Interval","Ratio"],
+ a:0,
+ w:"An ID number is a label used only to distinguish one employee from another. It supports equality and inequality comparisons and nothing else — a higher number does not mean more of anything.",
+ n:{1:"Ordinal data carries a meaningful rank order. Employee 4417 does not outrank employee 4416 in any respect.",
+    2:"Interval data requires equal, meaningful distances between values. The gap between two ID numbers is not a quantity.",
+    3:"Ratio data requires a true zero. EMP-0000 would not mean “no employee.”"}
+},
+{
+ b:"APPLY",
+ q:"Annual revenue expressed in Philippine pesos is measured at which level?",
+ o:["Nominal","Ordinal","Interval","Ratio"],
+ a:3,
+ w:"Revenue has equal intervals and a genuine zero — ₱0 means no revenue at all. That true zero is what makes ratio statements valid, so ₱8M really is twice ₱4M.",
+ n:{0:"Revenue is a measured quantity, not a category label.",
+    1:"Revenue does more than rank firms; the distances between values are meaningful and equal.",
+    2:"Interval scales lack a true zero. Revenue has one, which places it a level higher."}
+},
+{
+ b:"APPLY",
+ q:"A job-satisfaction item with the options Poor, Fair, Good and Excellent is measured at which level?",
+ o:["Nominal","Ordinal","Interval","Ratio"],
+ a:1,
+ w:"The four options have a clear rank order, but nothing establishes that the gap from Poor to Fair equals the gap from Good to Excellent. Ordered categories with unknown, unequal spacing is exactly the definition of ordinal.",
+ n:{0:"Nominal categories have no order. These clearly do — Excellent outranks Good.",
+    2:"Interval measurement requires demonstrably equal spacing between adjacent values, which verbal labels do not provide.",
+    3:"Ratio measurement additionally requires a true zero, and there is no zero point on this scale at all."}
+},
+{
+ b:"APPLY",
+ q:"The calendar year in which a company was founded — 1998, 2016, and so on — is measured at which level?",
+ o:["Nominal","Ordinal","Interval","Ratio"],
+ a:2,
+ w:"Years have equal intervals: the gap from 1998 to 1999 is the same as from 2015 to 2016, so subtraction is meaningful. But the calendar’s origin is a historical convention — the Gregorian calendar has no year zero at all, since 1 BC is followed directly by AD 1 — so ratios are meaningless: the year 2000 is not twice the year 1000.",
+ n:{0:"Years are far more than labels; they are ordered and equally spaced.",
+    1:"Years do more than rank events. The distance between them is a meaningful quantity, which lifts them above ordinal.",
+    3:"A ratio scale needs a true zero meaning “none of the quantity.” The calendar’s origin is arbitrary, and it has no zero year at all. Note the contrast with company age in years, which is ratio."}
+},
+{
+ b:"APPLY",
+ q:"The number of branches a retail chain operates is best described as:",
+ o:["Continuous","Discrete","Nominal","Interval"],
+ a:1,
+ w:"Branches are counted in whole units with genuine gaps between possible values. A chain cannot operate 47.5 branches, which makes the variable discrete.",
+ n:{0:"Continuous variables can take any value within an interval. Branch counts cannot take intermediate values.",
+    2:"This confuses two different classifications. Branch count is a quantity, not a category label — it is ratio-level and discrete.",
+    3:"Branch count has a true zero, so it is ratio rather than interval. The question, however, asks about discrete versus continuous."}
+},
+{
+ b:"APPLY",
+ q:"The time taken to resolve a customer-support ticket is best described as:",
+ o:["Discrete","Continuous","Nominal","Ordinal"],
+ a:1,
+ w:"Time can take any value within an interval, limited only by the precision of measurement. A ticket can be resolved in 12.47 minutes, so the variable is continuous — even if the ticketing system rounds it to whole minutes when logging.",
+ n:{0:"Recording precision does not determine the nature of the variable. Rounding a continuous quantity does not make it discrete.",
+    2:"Resolution time is a measured quantity, not a category.",
+    3:"Ordinal data ranks without measuring distance. Time has fully meaningful distances and a true zero."}
+},
+{
+ b:"COMPREHEND",
+ q:"“Our 250 survey respondents reported an average of 3.8 purchases per month.” This statement is:",
+ o:["Inferential, because it involves an average.",
+    "Descriptive, because it summarises only the units actually observed.",
+    "Inferential, because 250 is a sample.",
+    "Neither descriptive nor inferential."],
+ a:1,
+ w:"The sentence carefully restricts itself to the 250 people who responded. It makes no claim about anyone else, so it can be verified simply by recomputing the column. Descriptive statements are bounded by the phrase “our respondents.”",
+ n:{0:"Computing a mean is not what makes a statement inferential. The scope of the claim is what matters, not the tool used.",
+    2:"The data does come from a sample, but the sentence does not generalise beyond it. Had it read “our customers average 3.8 purchases,” it would have become inferential.",
+    3:"Every statistical statement does one job or the other. This one describes."}
+},
+{
+ b:"APPLY",
+ q:"A firm has 12,000 employees and surveys 300 of them. Which notation is correct?",
+ o:["N = 300 and n = 12,000","N = 12,000 and n = 300","Both equal 12,300","N and n both equal 300"],
+ a:1,
+ w:"Capital N denotes population size and lowercase n denotes sample size. The population here is all 12,000 employees, and 300 were sampled from it.",
+ n:{0:"This reverses the two. The capital letter always refers to the larger, population-level quantity.",
+    2:"The 300 surveyed employees are part of the 12,000; the two figures are not added together.",
+    3:"The population size does not shrink to match the sample. It remains 12,000."}
+},
+{
+ b:"APPLY",
+ q:"In the study “Does the number of training hours affect sales performance?”, the independent variable is:",
+ o:["Sales performance","Training hours","The employees studied","The company"],
+ a:1,
+ w:"The independent variable is the presumed cause or predictor — the input whose effect is being examined. Training hours is what is varied or observed as the explanatory factor.",
+ n:{0:"Sales performance is the outcome being explained, which makes it the dependent variable.",
+    2:"Employees are the units of analysis, not a variable. A variable is a characteristic that takes different values across units.",
+    3:"The company is the setting, not a variable in this study."}
+},
+{
+ b:"COMPREHEND",
+ q:"What is the purpose of a control variable?",
+ o:["To increase the sample size.",
+    "To hold constant, or statistically adjust for, a factor that could otherwise obscure the relationship between the independent and dependent variables.",
+    "To replace the dependent variable when it is difficult to measure.",
+    "To guarantee that the results will be statistically significant."],
+ a:1,
+ w:"Controls exist to prevent a third factor from muddying the picture. By fixing it or adjusting for it, the researcher isolates the relationship of interest and reduces the risk of mistaking a confounded association for a real effect.",
+ n:{0:"Adding a control variable does not add cases. Controls address confounding — and often improve precision as a by-product — but neither of those is the same as enlarging the sample.",
+    2:"A control never substitutes for the outcome. If it did, the study would be measuring something else entirely.",
+    3:"Nothing guarantees significance, and any procedure that did would be a form of manipulation rather than analysis."}
+},
+{
+ b:"APPLY",
+ q:"Which measure of centre is appropriate for a nominal variable such as preferred payment method?",
+ o:["Mean","Median","Mode","Standard deviation"],
+ a:2,
+ w:"The mode — the most frequently occurring category — is the only measure of centre that nominal data supports, because it requires nothing more than counting. Saying “the most common payment method is GCash” is meaningful; nothing else is.",
+ n:{0:"A mean requires numbers that can be added. Averaging the codes assigned to payment methods produces a value that corresponds to nothing.",
+    1:"A median requires the data to be orderable so that a middle value exists. Payment methods have no inherent order.",
+    3:"The standard deviation is a measure of spread, not centre, and it also requires interval or ratio data."}
+},
+{
+ b:"RECALL",
+ q:"The sampling frame is best described as:",
+ o:["The complete set of units the researcher wants to describe.",
+    "The actual list or mechanism from which sample units can be drawn.",
+    "The subset of units that were observed and measured.",
+    "The margin of error attached to an estimate."],
+ a:1,
+ w:"The frame is the operational bridge between ambition and reality — the loyalty database, the payroll file, the group membership list. The gap between the frame and the population is coverage error, and it is where most studies quietly fail.",
+ n:{0:"That is the population. Confusing the two is exactly what lets unwarranted claims through.",
+    2:"That is the sample, drawn from the frame.",
+    3:"Margin of error is a result of the analysis, not a component of the design."}
+},
+{
+ b:"APPLY",
+ q:"A student surveys whoever happens to be in the school canteen during her free period. This is an example of:",
+ o:["Simple random sampling","Stratified sampling","Convenience sampling","Systematic sampling"],
+ a:2,
+ w:"Units were selected purely because they were easy to reach. No randomisation was involved, so the probability of selection is unknown and unequal — which means formal inference to a wider student population is not supportable.",
+ n:{0:"Simple random sampling requires that every member of the population have a known and equal chance of selection. Students who never visit the canteen have no chance at all.",
+    1:"Stratified sampling divides the population into subgroups and samples randomly within each. No such structure was used.",
+    3:"Systematic sampling selects every kth unit from an ordered list. There was no list and no interval."}
+},
+{
+ b:"COMPREHEND",
+ q:"Saying a result is “statistically significant” means:",
+ o:["The effect is large and important.",
+    "A result at least as extreme as the one observed would be unlikely if there were truly no effect in the population.",
+    "The finding has been proven correct.",
+    "The sample was large enough."],
+ a:1,
+ w:"Significance is a statement about evidence under an assumption: if nothing were really going on, data at least this extreme would rarely appear. It speaks to detectability, not to magnitude, importance or proof.",
+ n:{0:"This is the single most common misreading. Significance and size are separate questions, and with a large sample a trivial effect can be significant.",
+    2:"Statistical procedures never prove anything. They quantify how well the evidence sits with a stated assumption.",
+    3:"Sample size influences whether significance is achieved, but significance is not a statement about sample size."}
+},
+{
+ b:"COMPREHEND",
+ q:"Why should an effect size be reported alongside a p-value?",
+ o:["Because journals require two numbers.",
+    "Because the effect size communicates how large the difference is, which the p-value does not.",
+    "Because the effect size replaces the need for a significance test.",
+    "Because effect sizes are unaffected by measurement error."],
+ a:1,
+ w:"The p-value and the effect size answer different questions. One asks whether a difference is detectable; the other asks how big it is. Since a large sample can make a trivial difference significant, reporting the p-value alone leaves the reader unable to judge whether the finding matters.",
+ n:{0:"Conventions exist because of the underlying logic, not the reverse. The reason is substantive.",
+    2:"The two are complementary, not interchangeable. An effect size without an indication of uncertainty is just as incomplete.",
+    3:"Effect sizes are affected by measurement error like any other statistic — unreliable measurement generally shrinks them."}
+},
+{
+ b:"RECALL",
+ q:"Republic Act No. 10173 is known as the:",
+ o:["Consumer Act of the Philippines",
+    "Data Privacy Act of 2012",
+    "Intellectual Property Code",
+    "Cybercrime Prevention Act"],
+ a:1,
+ w:"R.A. 10173 is the Data Privacy Act of 2012. It governs the collection, processing, storage and sharing of personal information in both the government and the private sector, and it is the statute that binds your Term Project data.",
+ n:{0:"The Consumer Act (R.A. 7394) concerns product standards, labelling and consumer protection.",
+    2:"The Intellectual Property Code (R.A. 8293) concerns copyright, patents and trademarks.",
+    3:"The Cybercrime Prevention Act (R.A. 10175) addresses offences committed through computer systems; it is a separate statute from the privacy law."}
+},
+{
+ b:"COMPREHEND",
+ q:"Which element is essential to informed consent in research?",
+ o:["The respondent signs a form of any kind.",
+    "The respondent is told what data will be collected, for what purpose, and that participation is voluntary.",
+    "The researcher is affiliated with a recognised university.",
+    "The data will eventually be published."],
+ a:1,
+ w:"Consent must be freely given, specific and informed. A respondent who does not know what is being collected or why cannot meaningfully agree to it, and voluntariness must be genuine — participation cannot be a condition of receiving a service.",
+ n:{0:"A signature evidences consent but does not constitute it. Signing a form that explains nothing is not informed consent.",
+    2:"Institutional affiliation may be required by an ethics board, but it confers no authority to collect data without consent.",
+    3:"Publication is a downstream decision. It is neither necessary nor sufficient for valid consent."}
+},
+{
+ b:"EVALUATE",
+ s:"A student surveys 60 classmates from her own section and finds that 70% prefer online classes.",
+ q:"Which conclusion overreaches the evidence?",
+ o:["“70% of the 60 classmates surveyed prefer online classes.”",
+    "“Most students in this section who responded prefer online classes.”",
+    "“70% of Filipino college students prefer online classes.”",
+    "“This sample cannot support a claim about the whole university.”"],
+ a:2,
+ w:"This extends a finding from 60 classmates in one section to every college student in the country — a population that was never sampled and that differs from the respondents in course, institution, region, connectivity and economic circumstance. The correct claim is bounded by the group actually observed.",
+ n:{0:"This is a plain description of the observed data, restricted to the 60 people surveyed. It is safe and correct.",
+    1:"This is also appropriately bounded, and it even acknowledges that only respondents are covered.",
+    3:"This is a correct statement of the study’s limitation, not an overreach. Recognising what your data cannot support is a strength."}
+}
+];
+
+/* Chapter-specific remediation text consumed by the shared engine. */
+const REMEDY = {
+  mid:"Revisit sections 1.3 and 1.5 — the four building blocks and the NOIR measurement levels — then reset and run this again.",
+  low:"Work through the chapter again before retrying. Focus on the four building blocks and the NOIR levels; nearly every item depends on those two ideas."
+};
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   QUIZ ENGINE  (shared verbatim across chapters)
+   Renders both item banks, handles answer locking, scoring, progress
+   and full-explanation reveal. No external libraries.
+
+   OPTION ORDER
+   Item banks are authored with the key in whatever position reads most
+   naturally, which in practice clusters the correct answer in one slot.
+   The engine therefore applies a deterministic cyclic rotation per item
+   so the key is spread evenly across A–D. Deterministic, not random, so
+   that a printed answer key always matches the on-screen version.
+     · slotOf(originalIndex) → the letter position it is displayed in
+     · origOf(slot)          → which authored option occupies that slot
+   `item.a` and the `item.n` keys always refer to AUTHORED indices, so
+   nothing in the bank needs to change.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const BANKS = { hots:{data:HOTS, answered:0, correct:0, rot:0},
+                drill:{data:DRILL, answered:0, correct:0, rot:2} };
+const LETTERS = ["A","B","C","D","E"];
+
+/** Rotation applied to item i of a bank. */
+function rotFor(key, i){ return (i + BANKS[key].rot) % BANKS[key].data[i].o.length; }
+/** Authored index -> displayed slot. */
+function slotOf(key, i, orig){ const L = BANKS[key].data[i].o.length; return (orig + rotFor(key,i)) % L; }
+/** Displayed slot -> authored index. */
+function origOf(key, i, slot){ const L = BANKS[key].data[i].o.length; return (slot - rotFor(key,i) + L) % L; }
+
+/** Build the DOM for one quiz bank. */
+function renderBank(key){
+  const bank = BANKS[key];
+  const box  = document.getElementById(key + "Box");
+  box.innerHTML = "";
+
+  bank.data.forEach((item, i) => {
+    const q = document.createElement("div");
+    q.className = "q";
+    q.id = key + "-q" + i;
+
+    // ── question head ──────────────────────────────────────────────
+    let html = '<div class="qhead"><div class="qnum">' + (i+1) + '</div><div class="qtext">';
+    html += '<span class="bloom">' + item.b + '</span><br>';
+    if (item.s) html += '<span class="scen">' + item.s + '</span>';
+    html += item.q + '</div></div><div class="opts">';
+
+    // ── options, rendered in rotated order ─────────────────────────
+    for (let slot = 0; slot < item.o.length; slot++){
+      const orig = origOf(key, i, slot);
+      html += '<button type="button" class="opt" data-i="' + i + '" data-j="' + orig + '">'
+            + '<span class="ltr">' + LETTERS[slot] + '</span><span>' + item.o[orig] + '</span></button>';
+    }
+    html += '</div>';
+
+    // ── explanation (hidden until answered) ────────────────────────
+    const keyLetter = LETTERS[slotOf(key, i, item.a)];
+    html += '<div class="expl" id="' + key + '-e' + i + '">'
+          + '<div class="vt ok" id="' + key + '-v' + i + '">✅ Correct — ' + keyLetter + '</div>'
+          + '<p><b>Why this is the answer.</b> ' + item.w + '</p>'
+          + '<div class="dis"><div style="font-weight:800;margin-bottom:6px;color:#404A56;">Why the other options fail</div>';
+    // list the distractors in displayed order, not authored order
+    Object.keys(item.n)
+      .map(Number)
+      .sort((x, y) => slotOf(key, i, x) - slotOf(key, i, y))
+      .forEach(orig => {
+        html += '<div><b>' + LETTERS[slotOf(key, i, orig)] + '.</b> ' + item.n[orig] + '</div>';
+      });
+    html += '</div></div>';
+
+    q.innerHTML = html;
+    box.appendChild(q);
+  });
+
+  // event delegation for all option buttons in this bank
+  box.addEventListener("click", e => {
+    const btn = e.target.closest(".opt");
+    if (btn) choose(key, +btn.dataset.i, +btn.dataset.j);
+  });
+
+  updateBar(key);
+}
+
+/** Handle a student's selection. `j` is the AUTHORED index of the chosen option. */
+function choose(key, i, j){
+  const bank = BANKS[key];
+  const item = bank.data[i];
+  const wrap = document.getElementById(key + "-q" + i);
+  if (wrap.dataset.done) return;          // already answered — ignore
+  wrap.dataset.done = "1";
+
+  wrap.querySelectorAll(".opt").forEach(o => {
+    const oj = +o.dataset.j;
+    o.classList.add("locked");
+    if (oj === item.a) o.classList.add("correct");
+    if (oj === j && j !== item.a) o.classList.add("wrong");
+  });
+
+  const verdict = document.getElementById(key + "-v" + i);
+  const keyLetter = LETTERS[slotOf(key, i, item.a)];
+  if (j === item.a){
+    bank.correct++;
+    verdict.className = "vt ok";
+    verdict.innerHTML = "✅ Correct — " + keyLetter;
+  } else {
+    verdict.className = "vt no";
+    verdict.innerHTML = "❌ Not quite — you chose " + LETTERS[slotOf(key, i, j)]
+                      + ", the answer is " + keyLetter;
+  }
+  bank.answered++;
+  document.getElementById(key + "-e" + i).classList.add("show");
+  updateBar(key);
+}
+
+/** Reveal every answer without scoring (study mode). */
+function revealAll(key){
+  const bank = BANKS[key];
+  bank.data.forEach((item, i) => {
+    const wrap = document.getElementById(key + "-q" + i);
+    if (wrap.dataset.done) return;
+    wrap.dataset.done = "1";
+    wrap.querySelectorAll(".opt").forEach(o => {
+      o.classList.add("locked");
+      if (+o.dataset.j === item.a) o.classList.add("correct");
+    });
+    const v = document.getElementById(key + "-v" + i);
+    v.className = "vt ok";
+    v.innerHTML = "✅ Answer — " + LETTERS[slotOf(key, i, item.a)];
+    document.getElementById(key + "-e" + i).classList.add("show");
+  });
+  updateBar(key, true);
+}
+
+/** Clear all answers and start over. */
+function resetQuiz(key){
+  BANKS[key].answered = 0;
+  BANKS[key].correct  = 0;
+  renderBank(key);
+  document.getElementById(key + "Verdict").style.display = "none";
+  document.getElementById(key).scrollIntoView({behavior:"smooth"});
+}
+
+/** Refresh the score display, meter and end-of-quiz verdict. */
+function updateBar(key, revealed){
+  const bank  = BANKS[key];
+  const total = bank.data.length;
+  document.getElementById(key + "Score").textContent =
+    revealed ? "Answers revealed" : "Score: " + bank.correct + " / " + bank.answered;
+  document.getElementById(key + "Meter").style.width = (bank.answered / total * 100) + "%";
+
+  const vBox = document.getElementById(key + "Verdict");
+  if (!revealed && bank.answered === total){
+    const pct = Math.round(bank.correct / total * 100);
+    // REMEDY is supplied per chapter alongside the item bank
+    const r = (typeof REMEDY !== "undefined") ? REMEDY
+            : { mid:"Revisit the sections you missed, then reset and run this again.",
+                low:"Work through the chapter again before retrying." };
+    let msg;
+    if (pct >= 90)      msg = "🏆 <b>" + bank.correct + "/" + total + " (" + pct + "%)</b> — Outstanding. You are not pattern-matching; you are reasoning. Move on to the case analysis.";
+    else if (pct >= 75) msg = "💪 <b>" + bank.correct + "/" + total + " (" + pct + "%)</b> — Solid command. Reread the explanations for the items you missed, then attempt the case analysis.";
+    else if (pct >= 60) msg = "📚 <b>" + bank.correct + "/" + total + " (" + pct + "%)</b> — The foundations are there but the edges are soft. " + r.mid;
+    else                msg = "🔁 <b>" + bank.correct + "/" + total + " (" + pct + "%)</b> — " + r.low;
+    document.getElementById(key + "VerdictText").innerHTML = msg;
+    vBox.style.display = "block";
+  }
+}
+
+/* ── Reading-progress bar, nav highlighting, back-to-top ─────────── */
+function onScroll(){
+  const h = document.documentElement;
+  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById("progress").style.width = pct + "%";
+  document.getElementById("backtop").classList.toggle("on", h.scrollTop > 700);
+
+  let current = "";
+  document.querySelectorAll("section[id]").forEach(sec => {
+    if (sec.getBoundingClientRect().top <= 140) current = sec.id;
+  });
+  document.querySelectorAll(".navlinks a").forEach(a => {
+    a.classList.toggle("on", a.getAttribute("href") === "#" + current);
+  });
+}
+
+/* ── Boot ────────────────────────────────────────────────────────── */
+renderBank("hots");
+renderBank("drill");
+window.addEventListener("scroll", onScroll, {passive:true});
+onScroll();
+</script>
+</body>
+</html>
