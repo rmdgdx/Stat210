@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STAT210 Advanced Statistics · RTU · Interactive Course</title>
+<style>
+:root{
+  /* Royal blue is the ground; gold is the accent */
+  --royal:#1F4FA8; --royal-deep:#12306B; --royal-ink:#0B1F47; --royal-mid:#1B3F87; --royal-soft:#2A5BB8;
+  --royal-tint:#DCE6F6; --royal-line:#2F5AA5;
+  --gold:#D9A82C; --gold-hi:#EAC24C; --gold-pale:#F7E9A6; --gold-ink:#5A4406;
+  --gold-grad:linear-gradient(135deg,#EAC24C,#D7A62C);
+  --ok:#4FD38A; --ok-bg:rgba(79,211,138,.14); --ok-bd:rgba(79,211,138,.45);
+  --no:#FF8A96; --no-bg:rgba(255,138,150,.14); --no-bd:rgba(255,138,150,.45);
+  --neu:#C9D6EE; --neu-bg:rgba(220,230,246,.10); --neu-bd:rgba(220,230,246,.28);
+  --text:#EEF3FC; --text-soft:#B9C8E6; --text-mute:#8FA5D0;
+  --card:#183A7D; --card-line:#2A54A6;
+  --shadow:0 1px 2px rgba(3,12,35,.35),0 14px 34px rgba(3,12,35,.45);
+}
+*{box-sizing:border-box;}
+html{background:var(--royal-ink);}
+body{margin:0;background:radial-gradient(circle at 100% 0%,#1F4FA8 0,transparent 42%),radial-gradient(circle at 0% 100%,#173B84 0,transparent 40%),linear-gradient(180deg,#12306B 0%,#0B1F47 100%);background-attachment:fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:var(--gold-hi);}
+a:focus-visible{outline:3px solid var(--gold-hi);outline-offset:3px;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 90px;}
+
+.banner{background:var(--royal-ink);color:var(--text);border-bottom:3px solid var(--gold);text-align:center;padding:9px 16px;font-size:.82rem;line-height:1.45;letter-spacing:.02em;}
+.banner b{color:var(--gold-hi);}
+.banner span{opacity:.8;}
+
+header.hero{position:relative;overflow:hidden;border-radius:0 0 30px 30px;margin-bottom:8px;padding:56px 34px 62px;background:radial-gradient(circle at 92% 6%,rgba(234,194,76,.28) 0,transparent 38%),radial-gradient(circle at 4% 96%,#2A5BB8 0,transparent 46%),linear-gradient(135deg,#1F4FA8 0%,#173E8C 55%,#12306B 100%);border-bottom:1px solid rgba(234,194,76,.35);}
+.hero .inner{max-width:1120px;margin:0 auto;padding:0 12px;}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;background:rgba(234,194,76,.16);border:1px solid rgba(234,194,76,.5);color:var(--gold-hi);font-weight:800;font-size:.76rem;letter-spacing:1.1px;text-transform:uppercase;padding:6px 15px;border-radius:999px;}
+.hero h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.08;margin:16px 0 8px;letter-spacing:-1px;color:#fff;font-weight:850;}
+.hero h1 small{display:block;font-size:.42em;letter-spacing:.5px;color:var(--gold-hi);font-weight:700;margin-bottom:6px;}
+.hero p{max-width:72ch;color:var(--text-soft);font-size:1.06rem;margin:0 0 20px;}
+.hchips{display:flex;flex-wrap:wrap;gap:9px;align-items:center;}
+.hchips span{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 15px;font-size:.82rem;font-weight:700;color:var(--text);}
+.hero .cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:850;font-size:.92rem;padding:10px 20px;border-radius:12px;background:var(--gold-grad);color:#2B2005;box-shadow:0 6px 18px rgba(234,194,76,.28);}
+.hero .cta:hover{filter:brightness(1.06);}
+
+h2.section{font-size:1.5rem;font-weight:840;letter-spacing:-.4px;margin:44px 0 4px;display:flex;align-items:center;gap:12px;color:#fff;}
+h2.section::before{content:"";width:26px;height:26px;border-radius:8px;background:var(--gold-grad);}
+.sub{color:var(--text-soft);margin:0 0 14px;max-width:80ch;}
+.sub b{color:var(--gold-hi);}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 22px;font-size:.85rem;color:var(--text-soft);align-items:center;}
+.legend b{display:inline-flex;align-items:center;gap:7px;font-weight:600;}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.dot.g{background:var(--ok);} .dot.r{background:var(--no);}
+
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));}
+.chapter{background:linear-gradient(180deg,#1B4290,#163780);border:1px solid var(--card-line);border-radius:18px;padding:20px 21px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;border-left-width:6px;border-left-color:var(--gold);transition:border-color .15s,transform .15s;}
+.chapter:hover{transform:translateY(-2px);border-color:rgba(234,194,76,.55);border-left-color:var(--gold-hi);}
+.chapter.ready{border-left-color:var(--ok);}
+.chapter.todo{border-left-color:var(--no);}
+.cnum{font-size:1.3rem;display:flex;align-items:center;gap:9px;}
+.cnum>span:first-of-type{font-size:.72rem;font-weight:850;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-hi);}
+.status{margin-left:auto;font-size:.64rem;font-weight:850;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+.status.g{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd);}
+.status.r{background:var(--no-bg);color:var(--no);border:1px solid var(--no-bd);}
+.status.checking,.status.neutral{background:var(--neu-bg);color:var(--neu);border:1px solid var(--neu-bd);}
+.chapter h3{margin:0;font-size:1.16rem;font-weight:820;letter-spacing:-.2px;color:#fff;}
+.chapter p{margin:0;color:var(--text-soft);font-size:.92rem;flex:1;}
+.topics{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.topics li{font-size:.74rem;font-weight:700;color:var(--gold-pale);background:rgba(234,194,76,.10);border:1px solid rgba(234,194,76,.32);border-radius:7px;padding:3px 8px;line-height:1.35;}
+.clinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.cl{text-decoration:none;font-weight:800;font-size:.85rem;padding:9px 15px;border-radius:11px;transition:filter .15s;}
+.cl.gold{background:var(--gold-grad);color:#2B2005;}
+.cl.blue{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);}
+.cl:hover{filter:brightness(1.06);}
+.cl.disabled{background:rgba(255,255,255,.05);color:var(--text-mute);cursor:not-allowed;border:1px dashed rgba(185,200,230,.35);pointer-events:none;}
+
+footer{margin-top:52px;padding-top:26px;border-top:1px solid rgba(234,194,76,.35);color:var(--text-soft);font-size:.86rem;}
+footer b{color:#fff;}
+.pal{display:flex;gap:5px;margin:10px 0 0;} .pal i{width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.18);display:block;}
+@media (prefers-reduced-motion:reduce){.chapter,.chapter:hover{transition:none;transform:none;}}
+</style>
+</head>
+<body>
+<div class="banner">🎓 <b>STAT210 · Advanced Statistics</b> &nbsp;—&nbsp; a class of <b>Dr.&nbsp;Ryan&nbsp;Manuel&nbsp;D.&nbsp;Guido</b><span>&nbsp;·&nbsp; Rizal Technological University</span></div>
+
+<header class="hero"><div class="inner">
+  <span class="eyebrow">🎓 Rizal Technological University · STAT210</span>
+  <h1><small>STAT210</small>Advanced Statistics</h1>
+  <p>An eleven-chapter interactive course that carries a student from the logic of inference through estimation, hypothesis testing, analysis of variance, categorical association and multiple regression — worked from first principles and built entirely as standalone HTML. Every chapter carries generated figures, worked derivations, a cheat sheet, a self-assessment, curated video explainers, and a graded applied case with model answers.</p>
+  <div class="hchips">
+    <a class="cta" href="syllabus.html">📄 Course Syllabus</a>
+    <span>📚 11 chapters</span><span>🎬 Per-topic video explainers</span><span>🧮 440+ quiz items</span><span>✍️ 11 graded cases</span>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <h2 class="section">Chapters</h2>
+  <p class="sub">Each chapter has a <b>Lecture &amp; Notes</b> page and an <b>Exercises &amp; Essays</b> page. Each card checks its files when this page loads — <b>green</b> once both pages are present, <b>red</b> if one is missing.</p>
+  <div class="legend">
+    <b><span class="dot g"></span> Ready — lecture &amp; exercises present (<span id="nready">…</span>)</b>
+    <b><span class="dot r"></span> Not yet uploaded — one or both pages missing (<span id="ntodo">…</span>)</b>
+  </div>
+
+  <div class="grid">
+    <article class="chapter" data-num="01">
+      <div class="cnum">🧭 <span>Chapter 1</span> <span class="status checking">Checking…</span></div>
+      <h3>Statistical Reasoning &amp; Measurement</h3>
+      <p>The architecture of inference: population versus sample, parameter versus statistic, and why a well-drawn sample licenses a claim about a whole. Levels of measurement, validity and reliability of measures, and the distinction between descriptive, inferential and predictive questions.</p>
+      <ul class="topics"><li>Inductive vs deductive logic</li><li>Nominal · ordinal · interval · ratio</li><li>Operationalisation</li><li>Sources of bias</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter01.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter01_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="02">
+      <div class="cnum">📊 <span>Chapter 2</span> <span class="status checking">Checking…</span></div>
+      <h3>Descriptive Statistics &amp; Visual Communication</h3>
+      <p>Measures of centre, dispersion and position — mean, median, trimmed mean, variance, standard deviation, coefficient of variation, quantiles and z-scores — with skewness and kurtosis as descriptors of shape. Data cleaning, outlier rules, and the grammar of honest graphics: which chart answers which question, and which distort.</p>
+      <ul class="topics"><li>Chebyshev &amp; empirical rule</li><li>Box plots · IQR fences</li><li>Skewness · kurtosis</li><li>Chart integrity</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter02.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter02_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="03">
+      <div class="cnum">🎲 <span>Chapter 3</span> <span class="status checking">Checking…</span></div>
+      <h3>Probability &amp; Probability Distributions</h3>
+      <p>Axioms, conditional probability, independence and Bayes' theorem. Random variables, expectation and variance; the binomial, Poisson, hypergeometric and geometric models for counts; the uniform, exponential and normal models for measurements, with the normal approximation and continuity correction.</p>
+      <ul class="topics"><li>Bayes' theorem</li><li>Binomial · Poisson</li><li>Normal &amp; standard normal</li><li>E(X) · Var(X) · linear combinations</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter03.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter03_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="04">
+      <div class="cnum">🎯 <span>Chapter 4</span> <span class="status checking">Checking…</span></div>
+      <h3>Sampling Design, Sampling Distributions &amp; the CLT</h3>
+      <p>Probability designs (simple random, systematic, stratified, cluster) against non-probability designs and the bias each invites. The sampling distribution of the mean and proportion, standard error, the finite-population correction, and the central limit theorem — stated precisely, with its conditions and its failure cases.</p>
+      <ul class="topics"><li>Standard error</li><li>Central limit theorem</li><li>Stratified vs cluster</li><li>Sampling distribution of p̂</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter04.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter04_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="05">
+      <div class="cnum">📏 <span>Chapter 5</span> <span class="status checking">Checking…</span></div>
+      <h3>Estimation &amp; Confidence Intervals</h3>
+      <p>Point and interval estimators, unbiasedness and efficiency, and the estimate ± multiplier × SE skeleton. z- and t-intervals for a mean, Wilson and Wald intervals for a proportion, χ²-intervals for a variance; sample-size determination for a target margin, and what a confidence level does and does not claim.</p>
+      <ul class="topics"><li>t distribution · df</li><li>Margin of error</li><li>Sample-size formulas</li><li>Interval for σ²</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter05.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter05_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="06">
+      <div class="cnum">⚖️ <span>Chapter 6</span> <span class="status checking">Checking…</span></div>
+      <h3>Hypothesis Testing: One-Sample Tests</h3>
+      <p>The test as argument by contradiction: null and alternative, tail selection, critical regions, p-values and the α–p decision rule. Type I and Type II error, power and effect size; z- and t-tests for a mean, the z-test for a proportion, the χ²-test for a variance, and the duality between tests and confidence intervals.</p>
+      <ul class="topics"><li>p-value vs α</li><li>Type I · Type II · power</li><li>Effect size (Cohen's d)</li><li>Test–interval duality</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter06.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter06_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="07">
+      <div class="cnum">👥 <span>Chapter 7</span> <span class="status checking">Checking…</span></div>
+      <h3>Comparing Two Groups</h3>
+      <p>Independent versus paired designs and the single question that decides between them. Pooled and Welch t-tests, the F-test for equal variances, the paired t-test on differences, the two-proportion z-test, confidence intervals for a difference, and the confounding trap in observational comparisons.</p>
+      <ul class="topics"><li>Welch vs pooled t</li><li>Paired differences</li><li>Two-proportion z</li><li>Confounding</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter07.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter07_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="08">
+      <div class="cnum">🔬 <span>Chapter 8</span> <span class="status checking">Checking…</span></div>
+      <h3>Analysis of Variance</h3>
+      <p>Why multiple t-tests inflate the family-wise error and how ANOVA partitions variation — SST = SSB + SSW — into an F ratio. One-way ANOVA with Tukey HSD and Bonferroni follow-ups, two-way ANOVA with main effects and interaction, assumption checks (Levene, normality of residuals), and η² as effect size.</p>
+      <ul class="topics"><li>F ratio · MSB/MSW</li><li>Tukey HSD · Bonferroni</li><li>Interaction plots</li><li>Levene's test</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter08.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter08_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="09">
+      <div class="cnum">🧮 <span>Chapter 9</span> <span class="status checking">Checking…</span></div>
+      <h3>Chi-Square Tests for Categorical Data</h3>
+      <p>Observed against expected counts and where the degrees of freedom come from. Goodness-of-fit, the test of independence in an r × c table, the test of homogeneity, the expected-frequency rule (fₑ ≥ 5), Yates' correction, and Cramér's V and the odds ratio as measures of association strength.</p>
+      <ul class="topics"><li>Goodness-of-fit</li><li>Independence · homogeneity</li><li>Cramér's V</li><li>Odds ratio</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter09.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter09_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="10">
+      <div class="cnum">📈 <span>Chapter 10</span> <span class="status checking">Checking…</span></div>
+      <h3>Correlation &amp; Simple Linear Regression</h3>
+      <p>Covariance, Pearson's r and Spearman's ρ, with Anscombe's quartet as a warning to plot first. Least-squares estimation of the line, inference on the slope, r² and the standard error of estimate, confidence versus prediction intervals, residual diagnostics, and the difference between correlation and cause.</p>
+      <ul class="topics"><li>Pearson r · Spearman ρ</li><li>Least squares</li><li>t-test on β₁</li><li>Residual plots</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter10.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter10_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+
+    <article class="chapter" data-num="11">
+      <div class="cnum">🧠 <span>Chapter 11</span> <span class="status checking">Checking…</span></div>
+      <h3>Multiple Regression &amp; Model Diagnostics</h3>
+      <p>Holding the other predictors constant: partial slopes, adjusted R², the overall F-test and individual t-tests. Dummy coding of categorical predictors, interaction terms, multicollinearity and the variance inflation factor, heteroscedasticity, influential points, and principled model selection.</p>
+      <ul class="topics"><li>Partial coefficients</li><li>Adjusted R² · F-test</li><li>Dummies · interaction</li><li>VIF · influence</li></ul>
+      <div class="clinks">
+        <a class="cl gold lec" href="Chapter11.html">📖 Lecture</a>
+        <a class="cl blue exo" href="Chapter11_Exercises.html">✍️ Exercises</a>
+      </div>
+    </article>
+  </div>
+
+  <footer>
+    <p><b>STAT210 Advanced Statistics</b> — Rizal Technological University. Built as dependency-free, offline-capable HTML; open any file directly in a browser or serve the folder with GitHub Pages.</p>
+    <p>Colour system — RTU Royal Blue-dominant with Gold:</p>
+    <div class="pal"><i style="background:#0B1F47"></i><i style="background:#12306B"></i><i style="background:#1F4FA8"></i><i style="background:#D9A82C"></i><i style="background:#EAC24C"></i></div>
+  </footer>
+</div>
+
+<script>
+/* Live file detection — works when served over http(s) (e.g. GitHub Pages).
+   Each chapter tries its file at the repo root first, then in a chapters/
+   subfolder. Opened from the local filesystem (file://) fetch is blocked, so we
+   fall back to an optimistic "Open" state with working links. */
+(function(){
+  async function exists(url){
+    try{ var r = await fetch(url, {method:'HEAD', cache:'no-store'}); return r.ok; }
+    catch(e){ return null; }
+  }
+  async function firstThatExists(cands){
+    var blocked=false;
+    for(var i=0;i<cands.length;i++){ var ok=await exists(cands[i]); if(ok===true) return cands[i]; if(ok===null) blocked=true; }
+    return blocked ? undefined : null;
+  }
+  async function run(){
+    var cards=[].slice.call(document.querySelectorAll('.chapter'));
+    var ready=0, todo=0, blockedMode=false;
+    for(var c=0;c<cards.length;c++){
+      var card=cards[c], nn=card.dataset.num, st=card.querySelector('.status');
+      var lecA=card.querySelector('a.lec'), exoA=card.querySelector('a.exo');
+      var lecU=await firstThatExists(['Chapter'+nn+'.html','chapters/Chapter'+nn+'.html']);
+      var exoU=await firstThatExists(['Chapter'+nn+'_Exercises.html','chapters/Chapter'+nn+'_Exercises.html']);
+      if(lecU===undefined || exoU===undefined){ blockedMode=true; st.className='status neutral'; st.textContent='Open'; continue; }
+      if(lecU){ lecA.href=lecU; } else { lecA.classList.add('disabled'); lecA.textContent='📖 Lecture · not uploaded'; }
+      if(exoU){ exoA.href=exoU; } else { exoA.classList.add('disabled'); exoA.textContent='✍️ Exercises · not uploaded'; }
+      var ok = !!(lecU && exoU);
+      card.classList.add(ok?'ready':'todo');
+      st.className='status '+(ok?'g':'r');
+      st.textContent=ok?'🟢 Ready':'🔴 Not yet uploaded';
+      ok?ready++:todo++;
+    }
+    if(blockedMode){ document.getElementById('nready').textContent='—'; document.getElementById('ntodo').textContent='—'; }
+    else { document.getElementById('nready').textContent=ready; document.getElementById('ntodo').textContent=todo; }
+  }
+  run();
+})();
+</script>
+</body>
+</html>
