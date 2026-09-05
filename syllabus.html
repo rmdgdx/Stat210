@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Business Statistics — Course Syllabus | AdvStat 102</title>
+<style>
+  :root{
+    --navy:#1a2f5a; --navy-dark:#12213f; --gold:#c9a227; --accent:#2e6da4;
+    --new:#0e7c4a; --upd:#b3541e; --ink:#26303b; --muted:#5c6b7a;
+    --line:#d8dee6; --bg:#f4f6f9; --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:var(--bg);line-height:1.65;}
+  .sans{font-family:'Segoe UI',Arial,Helvetica,sans-serif;}
+
+  header.masthead{background:linear-gradient(135deg,var(--navy-dark),var(--navy) 60%,#24457e);color:#fff;padding:42px 24px 34px;text-align:center;position:relative;}
+  header.masthead .kicker{font-family:'Segoe UI',Arial,sans-serif;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:#c7d3e8;}
+  header.masthead h1{font-size:1.9rem;margin:.45em auto .25em;max-width:900px;letter-spacing:.01em;}
+  header.masthead .subtitle{font-family:'Segoe UI',Arial,sans-serif;color:#dbe4f3;font-size:.92rem;}
+  header.masthead .rule{width:90px;height:3px;background:var(--gold);margin:16px auto 0;border-radius:2px;}
+  header.masthead .seal{font-size:1.7rem;margin-bottom:4px;letter-spacing:.3em;}
+
+  nav{position:sticky;top:0;z-index:50;background:var(--navy-dark);box-shadow:0 2px 8px rgba(0,0,0,.25);}
+  nav ul{display:flex;flex-wrap:wrap;justify-content:center;list-style:none;}
+  nav a{display:block;padding:10px 13px;color:#e7edf7;text-decoration:none;font-family:'Segoe UI',Arial,sans-serif;font-size:.8rem;letter-spacing:.03em;}
+  nav a:hover{background:var(--navy);color:var(--gold);}
+
+  main{max-width:980px;margin:0 auto;padding:34px 20px 70px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:30px 36px;margin-bottom:28px;box-shadow:0 1px 4px rgba(20,35,60,.06);scroll-margin-top:64px}
+  h2{font-family:'Segoe UI',Arial,sans-serif;color:var(--navy);font-size:1.3rem;border-bottom:3px solid var(--gold);padding-bottom:8px;margin-bottom:18px;}
+  h3{font-family:'Segoe UI',Arial,sans-serif;color:var(--accent);font-size:1.06rem;margin:24px 0 10px;}
+  h4{font-family:'Segoe UI',Arial,sans-serif;color:var(--navy);font-size:.95rem;margin:16px 0 6px;}
+  p{margin-bottom:13px;text-align:justify;}
+  ul.plain{margin:0 0 13px 24px;}
+  ul.plain li{margin-bottom:6px;}
+  ol.plain{margin:0 0 13px 26px;}
+  ol.plain li{margin-bottom:6px;}
+
+  .lead{font-size:1.06rem;color:#33404e;}
+  .callout{background:#eef3fa;border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0;font-size:.95rem;}
+  .callout.gold{background:#faf6e9;border-left-color:var(--gold);}
+  .callout.green{background:#f2f7ee;border-left-color:var(--new);}
+  .callout .label{display:block;font-family:'Segoe UI',Arial,sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:4px;}
+
+  .info-grid{display:grid;grid-template-columns:200px 1fr;gap:8px 18px;font-size:.98rem;}
+  .info-grid dt{font-family:'Segoe UI',Arial,sans-serif;font-weight:600;color:var(--navy);}
+  .info-grid dd{margin:0;}
+
+  .badge{display:inline-block;font-family:'Segoe UI',Arial,sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:10px;vertical-align:middle;text-transform:uppercase;margin-left:6px;}
+  .badge.new{background:#e2f4ea;color:var(--new);border:1px solid #9fd4b6;}
+  .badge.updated{background:#fbeadd;color:var(--upd);border:1px solid #e2b28c;}
+  .badge.core{background:#eaf0fb;color:var(--navy);border:1px solid #aebfe0;}
+
+  table{width:100%;border-collapse:collapse;font-size:.9rem;margin:14px 0 6px;}
+  th{background:var(--navy);color:#fff;font-family:'Segoe UI',Arial,sans-serif;font-weight:600;padding:9px 12px;text-align:left;}
+  td{border:1px solid var(--line);padding:9px 12px;vertical-align:top;background:#fff;}
+  tr:nth-child(even) td{background:#f7f9fc;}
+  .unit-row td{background:#e9eef6 !important;color:var(--navy);font-family:'Segoe UI',Arial,sans-serif;font-weight:700;letter-spacing:.04em;font-size:.85rem;}
+  .week-col{width:78px;white-space:nowrap;font-weight:600;color:var(--navy);}
+  .period-banner{background:linear-gradient(90deg,var(--navy),#2c4d88);color:#fff;font-family:'Segoe UI',Arial,sans-serif;font-weight:600;padding:10px 16px;border-radius:6px;margin:24px 0 4px;letter-spacing:.04em;font-size:.95rem;}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 4px;font-family:'Segoe UI',Arial,sans-serif;font-size:.8rem;color:var(--muted);align-items:center;}
+
+  footer{background:var(--navy-dark);color:#b9c6da;text-align:center;padding:24px 16px;font-family:'Segoe UI',Arial,sans-serif;font-size:.8rem;}
+  footer a{color:var(--gold);text-decoration:none;}
+  @media (max-width:700px){.info-grid{grid-template-columns:1fr;} section{padding:20px 16px;} table{font-size:.8rem;} th,td{padding:6px 8px;}}
+  @media print{nav{display:none;} body{background:#fff;} section{box-shadow:none;border:none;page-break-inside:avoid;} header.masthead{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="seal">★</div>
+  <div class="kicker">Republic of the Philippines · Rizal Technological University · College of Business, Entrepreneurship and Accountancy</div>
+  <h1>Advanced Business Statistics — Course Syllabus</h1>
+  <div class="subtitle">AdvStat 102 · Bachelor of Science in Business Administration · Dr. Ryan Manuel D. Guido</div>
+  <div class="rule"></div>
+</header>
+
+<nav class="sans">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#outcomes">Learning Outcomes</a></li>
+    <li><a href="#outline">Course Outline</a></li>
+    <li><a href="#plan">Learning Plan</a></li>
+    <li><a href="#map">Course Map</a></li>
+    <li><a href="#grading">Grading</a></li>
+    <li><a href="#readings">Readings</a></li>
+    <li><a href="#policies">Policies</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ============ OVERVIEW ============ -->
+<section id="overview">
+  <h2>Course Overview</h2>
+  <dl class="info-grid">
+    <dt>Course Title</dt><dd><strong>Advanced Business Statistics</strong></dd>
+    <dt>Course Code</dt><dd>AdvStat 102</dd>
+    <dt>Program</dt><dd>Bachelor of Science in Business Administration (BSBA)</dd>
+    <dt>Course Type</dt><dd>Business Core / Quantitative Methods course</dd>
+    <dt>No. of Units</dt><dd><strong>3 units</strong></dd>
+    <dt>Contact Hours</dt><dd><strong>3 hours per week for 18 weeks (54 hours per semester)</strong></dd>
+    <dt>Instructor</dt><dd>Dr. Ryan Manuel D. Guido</dd>
+    <dt>Basis</dt><dd>CHED CMO No. 17, series of 2017 (BSBA Policies, Standards and Guidelines); RTU Outcomes-Based Education framework</dd>
+  </dl>
+
+  <h3>Course Description</h3>
+  <p>Advanced Business Statistics develops the reasoning and techniques a business graduate needs to turn data into defensible decisions. Building on introductory statistics, the course moves from the logic of inference to the full toolkit of applied analysis: describing and visualising data honestly, modelling uncertainty with probability distributions, estimating population quantities, testing hypotheses about one and two groups, comparing several groups with the analysis of variance, measuring categorical association, and modelling relationships with correlation and multiple regression — closing with a framework for choosing the right technique for any business question.</p>
+  <p>The course is <strong>concepts-first and software-agnostic</strong>: every method is taught through its statistical logic, its assumptions, a worked business example, and an interpretation guide, so that students can read and defend output from any package rather than merely operating one. Throughout, the emphasis is on <strong>honest inference</strong> — stating assumptions, quantifying uncertainty, and refusing to overclaim causation from association.</p>
+  <p>The syllabus is organised into three six-week grading periods aligned to the Philippine Preliminary–Midterm–Final cycle, delivering <strong>twelve session topics, three major long quizzes, and three major examinations</strong>, and is anchored by a semester-long <strong>Business Statistical Report</strong> that carries a real analysis from problem framing to an oral defence.</p>
+
+  <div class="callout green"><span class="label">Companion Interactive Modules</span>This syllabus is paired with a full set of interactive HTML chapter modules (Chapters 1–11), each with learning objectives, generated figures, worked examples, a cheat sheet, a self-assessment, a 20-item higher-order thinking test, 20 reinforcement drills, a graded business-case study with model answers, and a curated video explainer for every topic (StatQuest, zedstatistics, Brandon Foltz, and others).</div>
+  <div class="callout"><span class="label">Concepts, Not Clicks</span>No specific statistical software is required. Students who have access to a spreadsheet, R, Python, JASP, or SPSS are encouraged to reproduce the worked examples, but all assessments can be completed with a scientific calculator and the reference tables provided in each module's cheat sheet.</div>
+</section>
+
+<!-- ============ OUTCOMES ============ -->
+<section id="outcomes">
+  <h2>Learning Outcomes</h2>
+  <p>At the end of the course, the students should be able to:</p>
+
+  <h3>Knowledge</h3>
+  <ol class="plain">
+    <li>Explain the logic of statistical inference — populations versus samples, sampling distributions, and the role of the Central Limit Theorem — as the foundation of business decision-making under uncertainty.</li>
+    <li>Describe the major families of probability distributions (binomial, Poisson, and normal) and identify which model applies to a given business situation.</li>
+    <li>Distinguish estimation from hypothesis testing, and state the hypotheses, assumptions, degrees of freedom, and interpretation of every inferential technique in the course.</li>
+    <li>Explain correlation, simple and multiple regression, and the meaning of a partial coefficient, R², adjusted R², interaction, and multicollinearity. <span class="badge core">Core</span></li>
+    <li>Select the appropriate statistical technique for a business question from the data type, the study design, and the assumptions each technique requires.</li>
+  </ol>
+
+  <h3>Skills</h3>
+  <ol class="plain">
+    <li>Compute and interpret descriptive summaries, confidence intervals, and test statistics by hand, and read the equivalent output produced by statistical software.</li>
+    <li>Conduct one- and two-sample tests, the analysis of variance, chi-square tests, and regression analyses, <strong>checking each technique's assumptions before interpreting the result</strong>.</li>
+    <li>Build and diagnose a multiple-regression model — dummy variables, interaction terms, variance inflation factors, and residual and leverage diagnostics — and interpret every coefficient correctly. <span class="badge core">Core</span></li>
+    <li>Communicate statistical findings to a managerial audience with honest uncertainty, correct data visualisation, and plain-language interpretation.</li>
+    <li>Produce a complete Business Statistical Report, from problem framing through analysis to a defensible recommendation.</li>
+  </ol>
+
+  <h3>Values</h3>
+  <ol class="plain">
+    <li>Practise intellectual honesty in analysis — reporting assumptions and uncertainty, acknowledging the limits of what data can support, and never presenting association as causation.</li>
+    <li>Apply statistical and data ethics: data privacy (R.A. 10173), transparent methods, and the responsible, disclosed use of computing and AI tools. <span class="badge new">Emphasis</span></li>
+    <li>Value rigorous, evidence-based reasoning in Filipino business and nation-building, and commit to lifelong quantitative literacy.</li>
+  </ol>
+</section>
+
+<!-- ============ OUTLINE ============ -->
+<section id="outline">
+  <h2>Course Outline and Timeframe</h2>
+  <div class="legend">
+    <span><span class="badge new" style="margin-left:0">Module</span> interactive chapter module available</span>
+    <span><span class="badge updated" style="margin-left:0">Two-view</span> published as separate Lecture &amp; Exercises pages</span>
+    <span><span class="badge core" style="margin-left:0">Capstone</span> integrative / decision-framework session</span>
+  </div>
+  <table>
+    <thead><tr><th class="week-col">Week</th><th style="width:64px">Session</th><th>Topic</th></tr></thead>
+    <tbody>
+      <tr class="unit-row"><td colspan="3">GRADING PERIOD A — FOUNDATIONS OF INFERENCE (Weeks 1–6)</td></tr>
+      <tr><td class="week-col">1</td><td>1</td><td>Statistical reasoning and measurement: populations vs samples, descriptive vs inferential statistics, levels of measurement, experimental vs observational studies <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">2</td><td>2</td><td>Description and visual communication: centre, spread and shape; choosing an honest chart; the six dimensions of a business visualisation <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">3</td><td>3</td><td>Probability and distributions: probability rules, the binomial and Poisson models, the normal distribution, and Bayes' theorem <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">4</td><td>4</td><td>Sampling, sampling distributions, and the Central Limit Theorem; the standard error <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">5</td><td>LQ1</td><td>Long Quiz 1 (Sessions 1–4)</td></tr>
+      <tr><td class="week-col">6</td><td>Exam</td><td>Preliminary Examination</td></tr>
+
+      <tr class="unit-row"><td colspan="3">GRADING PERIOD B — ESTIMATION AND DIFFERENCES (Weeks 7–12)</td></tr>
+      <tr><td class="week-col">7</td><td>5</td><td>Interval estimation and sample size: confidence intervals for a mean and a proportion, t versus z, margin of error, and sample-size determination <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">8</td><td>6</td><td>One-sample hypothesis testing: hypotheses, Type I / II errors, the p-value, power; z, t, and proportion tests <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">9</td><td>7</td><td>Comparing two groups: independent and paired samples, pooled vs Welch t, and the two-proportion test <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">10</td><td>8</td><td>Analysis of variance: one-way and two-way ANOVA, post-hoc comparisons (Tukey), and the family-wise error problem <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">11</td><td>LQ2</td><td>Long Quiz 2 (Sessions 5–8)</td></tr>
+      <tr><td class="week-col">12</td><td>Exam</td><td>Midterm Examination</td></tr>
+
+      <tr class="unit-row"><td colspan="3">GRADING PERIOD C — ASSOCIATION, MODELLING, AND INTEGRATION (Weeks 13–18)</td></tr>
+      <tr><td class="week-col">13</td><td>9</td><td>Chi-square tests: goodness-of-fit and tests of independence; the expected-frequency rule (f<sub>e</sub> ≥ 5) and adjusted residuals <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">14</td><td>10</td><td>Correlation and simple regression: r and r², the least-squares line, confidence vs prediction intervals, diagnostics, and the ecological fallacy <span class="badge new">Module</span></td></tr>
+      <tr><td class="week-col">15</td><td>11</td><td>Multiple regression: partial coefficients, adjusted R², dummy variables, interaction, multicollinearity and VIF, diagnostics, and model building <span class="badge new">Module</span> <span class="badge updated">Two-view</span></td></tr>
+      <tr><td class="week-col">16</td><td>12</td><td>Nonparametric methods and a technique-selection framework: sign, Wilcoxon, Mann–Whitney, Kruskal–Wallis and Spearman tests; the master decision table <span class="badge core">Capstone</span></td></tr>
+      <tr><td class="week-col">17</td><td>LQ3</td><td>Long Quiz 3 (Sessions 9–12) · Term-project oral defence</td></tr>
+      <tr><td class="week-col">18</td><td>Exam</td><td>Final Examination and culminating activity</td></tr>
+    </tbody>
+  </table>
+  <div class="callout gold"><span class="label">Calendar Architecture</span>Three six-week grading periods, each comprising four teaching sessions, one long quiz, and one major examination — yielding exactly <strong>12 sessions, 3 long quizzes, and 3 examinations</strong>, mapped onto the Preliminary–Midterm–Final cycle. Time-series and forecasting are treated only as an enrichment mention, since the course's four source texts do not cover them in depth.</div>
+</section>
+
+<!-- ============ LEARNING PLAN ============ -->
+<section id="plan">
+  <h2>Learning Plan</h2>
+
+  <div class="period-banner">GRADING PERIOD A — FOUNDATIONS OF INFERENCE (Weeks 1–6)</div>
+  <table>
+    <thead><tr><th style="width:19%">Learning Outcomes</th><th style="width:25%">Topic</th><th style="width:12%">Method</th><th style="width:26%">Resources</th><th style="width:18%">Assessment</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Explain the logic of inference; classify variables and study designs</td>
+        <td><strong>S1 — Statistical reasoning &amp; measurement</strong>: population vs sample; descriptive vs inferential; levels of measurement; experimental vs observational</td>
+        <td>Lecture and discussion</td>
+        <td>Bluman Ch 1; Agresti Ch 1–2; Module 1 + video (StatQuest / Khan)</td>
+        <td>Module self-check &amp; HOTS; seatwork</td>
+      </tr>
+      <tr>
+        <td>Summarise and visualise data honestly for a business audience</td>
+        <td><strong>S2 — Description &amp; visual communication</strong>: centre, spread, shape; choosing the right chart; the six dimensions of a visualisation; misleading graphics</td>
+        <td>Lecture; charting workshop</td>
+        <td>Bluman Ch 2–3; Fortino Ch 4–9; Agresti Ch 3; Module 2 + video</td>
+        <td>Data-visualisation critique; seatwork</td>
+      </tr>
+      <tr>
+        <td>Model uncertainty with the appropriate probability distribution</td>
+        <td><strong>S3 — Probability &amp; distributions</strong>: probability rules; binomial and Poisson; the normal model; Bayes' theorem</td>
+        <td>Lecture and problem solving</td>
+        <td>Bluman Ch 4–6; Chan Ch 2–4; Agresti Ch 4; Module 3 + video</td>
+        <td>Problem set; Module HOTS</td>
+      </tr>
+      <tr>
+        <td>Explain the sampling distribution and the CLT as the basis of inference</td>
+        <td><strong>S4 — Sampling &amp; the Central Limit Theorem</strong>: sampling methods; sampling distribution of the mean and proportion; standard error</td>
+        <td>Lecture; simulation demo</td>
+        <td>Bluman Ch 7 &amp; 14; Agresti §4.4–4.6; Chan Ch 6; Module 4 + video</td>
+        <td><strong>Long Quiz 1</strong> (wk 5); <strong>Preliminary Exam</strong> (wk 6); <strong>Project Proposal</strong> (wk 4)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="period-banner">GRADING PERIOD B — ESTIMATION AND DIFFERENCES (Weeks 7–12)</div>
+  <table>
+    <thead><tr><th style="width:19%">Learning Outcomes</th><th style="width:25%">Topic</th><th style="width:12%">Method</th><th style="width:26%">Resources</th><th style="width:18%">Assessment</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Estimate a population quantity with an interval; size a study</td>
+        <td><strong>S5 — Interval estimation &amp; sample size</strong>: CIs for a mean and a proportion; t vs z; margin of error; sample-size formulas</td>
+        <td>Lecture and problem solving</td>
+        <td>Bluman Ch 7; Agresti Ch 5; Chan Ch 8–9; Module 5 + video</td>
+        <td>Problem set; Module HOTS</td>
+      </tr>
+      <tr>
+        <td>Test a hypothesis about one population; reason about errors and power</td>
+        <td><strong>S6 — One-sample hypothesis testing</strong>: null &amp; alternative; Type I / II errors; p-value; power; z, t and proportion tests</td>
+        <td>Lecture and discussion</td>
+        <td>Bluman Ch 8; Agresti Ch 6; Chan Ch 9; Module 6 + video</td>
+        <td>Graded recitation; Module case</td>
+      </tr>
+      <tr>
+        <td>Compare two groups, choosing the correct design and test</td>
+        <td><strong>S7 — Comparing two groups</strong>: independent and paired samples; pooled vs Welch t; two-proportion z; the confounding trap</td>
+        <td>Lecture; guided practice</td>
+        <td>Bluman Ch 9; Agresti Ch 7; Module 7 + video</td>
+        <td>Case study; <strong>Project Progress Report</strong> (wk 10)</td>
+      </tr>
+      <tr>
+        <td>Compare several means and control the family-wise error rate</td>
+        <td><strong>S8 — Analysis of variance</strong>: one-way and two-way ANOVA; post-hoc (Tukey); the multiple-comparisons problem</td>
+        <td>Lecture and problem solving</td>
+        <td>Bluman Ch 12; Agresti Ch 12; Module 8 + video</td>
+        <td><strong>Long Quiz 2</strong> (wk 11); <strong>Midterm Exam</strong> (wk 12)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="period-banner">GRADING PERIOD C — ASSOCIATION, MODELLING, AND INTEGRATION (Weeks 13–18)</div>
+  <table>
+    <thead><tr><th style="width:19%">Learning Outcomes</th><th style="width:25%">Topic</th><th style="width:12%">Method</th><th style="width:26%">Resources</th><th style="width:18%">Assessment</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Test categorical association; check the expected-count assumption</td>
+        <td><strong>S9 — Chi-square tests</strong>: goodness-of-fit; independence; f<sub>e</sub> ≥ 5; adjusted residuals; odds ratios</td>
+        <td>Lecture and problem solving</td>
+        <td>Bluman Ch 11; Agresti Ch 8; Module 9 + video</td>
+        <td>Problem set; Module HOTS</td>
+      </tr>
+      <tr>
+        <td>Measure and model a straight-line relationship; predict with honest error</td>
+        <td><strong>S10 — Correlation &amp; simple regression</strong>: r and r²; least squares; confidence vs prediction intervals; residual diagnostics; regression to the mean; the ecological fallacy</td>
+        <td>Lecture; regression workshop</td>
+        <td>Bluman Ch 10; Agresti Ch 9; Fortino (scatterplots); Module 10 + video</td>
+        <td>Case study; graded recitation</td>
+      </tr>
+      <tr>
+        <td>Build, diagnose and interpret a multiple-regression model <span class="badge core">Core</span></td>
+        <td><strong>S11 — Multiple regression</strong>: partial coefficients; adjusted R²; the overall and partial F; dummy variables; interaction; multicollinearity &amp; VIF; diagnostics; model building</td>
+        <td>Lecture; modelling workshop</td>
+        <td>Bluman §10-4; Agresti Ch 11, 13–14; Module 11 (Lecture &amp; Exercises) + video</td>
+        <td>Business-case essays; <strong>Project Final Paper</strong> (wk 16)</td>
+      </tr>
+      <tr>
+        <td>Select the right technique for any business question; handle rank data</td>
+        <td><strong>S12 — Nonparametrics &amp; the technique-selection framework</strong> <span class="badge core">Capstone</span>: sign, Wilcoxon, Mann–Whitney, Kruskal–Wallis, Spearman; the master decision table</td>
+        <td>Lecture; integrative workshop</td>
+        <td>Bluman Ch 13; Agresti (rank methods); the decision-table handout</td>
+        <td><strong>Long Quiz 3</strong> (wk 17); <strong>Oral Defence</strong> (wk 17); <strong>Final Exam</strong> (wk 18)</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ COURSE MAP ============ -->
+<section id="map">
+  <h2>Course Map (Program Outcome Contribution)</h2>
+  <p>How Advanced Business Statistics contributes to the BSBA graduate attributes (CHED CMO No. 17, s. 2017). Insert the approved program-outcome codes from the RTU BSBA curriculum map where indicated.</p>
+  <table>
+    <thead><tr><th>BSBA Graduate Attribute / Program Outcome</th><th style="width:150px;text-align:center">AdvStat 102</th></tr></thead>
+    <tbody>
+      <tr class="unit-row"><td colspan="2">A. ANALYTICAL AND QUANTITATIVE COMPETENCE (Knowledge)</td></tr>
+      <tr><td>1. Apply quantitative and statistical methods to business problems</td><td style="text-align:center">D</td></tr>
+      <tr><td>2. Interpret and evaluate data-based evidence critically</td><td style="text-align:center">D</td></tr>
+      <tr><td>3. Use appropriate models to describe, estimate, and predict</td><td style="text-align:center">D</td></tr>
+      <tr class="unit-row"><td colspan="2">B. COMMUNICATION AND COLLABORATION (Skills)</td></tr>
+      <tr><td>4. Communicate analytical findings clearly to decision-makers</td><td style="text-align:center">P</td></tr>
+      <tr><td>5. Work effectively in teams on a data project</td><td style="text-align:center">P</td></tr>
+      <tr><td>6. Use current computing and AI tools to process information ethically</td><td style="text-align:center">P</td></tr>
+      <tr class="unit-row"><td colspan="2">C. ETHICS, PROFESSIONALISM, AND CIVIC RESPONSIBILITY (Values)</td></tr>
+      <tr><td>7. Uphold intellectual honesty and evidence-based reasoning</td><td style="text-align:center">D</td></tr>
+      <tr><td>8. Observe data privacy and professional ethics (R.A. 10173)</td><td style="text-align:center">O</td></tr>
+      <tr><td>9. Contribute analytical skills to Philippine business and nation-building</td><td style="text-align:center">O</td></tr>
+      <tr><td>10. Organise oneself for lifelong quantitative learning</td><td style="text-align:center">O</td></tr>
+    </tbody>
+  </table>
+  <p class="sans" style="font-size:.85rem;color:var(--muted)"><strong>Legend:</strong> I = Introduced &nbsp;·&nbsp; P = Practiced &nbsp;·&nbsp; D = Demonstrated / Developed &nbsp;·&nbsp; O = Opportunity to learn</p>
+</section>
+
+<!-- ============ GRADING ============ -->
+<section id="grading">
+  <h2>Course Requirements and Grading System</h2>
+
+  <h3>Periodic Grade</h3>
+  <p>Each of the three grading periods (Preliminary, Midterm, Final) earns a periodic grade computed as:</p>
+  <table>
+    <thead><tr><th>Component</th><th style="width:150px;text-align:center">Weight</th></tr></thead>
+    <tbody>
+      <tr><td>Class Standing</td><td style="text-align:center">60%</td></tr>
+      <tr><td>Major Examination</td><td style="text-align:center">40%</td></tr>
+      <tr class="unit-row"><td>Periodic Grade</td><td style="text-align:center">100%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Class Standing (the 60%)</h3>
+  <table>
+    <thead><tr><th>Component</th><th style="width:150px;text-align:center">Weight</th></tr></thead>
+    <tbody>
+      <tr><td>Long quiz</td><td style="text-align:center">40%</td></tr>
+      <tr><td>Seatwork and problem sets</td><td style="text-align:center">25%</td></tr>
+      <tr><td>Term-project stage (see below)</td><td style="text-align:center">25%</td></tr>
+      <tr><td>Participation and recitation</td><td style="text-align:center">10%</td></tr>
+      <tr class="unit-row"><td>Total Class Standing</td><td style="text-align:center">100%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Final Grade</h3>
+  <p>The final grade is the mean of the three periodic grades, transmuted to the RTU 1.00–5.00 scale (raw percentages are averaged and rounded to the nearest whole percentage point before transmutation).</p>
+
+  <h3>Term Project — Business Statistical Report</h3>
+  <p>A semester-long applied analysis carried by each group, staged so that every grading period contains at least one deliverable:</p>
+  <table>
+    <thead><tr><th>Stage</th><th class="week-col" style="color:#fff">Week</th><th style="width:120px;text-align:center">Weight*</th></tr></thead>
+    <tbody>
+      <tr><td>Proposal — problem framing and study design</td><td class="week-col">4</td><td style="text-align:center">20%</td></tr>
+      <tr><td>Progress Report — data, hypotheses, and sample size</td><td class="week-col">10</td><td style="text-align:center">20%</td></tr>
+      <tr><td>Final Paper — complete analysis and recommendation</td><td class="week-col">16</td><td style="text-align:center">40%</td></tr>
+      <tr><td>Oral Defence</td><td class="week-col">17</td><td style="text-align:center">20%</td></tr>
+    </tbody>
+  </table>
+  <p class="sans" style="font-size:.85rem;color:var(--muted)">*Stage weights are within the Term-Project component of Class Standing. The Proposal is assessed on problem framing and design only; formal hypotheses and the computed sample size are deferred to the Progress Report, since the estimation and testing sessions fall after week 4. Group presentations and the oral defence are rubric-scored: <strong>Content &amp; Relevance 30% · Analysis 40% · Communication &amp; Teamwork 30%</strong>. Weights may be adjusted to institutional grading policy.</p>
+</section>
+
+<!-- ============ READINGS ============ -->
+<section id="readings">
+  <h2>Required Readings and Learning Resources</h2>
+
+  <h3>Core Textbooks</h3>
+  <ul class="plain">
+    <li>Bluman, A. G. (2018). <em>Elementary Statistics: A Step by Step Approach</em> (10th ed.). McGraw-Hill Education. <span class="badge core">Primary</span></li>
+    <li>Agresti, A. (2018). <em>Statistical Methods for the Social Sciences</em> (5th ed.). Pearson. <span class="badge core">Primary</span></li>
+    <li>Chan, S. H. (2021). <em>Introduction to Probability for Data Science</em>. Michigan Publishing.</li>
+    <li>Fortino, A. (2020). <em>Data Visualization for Business Decisions: A Laboratory Notebook</em> (3rd ed.). Mercury Learning and Information.</li>
+  </ul>
+
+  <h3>Companion Interactive Modules <span class="badge new">Module</span></h3>
+  <ul class="plain">
+    <li>Advanced Business Statistics — interactive chapter modules, Chapters 1–11. Each module includes learning objectives, generated figures, worked examples, a cheat sheet, a self-assessment (20-item higher-order thinking test), 20 reinforcement drills, and a graded business-case study with model answers and rubrics.</li>
+    <li>Chapter 11 (Multiple Regression) is published in the two-view format — a <em>Lecture &amp; Notes</em> page and a separate <em>Exercises &amp; Essays</em> page.</li>
+  </ul>
+
+  <h3>Curated Video Explainers (per topic)</h3>
+  <ul class="plain">
+    <li>StatQuest with Josh Starmer; zedstatistics; Brandon Foltz (Statistics 101); jbstatistics; Khan Academy. One explainer is linked beside each topic in the companion modules; these are third-party educational resources hosted on YouTube and remain the property of their creators.</li>
+  </ul>
+
+  <h3>Standards and Legal References</h3>
+  <ul class="plain">
+    <li>CHED CMO No. 17, series of 2017 — Policies, Standards and Guidelines for the BSBA program.</li>
+    <li>Republic Act No. 10173 — Data Privacy Act of 2012.</li>
+  </ul>
+</section>
+
+<!-- ============ POLICIES ============ -->
+<section id="policies">
+  <h2>Course Policies</h2>
+
+  <h3>Academic Integrity</h3>
+  <p>All submitted work must be the student's own. All sources — print, online, and AI-assisted — must be properly cited. Fabricating data, copying another's analysis, or misrepresenting results is a breach of academic integrity and is dealt with under RTU policy. In statistics specifically, <strong>reporting a result while concealing a violated assumption, a discarded case, or an undisclosed search over models is treated as a methodological breach</strong>, not a stylistic choice.</p>
+
+  <h3>Responsible Use of Computing and AI Tools <span class="badge new">Emphasis</span></h3>
+  <p>Students may use spreadsheets, statistical software, and generative-AI tools as aids for computation, checking, and language polishing, and are encouraged to reproduce the worked examples. Such use must be <strong>disclosed in every submission</strong>, including which tool was used and for what. The statistical reasoning, the choice and checking of technique, and the interpretation and recommendation must be the student's own. Presenting AI-generated analysis as one's own work is not permitted.</p>
+
+  <h3>Data Ethics and Privacy</h3>
+  <p>Project data involving real persons or organisations must be gathered and stored in accordance with the Data Privacy Act (R.A. 10173): informed consent, minimal collection, anonymisation where possible, and secure handling. Sensitive data must never be used without authorisation.</p>
+
+  <h3>Attendance, Deadlines, and Inclusion</h3>
+  <p>Attendance and make-up work follow RTU and CHED rules. Late deliverables are accepted with deduction unless prior arrangement is made for a documented reason. The class is a safe space for evidence-based disagreement, and submissions are paperless by default.</p>
+</section>
+
+</main>
+
+<footer>
+  Advanced Business Statistics (AdvStat 102) · Bachelor of Science in Business Administration · College of Business, Entrepreneurship and Accountancy, Rizal Technological University · Aligned to CHED CMO No. 17, s. 2017 and the RTU OBE framework · Prepared by Dr. Ryan Manuel D. Guido · August 2026
+</footer>
+
+<script>
+/* Smooth in-page navigation that works inside sandboxed preview frames */
+(function(){
+  function go(e){
+    var href=this.getAttribute('href');
+    if(!href||href.charAt(0)!=='#')return;
+    var el=document.getElementById(href.slice(1));
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});
+      if(history&&history.replaceState){history.replaceState(null,'',href);}}
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',go);});
+})();
+</script>
+</body>
+</html>
