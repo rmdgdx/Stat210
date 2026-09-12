@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 2 — Exercises &amp; Essays</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   CHAPTER 11 · MULTIPLE REGRESSION
+   Interactive learning module · single standalone file · no libraries
+   ───────────────────────────────────────────────────────────────────
+   COLOUR SYSTEM — Rizal Technological University: GOLD-dominant with
+   Royal BLUE. Nine light surface tints, each paired with a darkened
+   "ink" variant used only for text, borders and icons so that every
+   text/background pair clears WCAG AA contrast. The gold family carries
+   most surfaces; blue, green and red are kept functional (concepts,
+   recaps, warnings). The five-colour chart series palette below is
+   gold-led and validated with the dataviz colour checker.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  /* --- nine light surface tints (GOLD-dominant + BLUE) --- */
+  --p1:#F6D8CF;  /* warm red   → mistakes, warnings, "don't do this"  */
+  --p2:#DCE7F6;  /* royal blue → core concepts, definitions           */
+  --p3:#D8EACF;  /* green      → recaps, correct answers, wins         */
+  --p4:#F0E1B0;  /* amber      → key terms, vocabulary                */
+  --p5:#FBEEC2;  /* gold cream → applied cases, real-world (dominant)*/
+  --p6:#FCF6D2;  /* pale gold  → TL;DR, highlights                    */
+  --p7:#ECDFBB;  /* sand       → glossary, reference tables           */
+  --p8:#F7E1BE;  /* warm gold  → activities, "try it"                 */
+  --p9:#F3F0E6;  /* warm mist  → neutral surfaces                     */
+
+  /* --- matching ink (text/border) variants, all clear WCAG AA --- */
+  --i1:#A23A29; --i2:#1C4E86; --i3:#3B6E2E; --i4:#7A5A10; --i5:#86620A;
+  --i6:#7C6710; --i7:#6C5A2A; --i8:#8A5716; --i9:#55514A;
+
+  /* --- RTU brand accents --- */
+  --gold:#D9A82C;      /* brand gold — rings, rules, accents  */
+  --gold-ink:#856408;  /* dark gold for gold text on white    */
+  --blue:#1F5FA8;      /* brand blue — secondary              */
+  --blue-ink:#184E86;
+  --gold-grad:linear-gradient(135deg,#EAC24C,#D7A62C);
+
+  --ink:#232A33;      /* body text            */
+  --ink-soft:#5C5A50; /* secondary text       */
+  --line:#E7E0CC;     /* warm hairline rules  */
+  --bg:#FDFBF3;       /* warm cream page      */
+  --radius:16px;
+  --shadow:0 1px 2px rgba(60,50,20,.06), 0 8px 24px rgba(60,50,20,.07);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth; scroll-padding-top:96px;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16.5px; line-height:1.68; -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+
+/* ── PROGRESS BAR ────────────────────────────────────────────────── */
+#progress{
+  position:fixed; top:0; left:0; height:5px; width:0%; z-index:200;
+  background:linear-gradient(90deg,var(--gold),#E8C24E,var(--blue));
+  transition:width .12s linear;
+}
+
+/* ── STICKY NAV ──────────────────────────────────────────────────── */
+nav#topnav{
+  position:sticky; top:0; z-index:150; background:rgba(252,252,253,.92);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+}
+.navwrap{max-width:1080px; margin:0 auto; padding:9px 20px; display:flex; align-items:center; gap:14px;}
+.navbrand{font-weight:800; font-size:.86rem; letter-spacing:.4px; white-space:nowrap; color:var(--gold-ink);}
+.navlinks{display:flex; gap:5px; overflow-x:auto; scrollbar-width:none; flex:1;}
+.navlinks::-webkit-scrollbar{display:none;}
+.navlinks a{
+  font-size:.78rem; font-weight:600; text-decoration:none; color:var(--ink-soft);
+  padding:5px 11px; border-radius:999px; white-space:nowrap; transition:.15s;
+}
+.navlinks a:hover{background:var(--p9); color:var(--ink);}
+.navlinks a.on{background:var(--gold-grad); color:#3A2D06;}
+
+/* ── LAYOUT ──────────────────────────────────────────────────────── */
+.wrap{max-width:1080px; margin:0 auto; padding:0 20px 100px;}
+section{scroll-margin-top:96px;}
+
+/* ── HERO ────────────────────────────────────────────────────────── */
+.hero{
+  margin:26px 0 34px; padding:38px 34px; border-radius:26px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(circle at 90% 6%,#F7E9A6 0,transparent 44%),
+    radial-gradient(circle at 4% 96%,#CBDDF4 0,transparent 46%),
+    radial-gradient(circle at 62% 104%,#FBEFC0 0,transparent 42%),
+    linear-gradient(135deg,#F6E6A0 0%,#EBCB5E 52%,#DCE6F6 100%);
+}
+.hero .eyebrow{
+  display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.72);
+  padding:5px 15px; border-radius:999px; font-size:.74rem; font-weight:800;
+  letter-spacing:1.3px; text-transform:uppercase; color:var(--gold-ink);
+}
+.hero h1{
+  font-size:clamp(1.9rem,4.6vw,3.05rem); line-height:1.12; margin:16px 0 10px;
+  font-weight:850; letter-spacing:-.9px; color:#22303B;
+}
+.hero .sub{font-size:1.04rem; max-width:62ch; color:#2E3945; margin:0 0 20px;}
+.chips{display:flex; flex-wrap:wrap; gap:9px;}
+.chip{
+  background:rgba(255,255,255,.82); border-radius:999px; padding:7px 15px;
+  font-size:.79rem; font-weight:700; color:#2E3945; display:inline-flex; align-items:center; gap:7px;
+}
+
+/* ── HEADINGS ────────────────────────────────────────────────────── */
+h2.sec{
+  font-size:1.62rem; font-weight:840; letter-spacing:-.5px; margin:52px 0 6px;
+  display:flex; align-items:center; gap:13px; line-height:1.25;
+}
+h2.sec .n{
+  flex:none; width:46px; height:46px; border-radius:14px; display:grid; place-items:center;
+  font-size:1.02rem; font-weight:850; background:var(--gold-grad); color:#3A2D06;
+}
+h3.sub{font-size:1.13rem; font-weight:800; margin:30px 0 8px; color:var(--i2); letter-spacing:-.2px;}
+h4.mini{font-size:.79rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-soft); margin:22px 0 7px;}
+p{margin:0 0 14px;}
+.lead{font-size:1.08rem; color:#37414D;}
+
+/* ── CARDS / CALLOUTS ────────────────────────────────────────────── */
+.card{border-radius:var(--radius); padding:19px 22px; margin:18px 0; border:1px solid rgba(0,0,0,.05);}
+.card .hd{display:flex; align-items:center; gap:9px; font-weight:840; font-size:.87rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:9px;}
+.card p:last-child,.card ul:last-child,.card ol:last-child{margin-bottom:0;}
+.c-tldr{background:var(--p6);} .c-tldr .hd{color:var(--i6);}
+.c-concept{background:var(--p2);} .c-concept .hd{color:var(--i2);}
+.c-recap{background:var(--p3);} .c-recap .hd{color:var(--i3);}
+.c-term{background:var(--p4);} .c-term .hd{color:var(--i4);}
+.c-biz{background:var(--p5);} .c-biz .hd{color:var(--i5);}
+.c-warn{background:var(--p1);} .c-warn .hd{color:var(--i1);}
+.c-try{background:var(--p8);} .c-try .hd{color:var(--i8);}
+.c-ref{background:var(--p7);} .c-ref .hd{color:var(--i7);}
+.c-neutral{background:var(--p9);} .c-neutral .hd{color:var(--i9);}
+
+/* ── INLINE BITS ─────────────────────────────────────────────────── */
+.kt{background:var(--p4); color:var(--i4); font-weight:750; padding:1px 7px; border-radius:6px; white-space:nowrap;}
+.hl{background:var(--p6); padding:1px 5px; border-radius:5px; font-weight:650;}
+.no{color:var(--i1); font-weight:750;}
+.yes{color:var(--i3); font-weight:750;}
+code,.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.9em; background:var(--p9); padding:2px 6px; border-radius:5px;}
+.formula{
+  background:#fff; border:2px dashed var(--gold); border-radius:12px; padding:13px 18px;
+  margin:14px 0; text-align:center; font-family:"Cambria Math",Georgia,serif; font-size:1.06rem;
+}
+
+/* ── TABLES ──────────────────────────────────────────────────────── */
+.tbl-scroll{overflow-x:auto; margin:16px 0; border-radius:14px; border:1px solid var(--line);}
+table{width:100%; border-collapse:collapse; font-size:.92rem; background:#fff; min-width:560px;}
+th{background:var(--p4); color:var(--i4); text-align:left; padding:11px 14px; font-weight:820; font-size:.78rem; letter-spacing:.7px; text-transform:uppercase;}
+td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top;}
+tbody tr:nth-child(even) td{background:#FAFBFC;}
+td.ctr,th.ctr{text-align:center;}
+
+/* ── ACCORDION ───────────────────────────────────────────────────── */
+details.acc{background:#fff; border:1px solid var(--line); border-radius:14px; margin:11px 0; overflow:hidden;}
+details.acc>summary{
+  cursor:pointer; padding:14px 18px; font-weight:750; list-style:none;
+  display:flex; align-items:center; gap:11px; transition:.15s;
+}
+details.acc>summary::-webkit-details-marker{display:none;}
+details.acc>summary::after{content:"＋"; margin-left:auto; font-weight:800; color:var(--ink-soft); font-size:1.1rem;}
+details.acc[open]>summary::after{content:"−";}
+details.acc>summary:hover{background:var(--p9);}
+details.acc[open]>summary{background:var(--p9); border-bottom:1px solid var(--line);}
+.acc-body{padding:16px 18px 18px;}
+.acc-body p:last-child,.acc-body ul:last-child{margin-bottom:0;}
+
+/* ── GRID ────────────────────────────────────────────────────────── */
+.grid{display:grid; gap:14px; margin:18px 0;}
+.g2{grid-template-columns:repeat(auto-fit,minmax(255px,1fr));}
+.g3{grid-template-columns:repeat(auto-fit,minmax(195px,1fr));}
+.g4{grid-template-columns:repeat(auto-fit,minmax(158px,1fr));}
+.tile{border-radius:14px; padding:16px 17px; border:1px solid rgba(0,0,0,.05);}
+.tile .ic{font-size:1.5rem; line-height:1; display:block; margin-bottom:8px;}
+.tile b{display:block; font-size:.98rem; margin-bottom:4px;}
+.tile span.d{font-size:.85rem; color:#4A5461; line-height:1.55;}
+
+/* ── STEPS ───────────────────────────────────────────────────────── */
+.steps{counter-reset:s; padding:0; margin:16px 0; list-style:none;}
+.steps li{counter-increment:s; position:relative; padding-left:48px; margin-bottom:15px;}
+.steps li::before{
+  content:counter(s); position:absolute; left:0; top:-1px; width:33px; height:33px;
+  border-radius:11px; background:var(--p5); color:var(--i5);
+  display:grid; place-items:center; font-weight:850; font-size:.94rem;
+}
+
+/* ── QUIZ ────────────────────────────────────────────────────────── */
+.quizbar{
+  position:sticky; top:52px; z-index:90; background:#fff; border:1px solid var(--line);
+  border-radius:14px; padding:12px 17px; margin:18px 0; display:flex; flex-wrap:wrap;
+  align-items:center; gap:12px; box-shadow:var(--shadow);
+}
+.quizbar .score{font-weight:850; font-size:1rem;}
+.quizbar .meter{flex:1; min-width:130px; height:9px; background:var(--p9); border-radius:99px; overflow:hidden;}
+.quizbar .meter i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--gold),var(--blue)); transition:width .3s;}
+.btn{
+  border:none; border-radius:999px; padding:8px 17px; font-size:.83rem; font-weight:750;
+  cursor:pointer; font-family:inherit; transition:.15s; background:var(--p9); color:var(--ink);
+}
+.btn:hover{filter:brightness(.96);}
+.btn.primary{background:var(--gold-grad); color:#3A2D06;}
+.btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft);}
+
+.q{background:#fff; border:1px solid var(--line); border-radius:16px; padding:19px 21px; margin:14px 0;}
+.q .qhead{display:flex; gap:12px; align-items:flex-start; margin-bottom:13px;}
+.q .qnum{
+  flex:none; width:32px; height:32px; border-radius:10px; background:var(--p4); color:var(--i4);
+  display:grid; place-items:center; font-weight:850; font-size:.86rem;
+}
+.q .qtext{font-weight:620; line-height:1.6;}
+.q .qtext .scen{display:block; color:var(--ink-soft); font-weight:450; font-size:.93rem; margin-bottom:6px;}
+.q .bloom{
+  display:inline-block; font-size:.66rem; font-weight:850; letter-spacing:1px; text-transform:uppercase;
+  background:var(--p7); color:var(--i7); padding:3px 9px; border-radius:999px; margin-bottom:8px;
+}
+.opts{display:grid; gap:8px;}
+.opt{
+  display:flex; gap:11px; align-items:flex-start; padding:11px 14px; border-radius:11px;
+  border:1.5px solid var(--line); background:#fff; cursor:pointer; transition:.14s;
+  font-size:.94rem; line-height:1.5; text-align:left; font-family:inherit; color:var(--ink); width:100%;
+}
+.opt:hover:not(.locked){background:var(--p9); border-color:#CDD5DE;}
+.opt .ltr{
+  flex:none; width:24px; height:24px; border-radius:7px; background:var(--p9); color:var(--ink-soft);
+  display:grid; place-items:center; font-weight:850; font-size:.78rem;
+}
+.opt.correct{background:var(--p3); border-color:var(--i3);}
+.opt.correct .ltr{background:var(--i3); color:#fff;}
+.opt.wrong{background:var(--p1); border-color:var(--i1);}
+.opt.wrong .ltr{background:var(--i1); color:#fff;}
+.opt.locked{cursor:default;}
+.expl{margin-top:13px; border-radius:12px; padding:15px 17px; background:var(--p9); display:none;}
+.expl.show{display:block;}
+.expl .vt{font-weight:850; font-size:.85rem; letter-spacing:.5px; text-transform:uppercase; margin-bottom:7px; display:flex; align-items:center; gap:7px;}
+.expl .vt.ok{color:var(--i3);} .expl .vt.no{color:var(--i1);}
+.expl p{font-size:.93rem; margin:0 0 9px;}
+.expl .dis{margin-top:10px; padding-top:10px; border-top:1px dashed #CFD6DE;}
+.expl .dis div{font-size:.885rem; margin-bottom:5px; color:#404A56;}
+.expl .dis b{color:var(--i1);}
+
+/* ── ESSAY ───────────────────────────────────────────────────────── */
+.essay{background:#fff; border:1px solid var(--line); border-left:6px solid var(--p5); border-radius:16px; padding:21px 23px; margin:18px 0;}
+.essay .etag{font-size:.72rem; font-weight:850; letter-spacing:1.2px; text-transform:uppercase; color:var(--i5); margin-bottom:7px;}
+.essay .eq{font-size:1.04rem; font-weight:750; margin-bottom:11px; line-height:1.5;}
+.rubric{font-size:.88rem;}
+.rubric td,.rubric th{padding:8px 12px;}
+
+/* ── GLOSSARY ────────────────────────────────────────────────────── */
+.gloss{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); margin:16px 0;}
+.gitem{background:var(--p7); border-radius:12px; padding:13px 15px;}
+.gitem b{display:block; color:var(--i7); font-size:.95rem; margin-bottom:3px;}
+.gitem span{font-size:.87rem; color:#3E4854; line-height:1.55;}
+
+/* ── MISC ────────────────────────────────────────────────────────── */
+.palette{display:flex; gap:5px; margin:12px 0 0; flex-wrap:wrap;}
+.sw{width:38px; height:38px; border-radius:9px; border:1px solid rgba(0,0,0,.07);}
+hr.div{border:none; border-top:1px solid var(--line); margin:44px 0;}
+footer.end{margin-top:56px; padding:30px 0 0; border-top:1px solid var(--line); font-size:.86rem; color:var(--ink-soft);}
+.backtop{position:fixed; right:18px; bottom:18px; z-index:120; width:46px; height:46px; border-radius:50%;
+  background:var(--gold-grad); color:#3A2D06; border:none; font-size:1.15rem; cursor:pointer; box-shadow:var(--shadow); display:none;}
+.backtop.on{display:block;}
+
+@media(max-width:640px){
+  body{font-size:16px;}
+  .hero{padding:28px 22px; border-radius:20px;}
+  h2.sec{font-size:1.36rem;}
+  h2.sec .n{width:38px; height:38px; font-size:.9rem;}
+  .card{padding:16px 17px;}
+  .q{padding:16px 15px;}
+  .quizbar{top:50px;}
+}
+/* ── PRINT / PDF ─────────────────────────────────────────────────
+   Turns the interactive module into a static answer-key workbook:
+   every explanation, model answer and rubric is forced open, all
+   chrome is stripped, and nothing that must be read together is
+   allowed to break across a page.                                  */
+@page{ size:Letter; margin:14mm 12mm 15mm; }
+
+@media print{
+  /* strip interactive chrome */
+  nav#topnav,#progress,.backtop,.quizbar{ display:none !important; }
+
+  /* force every hidden layer open */
+  .expl{ display:block !important; }
+  details.acc{ page-break-inside:avoid; }
+  details.acc>summary::after{ content:"" !important; }
+  details.acc>summary{ background:var(--p9) !important; border-bottom:1px solid var(--line); }
+  details.acc:not([open])>.acc-body{ display:block !important; }
+
+  /* keep tint fills — they carry the semantic colour coding */
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+
+  body{ font-size:10pt; line-height:1.5; background:#fff; }
+  .wrap{ max-width:none; padding:0 0 8pt; }
+  html{ scroll-behavior:auto; }
+
+  /* never split a unit of meaning across pages */
+  .card,.essay,.tile,.gitem,.formula,.acc-body,
+  .hero,.opts,.expl,.steps li{ page-break-inside:avoid; break-inside:avoid; }
+  /* Long reference tables must be allowed to flow. This chapter has several that
+     exceed a full page (the formula card, the case model answers); forcing them
+     whole strands the page before each one. Rows stay intact and the header
+     repeats on every page the table spans. */
+  .tbl-scroll{ break-inside:auto; page-break-inside:auto; }
+  /* An item may split, but only at the seam between its options and its
+     explanation — the stem+options block and the explanation each stay whole. */
+  .q{ break-inside:auto; }
+  .q .qhead{ break-after:avoid; }
+  /* Essay model answers and rubrics run close to a full page; keeping them
+     atomic would strand half a page before each. Let them flow, but keep
+     their internal tables and paragraphs whole. */
+  .essay details.acc, .essay .acc-body{ break-inside:auto; page-break-inside:auto; }
+  .essay details.acc>summary{ break-after:avoid; }
+  .essay .acc-body p, .essay .acc-body li{ break-inside:avoid; }
+  h2.sec,h3.sub,h4.mini{ page-break-after:avoid; break-after:avoid; }
+  tr,thead{ page-break-inside:avoid; }
+  thead{ display:table-header-group; }
+
+  /* major sections start a fresh page */
+  #cheat,#hots,#drill,#case{ page-break-before:always; }
+  hr.div{ display:none; }
+
+  /* tighten spacing that only exists for on-screen scrolling */
+  h2.sec{ margin:20pt 0 4pt; font-size:15pt; }
+  h3.sub{ margin:14pt 0 4pt; }
+  .card,.q,.essay{ margin:8pt 0; }
+  section{ scroll-margin-top:0; }
+  table{ min-width:0; font-size:8.6pt; }
+  .tbl-scroll{ overflow:visible; }
+  .grid{ gap:8pt; }
+
+  /* Quiz items are the bulk of the page count. Because each item is kept
+     whole (page-break-inside:avoid), an item taller than half a page wastes
+     the remainder. These densities are tuned so two reinforcement items fit
+     per page while the item stays comfortably readable. */
+  .q{ padding:11px 13px; margin:6pt 0; }
+  .q .qhead{ margin-bottom:8px; }
+  .q .qnum{ width:26px; height:26px; font-size:.78rem; }
+  .q .qtext{ font-size:9.5pt; line-height:1.45; }
+  .q .qtext .scen{ font-size:9pt; margin-bottom:4px; }
+  .q .bloom{ font-size:.62rem; padding:2px 7px; margin-bottom:5px; }
+  .opts{ gap:5px; }
+  .expl{ margin-top:9px; padding:10px 12px; }
+  .expl .vt{ font-size:.78rem; margin-bottom:5px; }
+  .expl p{ font-size:8.9pt; line-height:1.45; margin-bottom:6px; }
+  .expl .dis{ margin-top:7px; padding-top:7px; }
+  .expl .dis div{ font-size:8.5pt; line-height:1.42; margin-bottom:4px; }
+
+
+  figure.fig, .figcard, .figpair, .calc, pre.term{ page-break-inside:avoid; break-inside:avoid; }
+  .figpair.side{ grid-template-columns:1fr 1fr; }
+  figure.fig svg, .figcard svg{ max-height:none; }
+
+  /* answer key styling: correct option stays clearly marked */
+  .opt{ border-width:1px; padding:5px 10px; font-size:8.9pt; line-height:1.4; }
+  .opt .ltr{ width:20px; height:20px; font-size:.7rem; }
+  .opt.correct{ background:var(--p3) !important; border-color:var(--i3) !important; }
+  .opt.correct .ltr{ background:var(--i3) !important; color:#fff !important; }
+}
+
+/* ── CHART SERIES PALETTE ────────────────────────────────────────
+   The nine Pastel1 fills above are SURFACE colours: too light and too
+   low-chroma to encode data (measured — see §2.9). These five series
+   colours are GOLD-led and pushed into the accessible lightness/chroma
+   band. Verified with the dataviz validator: ALL CHECKS PASS on the
+   light surface (worst adjacent pair clears the floor with the legend
+   + direct labels every figure already carries).
+      gold → --s1   blue → --s2   green → --s3
+      plum → --s4   brick → --s5                                 */
+:root{
+  --s1:#A6790C; --s2:#1F5FA8; --s3:#3F8A3F; --s4:#8B4E9C; --s5:#B4523E;
+}
+
+/* ── FIGURES ─────────────────────────────────────────────────────── */
+figure.fig{ margin:18px 0; }
+figure.fig svg{ border:1px solid var(--line); border-radius:14px; background:#fff; }
+figcaption{ font-size:.85rem; color:var(--ink-soft); margin-top:7px; line-height:1.55; }
+figcaption b{ color:var(--ink); }
+.figpair{ display:grid; gap:14px; grid-template-columns:1fr; margin:18px 0; }
+@media(min-width:900px){ .figpair.side{ grid-template-columns:1fr 1fr; } }
+.figcard{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; }
+.figcard>.tag{
+  font-size:.74rem; font-weight:850; letter-spacing:1.1px; text-transform:uppercase;
+  padding:7px 13px; display:flex; align-items:center; gap:7px;
+}
+.figcard.bad>.tag{ background:var(--p1); color:var(--i1); }
+.figcard.good>.tag{ background:var(--p3); color:var(--i3); }
+.figcard svg{ border:none; border-radius:0; }
+.figcard>.note{ font-size:.83rem; color:#404A56; padding:10px 13px 12px; line-height:1.55; border-top:1px solid var(--line); }
+.figcard>.note b{ color:var(--ink); }
+.swatchrow{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:10px 0; }
+.swatchrow .s{ width:30px; height:30px; border-radius:8px; border:1px solid rgba(0,0,0,.08); }
+.swatchrow .arrow{ color:var(--ink-soft); font-weight:800; }
+pre.term{
+  background:#1D2530; color:#D8DEE6; border-radius:12px; padding:13px 15px; margin:12px 0;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:.74rem;
+  line-height:1.65; overflow-x:auto; white-space:pre;
+}
+pre.term .pass{ color:#8FD68F; } pre.term .fail{ color:#FF9A94; } pre.term .warn{ color:#F3D07A; }
+.calc{
+  background:#fff; border:1px solid var(--line); border-left:5px solid var(--gold);
+  border-radius:12px; padding:14px 17px; margin:14px 0;
+  font-family:"Cambria Math",Georgia,serif; font-size:.97rem; line-height:1.85;
+}
+.calc .step{ display:block; }
+.calc .res{ font-weight:800; color:var(--i2); font-family:inherit; }
+.calc .lbl{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:.74rem; font-weight:850; letter-spacing:.9px; text-transform:uppercase;
+  color:var(--ink-soft); display:block; margin-bottom:4px; }
+
+/* ── Z-TABLE ─────────────────────────────────────────────────────── */
+table.ztab{ font-size:.68rem; min-width:640px; font-variant-numeric:tabular-nums; }
+table.ztab th{ font-size:.62rem; padding:5px 3px; text-align:center; letter-spacing:0; }
+table.ztab td{ padding:3.5px 3px; text-align:center; border-color:#EDF0F4; }
+table.ztab td.zh{ background:var(--p4); color:var(--i4); font-weight:850; }
+table.ztab td.hi{ background:var(--p6); font-weight:800; }
+table.ztab tbody tr:nth-child(even) td{ background:#FAFBFC; }
+table.ztab tbody tr:nth-child(even) td.zh{ background:var(--p4); }
+table.ztab tbody tr:nth-child(even) td.hi{ background:var(--p6); }
+
+/* ── DESIGN / CONCEPT CARDS ──────────────────────────────────────── */
+.dist{ border:1px solid var(--line); border-radius:16px; overflow:hidden; margin:14px 0; background:#fff; }
+.dist>.dh{ padding:9px 14px; font-weight:850; font-size:.92rem; display:flex; align-items:center; gap:9px; }
+.dist>.db{ padding:13px 15px; }
+.dist>.db p:last-child{ margin-bottom:0; }
+.dist.binom>.dh{ background:var(--p2); color:var(--i2); }
+.dist.pois>.dh{ background:var(--p3); color:var(--i3); }
+.dist.norm>.dh{ background:var(--p4); color:var(--i4); }
+.dist.warn>.dh{ background:var(--p1); color:var(--i1); }
+
+/* ── THE THREE-DISTRIBUTION DISAMBIGUATION STRIP ─────────────────── */
+.three{ display:grid; gap:0; grid-template-columns:1fr; border:1px solid var(--line);
+  border-radius:16px; overflow:hidden; margin:16px 0; background:#fff; }
+@media(min-width:760px){ .three{ grid-template-columns:repeat(3,1fr); } }
+.three>div{ padding:14px 16px; border-top:1px solid var(--line); }
+@media(min-width:760px){ .three>div{ border-top:none; border-left:1px solid var(--line); }
+  .three>div:first-child{ border-left:none; } }
+.three .tt{ font-weight:850; font-size:.9rem; margin-bottom:6px; display:flex; align-items:center; gap:7px; }
+.three .tf{ font-family:"Cambria Math",Georgia,serif; background:var(--p9); border-radius:8px;
+  padding:6px 9px; margin:8px 0; font-size:.92rem; text-align:center; }
+.three p{ font-size:.87rem; margin:0; color:#414B57; line-height:1.55; }
+
+/* ── TWO-VIEW TAB BAR (Lecture / Exercises) ─────────────────────── */
+.navtabs{ display:flex; gap:7px; margin-left:auto; flex:none; }
+.navtabs a{
+  display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  font-size:.8rem; font-weight:800; letter-spacing:.2px; padding:7px 15px;
+  border-radius:999px; color:var(--blue-ink); background:var(--p2);
+  border:1px solid transparent; white-space:nowrap; transition:.15s;
+}
+.navtabs a:hover{ filter:brightness(.97); }
+.navtabs a.active{ background:var(--gold-grad); color:#3A2D06; box-shadow:0 1px 4px rgba(120,90,10,.3); }
+@media(max-width:720px){ .navtabs a .lbl2{ display:none; } }
+@media(max-width:640px){ .navtabs a{ padding:6px 11px; font-size:.74rem; } }
+
+/* ── PER-TOPIC VIDEO CARD ───────────────────────────────────────── */
+.vidbox{
+  display:flex; gap:14px; align-items:center; text-decoration:none; color:inherit;
+  background:#fff; border:1px solid var(--line); border-left:5px solid var(--gold);
+  border-radius:13px; padding:12px 16px; margin:16px 0; transition:.15s;
+}
+.vidbox:hover{ background:var(--p6); box-shadow:var(--shadow); }
+.vidbox .play{
+  flex:none; width:46px; height:46px; border-radius:12px; background:#E12D2D;
+  display:grid; place-items:center; color:#fff; font-size:1.15rem;
+}
+.vidbox .vmeta{ min-width:0; }
+.vidbox .vk{ font-size:.68rem; font-weight:850; letter-spacing:1.1px; text-transform:uppercase; color:var(--gold-ink); display:block; margin-bottom:2px; }
+.vidbox .vt{ font-weight:750; font-size:.97rem; line-height:1.35; display:block; color:var(--ink); }
+.vidbox .vch{ font-size:.83rem; color:var(--ink-soft); }
+.vidbox .go{ margin-left:auto; flex:none; color:var(--ink-soft); font-weight:800; font-size:1.1rem; }
+@media(max-width:640px){ .vidbox .go{ display:none; } }
+@media print{ .vidbox,.navtabs{ display:none !important; } }
+
+/* ── static MCQ options + answer dropdowns (exercises pages) ─────── */
+.optrow{display:flex;gap:11px;align-items:flex-start;padding:9px 13px;border:1.5px solid var(--line);
+  border-radius:11px;margin:7px 0;background:#fff;font-size:.95rem;line-height:1.5;}
+.optrow .ltr{flex:none;width:24px;height:24px;border-radius:7px;background:var(--p9);color:var(--ink-soft);
+  display:grid;place-items:center;font-weight:850;font-size:.78rem;}
+.q .opts{display:block;margin-top:4px;}
+details.acc.ans{margin:12px 0 2px;}
+details.acc.ans>summary{color:var(--blue-ink);font-weight:800;}
+.ansbody .key,.acc-body .key{font-weight:850;color:var(--i3);}
+.exbar{position:sticky;top:52px;z-index:90;background:#fff;border:1px solid var(--line);border-radius:14px;
+  padding:11px 16px;margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:var(--shadow);}
+.exbar .lbl{font-weight:850;}
+@media print{.exbar{display:none!important;} details.acc.ans>.acc-body{display:block!important;}}
+
+</style>
+</head>
+<body data-palette="#A6790C,#1F5FA8,#3F8A3F,#8B4E9C,#B4523E">
+<div class="rtu-instructor-banner" style="background:linear-gradient(135deg,#12213f 0%,#1a2f5a 60%,#24457e 100%);color:#eaf0fb;border-bottom:3px solid #c9a227;font-family:-apple-system,'Segoe UI',Arial,sans-serif;text-align:center;padding:9px 16px;font-size:.82rem;line-height:1.45;letter-spacing:.02em;"><span style="font-weight:800;color:#fff;">🎓 Advanced Statistics</span>&nbsp;—&nbsp; a class of <b style="color:#f2d98b;">Dr.&nbsp;Ryan&nbsp;Manuel&nbsp;D.&nbsp;Guido</b><span style="opacity:.85;">&nbsp;·&nbsp; Rizal Technological University</span></div>
+<nav id="topnav"><div class="navwrap"><span class="navbrand">✍️ CH 2 · EXERCISES &amp; ESSAYS</span><div class="navlinks"><a href="#exstart" class="on">Overview</a><a href="#reinf">⚡ Reinforcement</a><a href="#case">✍️ Case &amp; Essays</a></div><div class="navtabs"><a href="Chapter02.html">📖 <span class="lbl2">Lecture &amp; </span>Notes</a><a href="Chapter02_Exercises.html" class="active">✍️ <span class="lbl2">Exercises &amp; </span>Essays</a></div></div></nav>
+<div class="wrap">
+<section id="exstart"><div class="hero"><span class="eyebrow">✍️ Chapter 2 · Practice &amp; Assessment</span><h1>Description &amp; Visuals<br>Exercises &amp; Essays</h1><p class="sub">Twenty higher-order multiple-choice items to test your reasoning, followed by an applied-case essay test. For each question, decide on your answer first, then open the dropdown to check it and read a brief explanation. The full teaching material is on the <a href="Chapter02.html"><b>Lecture &amp; Notes</b></a> tab.</p><div class="chips"><span class="chip">⚡ 20 higher-order items</span><span class="chip">🧮 1 applied case</span><span class="chip">✍️ 3 essays</span></div></div></section>
+<section id="reinf"><hr class="div"><h2 class="sec"><span class="n" style="background:var(--gold-grad); color:#3A2D06;">⚡</span>Part I · Reinforcement Exercises — Higher-Order Thinking</h2><p class="lead">Twenty multiple-choice items. Most turn on a judgement, not a formula. Choose your answer, then use the dropdown to check it and read why.</p><div class="exbar"><span class="lbl">20 items</span><button class="btn primary" onclick="exAll(true)">Reveal all answers</button><button class="btn ghost" onclick="exAll(false)">Hide all</button></div><div class="q"><div class="qhead"><div class="qnum">1</div><div class="qtext"><span class="scen">A water-quality laboratory records daily samples processed for one bench: 42, 45, 48, 44, 46, <b>0</b>, 47, 43. The laboratory was closed for a public holiday on the sixth day, and the export tool wrote that day as 0 rather than leaving it blank.</span>What does that single cell do to the mean and the standard deviation?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>It lowers the mean and lowers the standard deviation, because a small value tightens the data.</span></div><div class="optrow"><span class="ltr">B</span><span>It lowers the mean from 45.0 to 39.4 and inflates the standard deviation from 2.2 to 16.0.</span></div><div class="optrow"><span class="ltr">C</span><span>It has no material effect, because one value out of eight cannot move a summary much.</span></div><div class="optrow"><span class="ltr">D</span><span>It raises the standard deviation but leaves the mean unchanged, since zero contributes nothing to the sum.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> It lowers the mean from 45.0 to 39.4 and inflates the standard deviation from 2.2 to 16.0.</p><p style="margin:0">The seven working days average 45.0 with a standard deviation of only 2.16 — a remarkably steady bench. Adding a spurious zero drops the mean to 39.375 and pushes the standard deviation to 16.04, a <b>7.4-fold inflation</b>. The damage to the spread is far worse than the damage to the centre, because the deviation of −39.4 gets squared. A blank cell would have been excluded automatically; a zero was silently treated as a real working day on which the bench processed nothing.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">2</div><div class="qtext"><span class="scen">A provincial survey records the monthly household income of 240 households in one municipality. The distribution is strongly right-skewed: most households earn between 22,000 and 38,000, while three landowning households earn over 400,000. Mean = 48,900; median = 31,200.</span>Which figure should be reported as the typical household income, and on what grounds?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The mean, because the median discards information about how much the wealthiest households earn.</span></div><div class="optrow"><span class="ltr">B</span><span>The mean, because it uses every household's income and is therefore more complete.</span></div><div class="optrow"><span class="ltr">C</span><span>The median, because with strong right skew the mean is pulled above almost every actual household and no longer describes a typical case.</span></div><div class="optrow"><span class="ltr">D</span><span>Either one, provided the choice is disclosed — both are valid measures of centre.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> The median, because with strong right skew the mean is pulled above almost every actual household and no longer describes a typical case.</p><p style="margin:0">“Typical” means the value a randomly chosen household is likely to be near, and the median answers that directly: half earn less, half earn more. The mean of 48,900 exceeds what the overwhelming majority actually earn, because three extreme incomes pull the balance point upward. Reporting the mean here would not be a technical error so much as a misleading answer to the question that was asked.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">3</div><div class="qtext"><span class="scen">Two monitoring stations are being compared for consistency.<br>Station A — monthly streamflow: mean 500,000 m³, standard deviation 40,000 m³.<br>Station B — monthly sample count: mean 3,000, standard deviation 180.</span>Which station is more variable, and how do you know?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Station A, because its coefficient of variation is 8.0% against Station B's 6.0%.</span></div><div class="optrow"><span class="ltr">B</span><span>They cannot be compared at all, because the two variables are measured in different units.</span></div><div class="optrow"><span class="ltr">C</span><span>Station B, because its standard deviation of 180 is smaller and smaller means steadier.</span></div><div class="optrow"><span class="ltr">D</span><span>Station A, because a standard deviation of 40,000 m³ is far larger than 180.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Station A, because its coefficient of variation is 8.0% against Station B's 6.0%.</p><p style="margin:0">The standard deviations are in incomparable units — cubic metres against sample counts — so they cannot be ranked directly. The coefficient of variation removes the units by expressing spread as a percentage of the mean: Station A gives 40,000 ÷ 500,000 = <b>8.0%</b> and Station B gives 180 ÷ 3,000 = <b>6.0%</b>. Relative to its own scale, Station A fluctuates more.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">4</div><div class="qtext"><span class="scen">A university surveys student clarity across three campuses.<br>Main campus — mean 4.6, 200 respondents.<br>North annex — mean 4.0, 1,800 respondents.<br>South annex — mean 3.4, 2,000 respondents.<br>The report states: “University-wide clarity is 4.0 out of 5.”</span>Evaluate the reported figure.</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>It overstates true university-wide clarity; the respondent-weighted mean is 3.73.</span></div><div class="optrow"><span class="ltr">B</span><span>It understates true university-wide clarity, because the largest campus was given too little influence.</span></div><div class="optrow"><span class="ltr">C</span><span>It cannot be evaluated without knowing the standard deviation on each campus.</span></div><div class="optrow"><span class="ltr">D</span><span>It is correct, since 4.0 is the average of the three campus means.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> It overstates true university-wide clarity; the respondent-weighted mean is 3.73.</p><p style="margin:0">The report averaged the three <em>campus means</em> as though each campus were the same size. It is not: the South annex contributes half the respondents and has the lowest clarity, while the Main campus contributes 5% and has the highest. The weighted mean is [4.6(200) + 4.0(1,800) + 3.4(2,000)] ÷ 4,000 = 14,920 ÷ 4,000 = <b>3.73</b>. The simple average <b>overstates</b> clarity by 0.27 of a point, which is a large error on a five-point scale.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">5</div><div class="qtext">Why is a sample variance computed by dividing the sum of squared deviations by n − 1 rather than by n?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Because n − 1 produces a larger number, and a conservative estimate is always safer.</span></div><div class="optrow"><span class="ltr">B</span><span>Because one deviation is fully determined once the sample mean has been used, so only n − 1 deviations are free to vary; dividing by n would give a systematically too-small estimate.</span></div><div class="optrow"><span class="ltr">C</span><span>Because the sample mean is always slightly larger than the population mean.</span></div><div class="optrow"><span class="ltr">D</span><span>Because the formula must match the one used for the population variance.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> Because one deviation is fully determined once the sample mean has been used, so only n − 1 deviations are free to vary; dividing by n would give a systematically too-small estimate.</p><p style="margin:0">Deviations from the sample mean must sum to exactly zero. Once you know n − 1 of them, the last one is forced — so it carries no independent information. That count of independent deviations is the <b>degrees of freedom</b>. Dividing by n treats all n deviations as informative and therefore understates the true variability; dividing by n − 1 corrects that bias. The correction is largest for small samples, which is exactly when it matters most.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">6</div><div class="qtext"><span class="scen">A column recording monthly station streamflow in <b>thousand m³</b> contains: 512, 486, 455, 470, 498, 505, and <b>493000</b>.</span>What is the correct treatment of the value 493000?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Replace it with the mean of the other six values, so that the sample size is preserved.</span></div><div class="optrow"><span class="ltr">B</span><span>Keep it — it may be a genuine main-stem gauge, and deleting real data is unethical.</span></div><div class="optrow"><span class="ltr">C</span><span>Delete the row silently, since a value that extreme is obviously wrong.</span></div><div class="optrow"><span class="ltr">D</span><span>Recognise it as a unit error — cubic metres entered in a thousand-m³ column — and correct it to 493 if the source can be verified; otherwise treat it as missing and disclose that.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Recognise it as a unit error — cubic metres entered in a thousand-m³ column — and correct it to 493 if the source can be verified; otherwise treat it as missing and disclose that.</p><p style="margin:0">The value is roughly a thousand times the others, which is the signature of a unit mix-up rather than a real observation: someone entered 493,000 m³ into a column already denominated in thousands of cubic metres. This is an <b>error</b>, the first of the three outlier categories, so the correct action is to establish the true value and fix it. If the source document cannot be checked, the honest fallback is to treat the cell as missing and report that one observation was excluded and why.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">7</div><div class="qtext">Why is the 1.5 × IQR rule a more reliable outlier detector than flagging observations with |z| > 3?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Because the 1.5 multiplier is more sensitive than a threshold of three standard deviations.</span></div><div class="optrow"><span class="ltr">B</span><span>Because z-scores can only be computed for normally distributed data.</span></div><div class="optrow"><span class="ltr">C</span><span>Because the IQR is easier to compute by hand than the standard deviation.</span></div><div class="optrow"><span class="ltr">D</span><span>Because the z-score method uses a mean and standard deviation that the outlier itself inflates, whereas the IQR fences are built from positions that extreme values cannot influence.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Because the z-score method uses a mean and standard deviation that the outlier itself inflates, whereas the IQR fences are built from positions that extreme values cannot influence.</p><p style="margin:0">This is a circularity problem. An extreme value pulls the mean toward itself and inflates the standard deviation, and both quantities sit in the z-score formula — so the outlier shrinks its own z-score and can <b>mask itself</b>. In this chapter's dataset the main-stem gauge scored z = +3.14, but measured against the eleven-station standard deviation of 63.77 thousand m³ it is more than twenty deviations out. Quartiles depend only on rank position, so no single extreme value can shift them, which makes the fences an independent yardstick.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">8</div><div class="qtext"><span class="scen">Nine laboratories' average sample turnaround times in days, sorted: 12, 14, 15, 16, 18, 19, 21, 24, 47.</span>Applying the 1.5 × IQR rule, which observations are flagged as outliers?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Only 47.</span></div><div class="optrow"><span class="ltr">B</span><span>Both 12 and 47.</span></div><div class="optrow"><span class="ltr">C</span><span>Only 12.</span></div><div class="optrow"><span class="ltr">D</span><span>None — the data is too small a sample for the rule to apply.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Only 47.</p><p style="margin:0">Use the convention from the formula card, c = np/100. For Q<sub>1</sub>: c = 9(25)/100 = 2.25 → fractional, so round up to 3, and the 3rd value is <b>15</b>. For Q<sub>3</sub>: c = 9(75)/100 = 6.75 → round up to 7, and the 7th value is <b>21</b>. So IQR = 6, and the fences are 15 − 1.5(6) = <b>6</b> and 21 + 1.5(6) = <b>30</b>. Only 47 exceeds a fence. Note that 47 is well over twice the median of 18 — a laboratory taking six and a half weeks where the rest take two to three, which is a finding worth acting on rather than deleting. (Some texts locate quartiles by splitting at the median instead, which here gives Q<sub>1</sub> = 14.5 and Q<sub>3</sub> = 22.5 and fences of 2.5 and 34.5. The two conventions differ on the quartiles yet agree on the verdict — a useful reminder to state which one you used.)</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">9</div><div class="qtext"><span class="scen">An analyst reports: “Daily rainfall on rain days averages 4,200 with a standard deviation of 3,800 (in hundredths of a millimetre), so by the empirical rule about 95% of rain days fall between 0 and 11,800.” The distribution of daily rainfall is strongly right-skewed.</span>What is wrong, and what should have been used instead?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Nothing is wrong; the empirical rule applies to any distribution with a computed mean and standard deviation.</span></div><div class="optrow"><span class="ltr">B</span><span>The empirical rule requires an approximately bell-shaped distribution, which this is not; Chebyshev's theorem applies to any shape and would give at least 75% within two standard deviations.</span></div><div class="optrow"><span class="ltr">C</span><span>The arithmetic is wrong — two standard deviations either side of 4,200 is 400 to 8,000.</span></div><div class="optrow"><span class="ltr">D</span><span>The standard deviation should have been divided by the square root of the sample size first.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> The empirical rule requires an approximately bell-shaped distribution, which this is not; Chebyshev's theorem applies to any shape and would give at least 75% within two standard deviations.</p><p style="margin:0">The 68–95–99.7 figures are properties of the <b>normal</b> distribution and have no general validity. For a strongly skewed variable they can be badly wrong — and the tell is visible in the analyst's own output: the lower bound landed on 0, a boundary the data physically cannot cross, which is a signature of forcing a symmetric model onto an asymmetric variable. Chebyshev's theorem makes no shape assumption and guarantees at least 1 − 1/2² = <b>75%</b> within two standard deviations. Weaker, but true.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">10</div><div class="qtext"><span class="scen">For the daily rainfall totals at a station, mean = 4,200 and median = 2,800 (hundredths of a millimetre); the standard deviation is 3,500.</span>What does this pattern indicate, and what follows for reporting?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The distribution is right-skewed, so the mean and median should both be discarded in favour of the mode.</span></div><div class="optrow"><span class="ltr">B</span><span>The distribution is left-skewed, so the mean is the safer summary.</span></div><div class="optrow"><span class="ltr">C</span><span>The distribution is right-skewed — Pearson's median skewness is +1.20 — so the median should lead, with the mean reported alongside for the total.</span></div><div class="optrow"><span class="ltr">D</span><span>The distribution is symmetric and the gap simply reflects sampling error.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> The distribution is right-skewed — Pearson's median skewness is +1.20 — so the median should lead, with the mean reported alongside for the total.</p><p style="margin:0">Mean above median is the definition of right skew, and it is quantifiable from these three numbers alone: 3(4,200 − 2,800) ÷ 3,500 = 4,200 ÷ 3,500 = <b>+1.20</b>, which exceeds 1.0 and therefore counts as strong skew. The typical rain day is nearer 2,800; the mean is inflated by a minority of very wet days. Both figures are useful, for different questions — the median for “what is a normal rain day”, the mean for water balance, since mean × number of rain days gives the expected total rainfall.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">11</div><div class="qtext">Which statement about kurtosis is correct?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Kurtosis measures asymmetry, with positive values indicating a longer right tail.</span></div><div class="optrow"><span class="ltr">B</span><span>Kurtosis is only defined for symmetric distributions.</span></div><div class="optrow"><span class="ltr">C</span><span>Kurtosis measures how peaked a distribution is at its centre; higher kurtosis means a taller peak and nothing more.</span></div><div class="optrow"><span class="ltr">D</span><span>Kurtosis describes tail weight — how much of the variance comes from rare extreme values — so high kurtosis warns that extreme events are more frequent than a normal model predicts.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> Kurtosis describes tail weight — how much of the variance comes from rare extreme values — so high kurtosis warns that extreme events are more frequent than a normal model predicts.</p><p style="margin:0">The “peakedness” gloss is the most persistent misconception in introductory statistics. Kurtosis is driven primarily by the <b>tails</b>: it asks what share of the variance is produced by rare, far-from-centre observations. This is why leptokurtic (heavy-tailed) distributions of rainfall, discharge and seismic energy matter so much in practice — a risk model that assumes normality will systematically understate the probability of an extreme event, because normality assigns almost no probability to the extremes that heavy-tailed data actually produces.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">12</div><div class="qtext"><span class="scen">An adoption survey after an information campaign is cross-tabulated by locality.<br>Urban: 90 adopted, 60 did not (150 total).<br>Rural: 60 adopted, 190 did not (250 total).<br>Overall, 150 of 400 households adopted.</span>To answer “do urban households adopt at a higher rate than rural households?”, which percentage should be reported?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Row percentages: 60% of urban households adopted against 24% of rural households.</span></div><div class="optrow"><span class="ltr">B</span><span>Percentages of the overall total: urban adopters are 22.5% of all households.</span></div><div class="optrow"><span class="ltr">C</span><span>The raw counts alone: 90 urban households adopted against 60 rural, so urban households adopt more.</span></div><div class="optrow"><span class="ltr">D</span><span>Column percentages: 60% of adopters were urban, so urban households dominate the campaign.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Row percentages: 60% of urban households adopted against 24% of rural households.</p><p style="margin:0">The question makes locality the explanatory variable and adoption the outcome, so each locality's row must total 100% and the comparison is between <em>rates within</em> localities: 90/150 = <b>60%</b> of urban households against 60/250 = <b>24%</b> of rural households. That is a meaningful, like-for-like comparison. The general rule: <b>percentage across the explanatory variable</b>.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">13</div><div class="qtext"><span class="scen">An analyst groups 60 sediment-load readings into 6 classes, computes the mean from the class midpoints, and gets 845 mg/L. Computing the mean from the raw 60 values gives 851 mg/L.</span>What explains the discrepancy?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>One of the two calculations must contain an arithmetic error.</span></div><div class="optrow"><span class="ltr">B</span><span>Grouping replaces every observation with its class midpoint, so the grouped mean is an approximation whose accuracy depends on how evenly values sit within each class.</span></div><div class="optrow"><span class="ltr">C</span><span>The grouped mean is the correct one, because grouping removes noise from the raw data.</span></div><div class="optrow"><span class="ltr">D</span><span>The difference arises because the grouped calculation divides by the number of classes rather than the number of observations.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> Grouping replaces every observation with its class midpoint, so the grouped mean is an approximation whose accuracy depends on how evenly values sit within each class.</p><p style="margin:0">Grouped computation assumes every value in a class sits at the class midpoint. In reality they are spread across the class, and if they lean toward one end the midpoint misrepresents them slightly. Those small misrepresentations accumulate into a modest difference — here 6 mg/L, or 0.7%. Both numbers are “correct” given their inputs; the raw mean is the better estimate, and the rule follows: <b>group in order to see the distribution, compute from raw data whenever you still have it.</b></p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">14</div><div class="qtext"><span class="scen">A basin authority wants a slide that lets a review panel rank its 14 gauging stations by share of total streamflow and immediately see which ones lead.</span>Which form best serves that job?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>A stacked bar with all 14 stations in a single column.</span></div><div class="optrow"><span class="ltr">B</span><span>A pie chart with 14 slices and a colour legend.</span></div><div class="optrow"><span class="ltr">C</span><span>A horizontal bar chart, sorted descending, with each station labelled beside its own bar.</span></div><div class="optrow"><span class="ltr">D</span><span>A line chart with stations on the horizontal axis.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> A horizontal bar chart, sorted descending, with each station labelled beside its own bar.</p><p style="margin:0">The data's job is <b>ranked magnitude comparison</b>, and length from a common zero baseline is the encoding humans judge most accurately. Sorting does the ranking work for the reader, horizontal orientation accommodates 14 station names without rotating text, and labelling each bar directly removes the legend and the back-and-forth eye movement it forces. One series means one colour.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">15</div><div class="qtext">Under what circumstances is it legitimate to start a chart's vertical axis at a value other than zero?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>For a line chart, where slope encodes change and a zero baseline can flatten a meaningful trend — but not for a bar chart, where length encodes quantity and truncation misstates the values.</span></div><div class="optrow"><span class="ltr">B</span><span>Whenever the data range is narrow, regardless of the chart type used.</span></div><div class="optrow"><span class="ltr">C</span><span>Never — every chart must include zero on the value axis.</span></div><div class="optrow"><span class="ltr">D</span><span>Always, provided the axis is labelled, since a labelled axis puts the reader on notice.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> For a line chart, where slope encodes change and a zero baseline can flatten a meaningful trend — but not for a bar chart, where length encodes quantity and truncation misstates the values.</p><p style="margin:0">The answer follows from the <b>encoding</b>, not from taste. A bar communicates quantity through its length measured from the baseline, so shifting that baseline breaks the correspondence between length and value — the 3% rise in this chapter's Figure 2.5 became an apparent 300%. A line communicates change through slope; the reader is comparing the shape of the path rather than reading heights against zero, so a tighter axis is acceptable and often necessary to make a real trend visible. Understanding this distinction is what separates a rule you memorised from a rule you can apply.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">16</div><div class="qtext"><span class="scen">A monthly report plots rainfall (thousand m³, left axis) and reservoir level (mg/L, right axis) as two lines on one chart. The lines track each other closely and the title reads “Rainfall drives reservoir level”. Rainfall actually rose 44% over the period while the reservoir level rose 9%.</span>Which revision best fixes the chart?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Index both series to their January value = 100 and plot them on a single axis, so the two growth rates are directly comparable.</span></div><div class="optrow"><span class="ltr">B</span><span>Convert the chart to a stacked area so the two series can be seen accumulating together.</span></div><div class="optrow"><span class="ltr">C</span><span>Plot reservoir level against rainfall as a scatterplot and add a trend line to prove the relationship.</span></div><div class="optrow"><span class="ltr">D</span><span>Keep both axes but label them more clearly and soften the title to “Rainfall and reservoir level over time”.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Index both series to their January value = 100 and plot them on a single axis, so the two growth rates are directly comparable.</p><p style="margin:0">The defect is structural: with two independent scales the analyst chooses how closely the lines appear to track, so the visual relationship is manufactured rather than measured. Indexing both series to a common base converts them to the same unit — percentage change from January — which allows a single axis and makes the real comparison visible: 44% against 9%, a gap the dual-axis version concealed entirely. Small multiples or two separate charts are equally valid fixes.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">17</div><div class="qtext"><span class="scen">A single-series bar chart shows park visitors for seven days of the week. Each of the seven bars is a different colour, and a legend maps each colour to its day. The days are also labelled on the horizontal axis.</span>What is the core problem?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Nothing — using distinct colours makes each day easier to identify.</span></div><div class="optrow"><span class="ltr">B</span><span>Colour is encoding information already carried by the axis labels, so it does no work; worse, seven hues imply the days differ in kind rather than merely in value.</span></div><div class="optrow"><span class="ltr">C</span><span>The chart should use seven shades of a single hue instead, forming a sequential ramp.</span></div><div class="optrow"><span class="ltr">D</span><span>The legend should be moved above the chart rather than beside it.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: B.</span> Colour is encoding information already carried by the axis labels, so it does no work; worse, seven hues imply the days differ in kind rather than merely in value.</p><p style="margin:0">Colour has four legitimate jobs — categorical identity, sequential magnitude, diverging polarity, and status. Here it does none of them: identity is already established by the axis labels, so the colour is pure decoration, and decoration competes with the data for attention. It also actively misleads, because varying hue signals a difference in <em>kind</em>, and Monday does not differ in kind from Tuesday. One series takes one colour, with a second colour introduced only to mark something that is genuinely a finding.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">18</div><div class="qtext">You have chosen five institutional colours for a chart's data series. What is the professional way to confirm they are distinguishable for readers with colour-vision deficiency?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Choose colours from a well-known institutional palette, since established palettes are designed by professionals.</span></div><div class="optrow"><span class="ltr">B</span><span>View the chart on several monitors and confirm the colours still look different.</span></div><div class="optrow"><span class="ltr">C</span><span>Compute the perceptual separation between each adjacent pair under simulated colour-vision deficiency and check each against a stated threshold, then fix any pair that fails.</span></div><div class="optrow"><span class="ltr">D</span><span>Ask two or three colleagues whether they can tell the colours apart.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: C.</span> Compute the perceptual separation between each adjacent pair under simulated colour-vision deficiency and check each against a stated threshold, then fix any pair that fails.</p><p style="margin:0">Colour accessibility is <b>computable</b>, which means it should be computed rather than judged. Perceptual distance between colours under simulated protanopia, deuteranopia and tritanopia can be measured numerically and compared against a threshold, and the check takes seconds. This chapter contains a worked instance: the seaborn Pastel1 palette fails four such checks as a data palette, including one showing that two of its swatches are hard to separate even with <em>normal</em> colour vision — a defect no amount of looking would reliably reveal.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">19</div><div class="qtext"><span class="scen">A dataset of 400 household survey records has 15% of the income field missing. An analyst replaces every missing value with the mean of the observed incomes, then reports the mean, the standard deviation, and a 95% confidence interval.</span>Which consequence is the most serious?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>The sample size is now wrong, because imputed records should not be counted.</span></div><div class="optrow"><span class="ltr">B</span><span>Nothing serious — mean imputation is the standard remedy for missing data.</span></div><div class="optrow"><span class="ltr">C</span><span>The mean is now biased, because imputed values are not real observations.</span></div><div class="optrow"><span class="ltr">D</span><span>The standard deviation is artificially reduced, because 60 values were added with zero deviation from the mean — so the reported confidence interval is too narrow and overstates the precision of the estimate.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: D.</span> The standard deviation is artificially reduced, because 60 values were added with zero deviation from the mean — so the reported confidence interval is too narrow and overstates the precision of the estimate.</p><p style="margin:0">Mean imputation is designed to leave the mean unchanged, and it does. The damage lands on the <b>spread</b>: each of the 60 imputed values contributes a deviation of exactly zero to the sum of squares, while still increasing the denominator. The variance therefore falls, the standard deviation falls with it, and every downstream quantity built on the standard deviation — the standard error, the confidence interval, the test statistic — becomes too optimistic. Understating your own uncertainty is more dangerous than a slightly wrong point estimate, because it hides the fact that you might be wrong.</p></div></details></div>
+<div class="q"><div class="qhead"><div class="qnum">20</div><div class="qtext"><span class="scen">You are handed a 400-row spreadsheet of station readings from four field teams and asked for “the headline numbers by tomorrow”. You have not seen the file before.</span>What is the correct first action?</div></div><div class="opts"><div class="optrow"><span class="ltr">A</span><span>Profile every column first — count of rows, distinct values, minimum, maximum, count of blanks and count of zeros — and reconcile each against a plausible range before computing any summary.</span></div><div class="optrow"><span class="ltr">B</span><span>Sort by streamflow descending and remove the top and bottom 5% to eliminate outliers before analysis.</span></div><div class="optrow"><span class="ltr">C</span><span>Build the charts first, since visual inspection will reveal any problems in the data.</span></div><div class="optrow"><span class="ltr">D</span><span>Compute the mean and standard deviation of each numeric column, so there is something to report immediately.</span></div></div><details class="acc ans"><summary>Show correct answer &amp; explanation</summary><div class="acc-body"><p><span class="key">✓ Correct answer: A.</span> Profile every column first — count of rows, distinct values, minimum, maximum, count of blanks and count of zeros — and reconcile each against a plausible range before computing any summary.</p><p style="margin:0">Profiling is cheap, fast, and catches the defects that silently corrupt every subsequent number: a maximum a thousand times the median reveals a unit error; unexpected zeros in a field that cannot legitimately be zero reveal missing values in disguise; a row count above the known number of stations reveals duplicates; four teams reporting means four chances of divergent conventions. Ten minutes here protects everything downstream — and it produces the disclosure you will need in the methodology section anyway.</p></div></details></div></section>
+<section id="case"><hr class="div"><h2 class="sec"><span class="n" style="background:var(--p2); color:var(--i2);">✍️</span>Part II · Applied Case &amp; Essay Test</h2><p class="lead">Read the case, then answer the three essay questions. Write your response first; the dropdown under each item reveals a brief answer key — what a strong response must establish.</p><p class="lead">This case is engineered so that every defect from sections 2.2 to 2.9 is present at once. Read it, then answer three essay questions. Model answers with full arithmetic and scoring rubrics follow — write yours <b>before</b> you open them.</p><div class="card c-biz">
+  <div class="hd">🌊 Case: the Pampanga Basin monitoring network — the monthly monitoring report</div>
+
+  <p><b>Background.</b> The Pampanga Basin monitoring network operates 13 stations across Pampanga and Bulacan. A new research assistant has been asked to produce the monthly monitoring report for the review panel. She receives one spreadsheet, assembled by four field-team leaders who each maintain their own template, and produces the extract below. The <b>Streamflow</b> column is documented in the codebook as <b>thousand m³</b>; <b>Clarity</b> is documented as a <b>1–5</b> scale.</p>
+
+  <div class="tbl-scroll" style="margin:14px 0;">
+  <table>
+    <thead><tr><th class="ctr" style="width:6%">Row</th><th style="width:24%">Station</th><th class="ctr">Streamflow (000 m³)</th><th class="ctr">Clarity</th><th class="ctr">Samples logged</th></tr></thead>
+    <tbody>
+      <tr><td class="ctr">1</td><td>Arayat</td><td class="ctr">512</td><td class="ctr">4.2</td><td class="ctr">3,120</td></tr>
+      <tr><td class="ctr">2</td><td>Candaba</td><td class="ctr">486</td><td class="ctr">4.0</td><td class="ctr">2,980</td></tr>
+      <tr><td class="ctr">3</td><td>Arayat</td><td class="ctr">512</td><td class="ctr">4.2</td><td class="ctr">3,120</td></tr>
+      <tr><td class="ctr">4</td><td>Apalit</td><td class="ctr">455</td><td class="ctr">3.8</td><td class="ctr">2,740</td></tr>
+      <tr><td class="ctr">5</td><td>Cabiao</td><td class="ctr">470</td><td class="ctr">4.1</td><td class="ctr">2,810</td></tr>
+      <tr><td class="ctr">6</td><td>San Simon</td><td class="ctr">0</td><td class="ctr">3.9</td><td class="ctr">2,650</td></tr>
+      <tr><td class="ctr">7</td><td>Calumpit</td><td class="ctr">498</td><td class="ctr">4.3</td><td class="ctr">3,040</td></tr>
+      <tr><td class="ctr">8</td><td>Hagonoy</td><td class="ctr">505</td><td class="ctr">8.6</td><td class="ctr">3,090</td></tr>
+      <tr><td class="ctr">9</td><td>Macabebe</td><td class="ctr">462</td><td class="ctr">4.0</td><td class="ctr">2,760</td></tr>
+      <tr><td class="ctr">10</td><td>Masantol</td><td class="ctr">441</td><td class="ctr">3.7</td><td class="ctr">2,690</td></tr>
+      <tr><td class="ctr">11</td><td>Minalin</td><td class="ctr">478</td><td class="ctr">4.1</td><td class="ctr">2,870</td></tr>
+      <tr><td class="ctr">12</td><td>Sto. Tomas</td><td class="ctr">449</td><td class="ctr">3.9</td><td class="ctr">2,720</td></tr>
+      <tr><td class="ctr">13</td><td>Angat Confluence</td><td class="ctr">1,268</td><td class="ctr">4.4</td><td class="ctr">6,410</td></tr>
+      <tr><td class="ctr">14</td><td>Guagua</td><td class="ctr">493,000</td><td class="ctr">4.0</td><td class="ctr">2,900</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p><b>Known context.</b> Angat Confluence was commissioned four months ago on the main stem just below the Angat–Pampanga junction and is the network's designated reference gauge; its sample count is genuinely more than double any other station. The San Simon team leader was on leave and did not submit a streamflow figure. Hagonoy's team leader uses a household-feedback tablet configured on a <b>1–10</b> scale.</p>
+
+  <p><b>The assistant's summary.</b> She computed, over all 14 rows as they appear above:</p>
+  <div style="background:#fff; border-radius:12px; padding:14px 17px; margin:12px 0; border-left:4px solid var(--i5);">
+    <b>Mean streamflow: 35,681 thousand m³ per station</b> &nbsp;·&nbsp; <b>Mean clarity: 4.37 / 5</b> &nbsp;·&nbsp; <b>Standard deviation of streamflow: 131,626 thousand m³</b><br>
+    <span style="font-style:italic;color:var(--ink-soft)">Her note to the review panel: “Average station streamflow is 35.7 million m³ per month and clarity is good at 4.4 out of 5. Streamflow is highly variable across the network, so I recommend a gauge-recalibration programme to reduce station-to-station inconsistency.”</span>
+  </div>
+
+  <p style="margin:0"><b>The visual set.</b> Three slides accompany the summary: (1) a pie chart of streamflow share with one slice per station and a colour legend; (2) a bar chart of the four sub-basins' streamflow with the vertical axis beginning at 1,900 thousand m³, titled <em>“Figure 2: Streamflow by Sub-basin”</em>; and (3) a chart plotting samples logged (left axis, 0–7,000) against clarity (right axis, 3.5–9.0) as two lines, titled <em>“Busier stations are clearer stations”</em>.</p>
+</div><div class="essay"><div class="etag">Essay 1 · 15 points · Analyse</div><div class="eq">Conduct a data-preparation audit of the extract. Identify every defect, classify each one by type, state the direction in which it distorts the reported statistics, and prescribe the correct treatment. Then explain why the assistant's reported standard deviation of 131,626 thousand m³ cannot be interpreted at all.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>All five defects found, each named by <em>type</em> — not just "row 14 is wrong".</li>
+        <li>A direction of distortion for each: does it push the statistic up or down?</li>
+        <li>A different prescribed treatment for each type — the fix for a unit error is not the fix for a genuine outlier.</li>
+        <li>Explicit recognition that Angat Confluence is <b>not</b> a defect.</li>
+        <li>An argument about the standard deviation that rests on the unit error, not merely on "the data is dirty".</li>
+      </ul>
+    </div></details></div>
+<div class="essay"><div class="etag">Essay 2 · 20 points · Apply & Evaluate</div><div class="eq">Using the cleaned streamflow data — duplicate removed, unit error corrected to 493, San Simon excluded as missing, Angat Confluence retained — compute the mean, median, standard deviation, coefficient of variation, quartiles, IQR and the outlier fences. Determine Pearson's median skewness. Then decide which statistics belong in the monitoring report, and defend that choice. Finally, state what the corrected figures actually recommend to the basin authority.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>Correct arithmetic, shown — not just final values.</li>
+        <li>The sorted array written out, since every positional statistic depends on it.</li>
+        <li>A recomputation with the main-stem gauge excluded, used as evidence rather than as an aside.</li>
+        <li>A reporting decision that follows from the measured skew.</li>
+        <li>A recommendation that <em>reverses</em> the assistant's, with the reason.</li>
+      </ul>
+    </div></details></div>
+<div class="essay"><div class="etag">Essay 3 · 15 points · Evaluate & Create</div><div class="eq">Critique the three slides in the visual set. For each, name the specific defect, identify which of Fortino's six dimensions it sits in, and specify the replacement chart — its form, its ordering, its axis treatment, its colour assignment and its action title. Then state the one principle that all three slides violate.</div><details class="acc ans"><summary>Show answer key — what a strong response must establish</summary><div class="acc-body">
+      <ul style="margin:0">
+        <li>Each defect tied to a <em>named</em> Fortino dimension, not just criticised.</li>
+        <li>A replacement specification concrete enough to hand to a designer — form, order, axis, colour, title.</li>
+        <li>An actual action title written out for each, not a description of one.</li>
+        <li>Recognition that slide 3's defect is <b>structural</b>, not cosmetic.</li>
+        <li>A unifying principle stated at the level of encoding, not style.</li>
+      </ul>
+    </div></details></div></section>
+<footer class="end"><p><b>Advanced Statistics</b> · Chapter 2 — Description &amp; Visuals · Exercises &amp; Essays. STAT210 Advanced Statistics, Rizal Technological University.</p></footer>
+</div>
+<script>
+(function(){
+  function s(e){var h=this.getAttribute("href");if(!h||h[0]!=="#")return;var el=document.getElementById(h.slice(1));
+    if(el){e.preventDefault();el.scrollIntoView({behavior:"smooth",block:"start"});}}
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener("click",s);});
+  window.exAll=function(open){document.querySelectorAll("details.ans").forEach(function(d){d.open=open;});};
+})();
+</script>
+</body>
+</html>
