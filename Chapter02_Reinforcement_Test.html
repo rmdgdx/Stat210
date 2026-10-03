@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAT 210 Advanced Statistics — Chapter02 Reinforcement Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,500;0,600;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16233f; --ink-soft:#22325a; --paper:#eef1f6; --surface:#ffffff;
+  --text:#232a36; --muted:#626c7c; --blue:#2f6db0; --blue-soft:#e7f0fa;
+  --gold:#d99a24; --gold-soft:#fbf6ea; --code-bg:#1b2438; --code-text:#e7ecf7;
+  --rule:#dde3ec; --ok:#1f9d57; --bad:#cf3a3a;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0; background:var(--paper); color:var(--text);
+  font-family:"Inter",system-ui,-apple-system,sans-serif; font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column;}
+.wrap{width:100%; max-width:760px; margin:0 auto; padding:28px 20px 60px; flex:1;}
+
+/* Header bar */
+.topbar{background:var(--ink); color:#fff;}
+.topbar .inner{max-width:760px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+.topbar .brand{display:flex; align-items:center; gap:13px;}
+.topbar .seal{width:54px; height:54px; flex-shrink:0; display:block;}
+.topbar .seal img{width:100%; height:100%; object-fit:contain; display:block;}
+.topbar .kick{font-family:"JetBrains Mono",monospace; font-size:.7rem; letter-spacing:.1em; color:var(--gold);}
+.topbar h1{font-family:"Spectral",serif; font-weight:600; font-size:1.12rem; margin:2px 0 0; line-height:1.2;}
+.topbar .who{font-size:.72rem; color:#aab6cc; text-align:right; line-height:1.45;}
+.topbar .who b{color:#fff;}
+
+/* Progress */
+.progress{margin:22px 0 6px;}
+.progress .meta{display:flex; justify-content:space-between; align-items:baseline; font-family:"JetBrains Mono",monospace; font-size:.74rem; color:var(--muted); margin-bottom:7px;}
+.progress .meta .qof{color:var(--ink-soft); font-weight:600;}
+.bar{height:7px; background:#e2e7f0; border-radius:99px; overflow:hidden;}
+.bar > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--gold)); border-radius:99px; transition:width .25s ease;}
+
+/* Cards / panels */
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:14px; padding:26px 26px 24px; box-shadow:0 1px 2px rgba(20,30,60,.04);}
+h2{font-family:"Spectral",serif; color:var(--ink); font-weight:600; margin:0 0 .4rem; line-height:1.2;}
+.lead{color:var(--muted); font-size:.95rem; margin:.2rem 0 1.2rem;}
+
+/* Coverage list on the start screen */
+.coverage{margin:0 0 20px; padding:16px 18px; background:#f6f8fc; border:1px solid var(--rule); border-radius:10px;}
+.coverage h3{font-family:"Spectral",serif; font-size:.98rem; color:var(--ink); margin:0 0 9px; font-weight:600;}
+.coverage ol{margin:0; padding-left:20px; font-size:.87rem; color:var(--ink-soft);}
+.coverage li{padding:2px 0;}
+
+/* Identity form */
+.field{margin:14px 0;}
+.field label{display:block; font-size:.78rem; font-weight:600; color:var(--ink-soft); letter-spacing:.02em; margin-bottom:6px;}
+.field input{width:100%; font-family:"Inter",sans-serif; font-size:1rem; padding:11px 13px; border:1px solid var(--rule); border-radius:9px; background:#fbfcfe; color:var(--text);}
+.field input:focus{outline:2px solid var(--blue-soft); border-color:var(--blue);}
+.field .hint{font-size:.74rem; color:var(--muted); margin-top:5px;}
+
+/* Question */
+.qhead{display:flex; align-items:flex-start; gap:10px; margin-bottom:6px;}
+.qnum{font-family:"JetBrains Mono",monospace; font-size:.74rem; color:#fff; background:var(--ink); padding:3px 9px; border-radius:6px; flex-shrink:0; margin-top:3px;}
+.qtitle{font-family:"Spectral",serif; font-weight:600; font-size:1.1rem; line-height:1.4; color:var(--ink);}
+.qdomain{font-family:"JetBrains Mono",monospace; font-size:.68rem; color:var(--muted); margin:0 0 14px 44px;}
+pre.code{background:var(--code-bg); color:var(--code-text); border-radius:10px; padding:16px 16px 14px;
+  overflow-x:auto; margin:14px 0 18px; position:relative; border:1px solid #0f1626;
+  font-family:"JetBrains Mono",monospace; font-size:.8rem; line-height:1.6; white-space:pre;}
+pre.code::before{content:"data"; position:absolute; top:0; right:0; font-family:"JetBrains Mono",monospace; font-size:.6rem;
+  letter-spacing:.1em; color:var(--ink); background:var(--gold); padding:2px 9px; border-radius:0 9px 0 9px; font-weight:600;}
+
+/* Options */
+.opts{list-style:none; padding:0; margin:0;}
+.opt{display:flex; align-items:center; gap:12px; padding:13px 15px; margin:9px 0; border:1.5px solid var(--rule);
+  border-radius:10px; background:#fbfcfe; cursor:pointer; transition:border-color .12s, background .12s;}
+.opt:hover{border-color:#b9c6dd; background:#f5f8fc;}
+.opt.sel{border-color:var(--blue); background:var(--blue-soft);}
+.opt:focus-visible{outline:2px solid var(--blue); outline-offset:2px;}
+.opt .let{font-family:"JetBrains Mono",monospace; font-weight:600; font-size:.86rem; color:var(--muted);
+  width:26px; height:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  border:1.5px solid var(--rule); border-radius:50%; background:#fff;}
+.opt.sel .let{color:#fff; background:var(--blue); border-color:var(--blue);}
+.opt .txt{font-size:.96rem;}
+
+/* Nav buttons */
+.actions{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:22px;}
+.btn{font-family:"Inter",sans-serif; font-size:.95rem; font-weight:600; padding:12px 24px; border-radius:10px;
+  border:1px solid transparent; cursor:pointer; transition:filter .12s, background .12s;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+.btn-primary{background:var(--ink); color:#fff;}
+.btn-primary:hover:not(:disabled){filter:brightness(1.15);}
+.btn-gold{background:var(--gold); color:#1a1303;}
+.btn-gold:hover:not(:disabled){filter:brightness(1.06);}
+.btn-ghost{background:transparent; color:var(--muted); border-color:var(--rule);}
+.btn-ghost:hover:not(:disabled){color:var(--ink); border-color:#b9c6dd;}
+.note{font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted);}
+
+/* Completion */
+.center{text-align:center;}
+.bigmark{width:64px; height:64px; border-radius:50%; background:var(--gold-soft); border:2px solid var(--gold);
+  color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:1.8rem; margin:6px auto 16px;}
+.summary{background:#f6f8fc; border:1px solid var(--rule); border-radius:10px; padding:14px 18px; margin:18px 0; text-align:left; font-size:.92rem;}
+.summary div{display:flex; justify-content:space-between; gap:14px; padding:4px 0; border-top:1px solid var(--rule);}
+.summary div:first-child{border-top:none;}
+.summary b{color:var(--ink-soft); text-align:right;}
+.statusmsg{font-size:.9rem; margin-top:14px; padding:11px 14px; border-radius:9px; display:none; text-align:left;}
+.statusmsg.show{display:block;}
+.statusmsg.good{background:#eaf6ef; color:#1f5b3a; border:1px solid #bfe3cd;}
+.statusmsg.bad{background:#fceaea; color:#8a2b2b; border:1px solid #e9c3c3;}
+.statusmsg.info{background:var(--blue-soft); color:#1c4f86; border:1px solid #c5dcf2;}
+
+.deadline{background:var(--gold-soft); border-bottom:1px solid #ecdcb8; color:#6b4a0e;}
+.deadline .inner{max-width:760px; margin:0 auto; padding:9px 20px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; font-size:.84rem;}
+.deadline b{color:#4d3407;}
+.deadline .cd{font-family:"JetBrains Mono",monospace; font-size:.78rem; font-weight:500;}
+.deadline.late{background:#fceaea; border-bottom-color:#e9c3c3; color:#8a2b2b;}
+.deadline.late b{color:#6e1f1f;}
+.hide{display:none !important;}
+footer{max-width:760px; margin:0 auto; padding:18px 20px 34px; font-size:.74rem;
+  color:var(--muted); text-align:center; line-height:1.6;}
+footer .seal-sm{display:block; width:38px; height:38px; margin:0 auto 10px;}
+@media (max-width:600px){
+  .panel{padding:20px 18px;}
+  .topbar .who{text-align:left;}
+  .qdomain{margin-left:0;}
+  .actions{flex-wrap:wrap;}
+  .btn{flex:1 1 auto;}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <div class="brand">
+      <span class="seal"><img src="data:image/png;base64,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" alt="Rizal Technological University seal"></span>
+      <div>
+        <div class="kick">STAT 210 &middot; CHAPTER02 REINFORCEMENT TEST</div>
+        <h1>Advanced Statistics</h1>
+      </div>
+    </div>
+    <div class="who">Prepared by<br><b>Dr. Ryan Manuel D. Guido</b></div>
+  </div>
+</div>
+
+<div class="deadline" id="deadlineBar">
+  <div class="inner">
+    <span>Submission deadline: <b>9:00 PM (21:00) today, Saturday, 3 October 2026</b>, Philippine time</span>
+    <span class="cd" id="countdown"></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Progress (hidden until the test starts) -->
+  <div class="progress hide" id="progress">
+    <div class="meta"><span class="qof" id="qof">Question 1 of 100</span><span id="answeredCount">0 answered</span></div>
+    <div class="bar"><i id="barfill"></i></div>
+  </div>
+
+  <!-- ===== START SCREEN ===== -->
+  <section class="panel" id="startScreen">
+    <h2>Before you begin</h2>
+    <p class="lead">This is the Chapter02 Reinforcement Test: 100 higher-order thinking items on Chapter 2, <em>Data Preparation, Description &amp; Visual Communication</em>. Every item puts you in front of a decision an analyst actually faces: a dirty column, a skewed distribution, a chart that flatters. Many items show a small dataset and require you to compute something before you can choose, so keep a calculator and scratch paper ready. Read each item, choose the <strong>best</strong> answer, and select <strong>Next</strong>; the following item appears only once you have answered. Stay on this page until you finish, since refreshing or closing it clears your answers. No score is shown on screen — your responses go to your instructor, who returns your score and a profile of your strong and weak topics. Select <strong>Send to instructor</strong> before <strong>9:00 PM (21:00) today</strong>; submissions after that time are marked late.</p>
+
+    <div class="coverage">
+      <h3>What the test covers</h3>
+      <ol id="coverList"></ol>
+    </div>
+
+    <div class="field"><label for="fName">Full name</label><input id="fName" type="text" autocomplete="name" placeholder="e.g., Maria Santos"></div>
+    <div class="field"><label for="fId">Student number</label><input id="fId" type="text" placeholder="e.g., 2026-12345"></div>
+    <div class="field"><label for="fSection">Program and section</label><input id="fSection" type="text" placeholder="e.g., STAT 210 — Section A"></div>
+    <div class="field"><label for="fEmail">Your email <span style="font-weight:400;color:var(--muted)">(RTU email)</span></label><input id="fEmail" type="email" autocomplete="email" placeholder="you@rtu.edu.ph"></div>
+    <div class="actions" style="justify-content:flex-end;">
+      <button class="btn btn-primary" id="startBtn">Start the test</button>
+    </div>
+    <p class="note" style="margin-top:14px;">100 items &middot; one at a time &middot; about 2 hours &middot; no score shown on screen &middot; deadline 21:00 today</p>
+  </section>
+
+  <!-- ===== QUESTION SCREEN ===== -->
+  <section class="panel hide" id="quizScreen">
+    <div class="qhead"><span class="qnum" id="qBadge">Q1</span><span class="qtitle" id="qPrompt"></span></div>
+    <div class="qdomain" id="qDomain"></div>
+    <pre class="code" id="qCode"></pre>
+    <ul class="opts" id="qOpts"></ul>
+    <div class="actions">
+      <button class="btn btn-ghost" id="prevBtn">Back</button>
+      <button class="btn btn-primary" id="nextBtn" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- ===== COMPLETION SCREEN ===== -->
+  <section class="panel center hide" id="doneScreen">
+    <div class="bigmark">&#10003;</div>
+    <h2>All 100 items answered</h2>
+    <p class="lead">Your responses are ready to send. Your score and topic profile are computed when your instructor receives them; they are not shown here.</p>
+    <div class="summary">
+      <div><span>Name</span><b id="sName">—</b></div>
+      <div><span>Student number</span><b id="sId">—</b></div>
+      <div><span>Program and section</span><b id="sSection">—</b></div>
+      <div><span>Items answered</span><b id="sAnswered">0 / 100</b></div>
+    </div>
+    <div class="actions" style="justify-content:center; gap:14px;">
+      <button class="btn btn-ghost" id="reviewBtn">Review answers</button>
+      <button class="btn btn-gold" id="sendBtn">Send to instructor</button>
+    </div>
+    <div class="statusmsg" id="statusMsg"></div>
+    <p class="note" id="destNote" style="margin-top:16px;"></p>
+  </section>
+
+</div>
+
+<footer>
+  <img class="seal-sm" src="data:image/png;base64,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" alt="">
+  Prepared by Dr. Ryan Manuel D. Guido for the class STAT 210 Advanced Statistics.<br>
+  Rizal Technological University<br>
+  <a href="index.html" style="color:var(--blue);font-weight:600;text-decoration:none;">&larr; Back to the STAT 210 course home</a>
+</footer>
+
+<script>
+/* ====================================================================
+   SUBMISSION CONFIG — set this ONCE before sharing the test.
+   --------------------------------------------------------------------
+   A standalone HTML page cannot send email by itself, so responses are
+   POSTed to Formspree, which delivers them to the instructor's inbox.
+   The respondent never sees a score.
+
+   SETUP (about 2 minutes, one time):
+     1. Go to https://formspree.io and sign in using rmguido@rtu.edu.ph
+        (the address that should receive the results).
+     2. Create a new form and confirm the verification email.
+     3. Copy the form endpoint, e.g. https://formspree.io/f/abcdwxyz
+     4. Paste it below as the value of `endpoint`.
+   Until a valid endpoint is set, the Send button shows a configuration
+   notice rather than failing silently.
+   ==================================================================== */
+const CONFIG = {
+  endpoint: "https://formspree.io/f/mzeznpaq",
+  instructorEmail: "rmguido@rtu.edu.ph",
+  testName: "STAT 210 Advanced Statistics — Chapter02 Reinforcement Test (100 items)",
+  deadline: "2026-10-03T21:00:00+08:00",   // 9:00 PM Philippine time; late sends are flagged, not blocked
+  deadlineLabel: "9:00 PM (21:00), Saturday, 3 October 2026, Philippine time"
+};
+
+const QUESTIONS = [
+{
+"prompt": "An analyst ran a t-test on household water bills first, and only afterwards plotted a histogram, which showed a long right tail and three extreme values. Which judgement of this workflow is most defensible?",
+"code": "",
+"options": [
+"The workflow is acceptable once the three extreme values are deleted, because the t-test result can then be reported exactly as it was first computed",
+"The workflow is acceptable, because a histogram is a presentation device for the report's opening section and has no bearing on which test is legitimate",
+"The workflow is acceptable, because the order in which the analyst plots and tests the data never changes which inferential procedure is valid",
+"The test choice must be re-examined: the histogram is evidence about whether the t-test was legitimate, so description should have come first"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "Two monitoring datasets have the same mean, the same standard deviation and the same correlation between rainfall and runoff. A manager concludes they describe the same rainfall–runoff relationship. What is the strongest critique?",
+"code": "",
+"options": [
+"The conclusion holds only if the two datasets also share the same median and range, after which a plot adds nothing that the summaries lack",
+"Identical summary statistics can hide a straight-line trend in one dataset and a curve or a single wild point in the other, so the data must be plotted",
+"The conclusion fails only because a correlation coefficient should never be reported in the same table as a mean and a standard deviation",
+"The conclusion holds, because when the mean, the standard deviation and the correlation all match, both datasets must follow a rainfall–runoff relationship of the same form"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "Stream gauges with failing sensors tend to stop transmitting during exactly the high-flow days that stress them most. How should these gaps be classified, and why does it matter?",
+"code": "",
+"options": [
+"Missing completely at random — the gaps are unrelated to anything, so dropping them costs precision but not validity",
+"Missing at random — the gaps depend only on an observed station attribute, so modelling that attribute fully repairs the bias",
+"Not missing at all — a silent sensor means no flow occurred, so the gaps should be recorded as zero",
+"Missing not at random — the absence depends on the unobserved value itself, so dropping the gaps will understate high flows"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "In a water-quality dataset, the stations commissioned after 2023 (identified by a 'year installed' column) routinely leave the turbidity field blank. Which classification and response fits best?",
+"code": "",
+"options": [
+"Missing not at random — because the blanks cluster in particular stations, the gap must depend on turbidity itself, so no use of the observed variables can help",
+"Missing completely at random — installation year is irrelevant, so the newer stations can simply be ignored",
+"Missing at random — the gap depends on an observed variable, so the bias can be addressed by modelling installation year",
+"A coding defect — the blanks should be converted to zero turbidity so that every station contributes to the mean"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "Five observed values have mean 50. Two missing values are filled in with that mean (mean imputation). What happens to the summary statistics?",
+"code": "Observed: 42  48  50  52  58\nImputed:  50  50   (added to the five above)",
+"options": [
+"The mean stays 50 and the standard deviation stays about 5.83, because values placed exactly at the mean contribute nothing either way, so mean imputation is harmless",
+"The mean stays 50 and the standard deviation rises from about 5.83 to about 6.50, because n increased",
+"The mean stays 50 but the standard deviation falls from about 5.83 to about 4.76, understating the true spread",
+"The mean rises above 50 and the standard deviation grows, because two extra values were added"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "A station's unreported streamflow was stored as 0. How large is the distortion in the mean?",
+"code": "Monthly streamflow (thousand m³): 512  486  0  470  498\n(the 0 is a station that did not report)",
+"options": [
+"The mean is unaffected, because a zero adds nothing to the total",
+"The mean is pulled down by 98.3 thousand m³ — from 491.5 to 393.2, an understatement of 20%",
+"The mean is pulled up by 98.3 thousand m³, because the zero inflates the standard deviation",
+"The mean is pulled down by 19.7 thousand m³ — from 393.2 to 373.5, about 5%"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "A regional survey drops every barangay with any missing field (listwise deletion). The barangays that failed to report are mostly remote upland ones. What is the most serious consequence?",
+"code": "",
+"options": [
+"The analysis now describes 'barangays that report', a redefined and biased population, not merely a smaller sample",
+"Nothing is lost, because listwise deletion is the professional default whatever pattern the missing values follow",
+"Only precision is lost: a smaller n widens the intervals, but the estimates themselves stay centred on the right values",
+"The variance is artificially shrunk, exactly as it would be under mean imputation, while the mean itself is untouched"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "In a daily rainfall file, which recorded 0 is the most defensible to keep as a true zero?",
+"code": "",
+"options": [
+"A dry-season day on which the gauge was checked, working, and collected no rain",
+"A day before the station was commissioned, filled in by the export tool",
+"A day on which the data-logger battery died before midnight",
+"A day on which the observer was absent and nobody read the gauge"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "A methods section lists four questions answered with descriptive tools. Which one belongs to description's diagnostic job (Job 2) rather than its communicative job (Job 1)?",
+"code": "",
+"options": [
+"Are the spreads of the two groups similar enough to justify a pooled-variance test later?",
+"What single number should the regional director quote as the reading of a typical station?",
+"Which chart would let a council audience see the monthly trend in the fewest seconds?",
+"How should the station names be ordered so that the summary table reads cleanly in print?"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "Three handling options are proposed for six missing salinity readings whose missingness mechanism is uncertain. Which option is the most defensible default for this course and for practice?",
+"code": "",
+"options": [
+"Replace the six with the variable's mean, so that both the sample size and the mean are preserved and no record has to be excluded from the analysis",
+"Exclude the six from the computation and report exactly how many were omitted and why",
+"Delete every record with any missing field and report the result without mention",
+"Replace the six with zero so that every station appears in the table"
+],
+"domain": "Why description comes first & missing data"
+},
+{
+"prompt": "One reading is exactly ten times its neighbours. Checking the field sheet shows the decimal point was keyed one place to the right. What is the correct treatment?",
+"code": "",
+"options": [
+"Delete the value silently, because it is clearly an error and would distort the average",
+"Keep the value exactly as recorded, because an outlier must never be altered once it is in the file",
+"Replace the value with the median, because the median is the resistant measure of centre",
+"Correct the value to the field-sheet figure and log the change in the audit trail"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "The main-stem river gauge reports far more flow than any tributary station. Its rating curve and sensors were verified. How should the analyst treat it?",
+"code": "",
+"options": [
+"Replace it with the upper-fence value, so the distribution becomes symmetric and the mean is safe to report",
+"Keep it as a genuine extreme, report it, and pair the mean with resistant statistics such as the median and IQR",
+"Keep it, but report only the mean and standard deviation, because these are the statistics that use every value",
+"Delete it, because any value beyond the upper fence must be treated as an error and removed before analysis"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "A reading taken during a scheduled reservoir release appears in a dataset meant to describe natural river flow. What is the defensible action?",
+"code": "",
+"options": [
+"Exclude it as a member of a different population and state the exclusion rule, ideally written before seeing results",
+"Keep it, because every value that was recorded during the study period belongs to the population being described, whatever produced it",
+"Average it with the following day's reading, so its influence on the mean is softened rather than removed",
+"Keep it unless removing it changes the headline mean, in which case drop it and say nothing further"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "Which exclusion statement describes a method rather than misconduct?",
+"code": "",
+"options": [
+"Values that weakened the observed trend were set aside after the first analysis run, to make the pattern clearer",
+"We dropped the readings the client found surprising, so that this report stays consistent with last year's report",
+"Readings more than 3 SD from the pre-season baseline were excluded, as specified in the protocol before data collection",
+"We removed the one station that kept pulling our network average away from the value the agency had expected, because it made the result look unstable"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "A column meant to hold percentages is averaged as entered. What has gone wrong, and how large is the damage?",
+"code": "Share of sampled wells passing the nitrate standard:\n0.42   38   0.51   45   40",
+"options": [
+"Proportions and percentages are mixed; the naive mean of 24.79 slightly overstates the true mean of 21.6%",
+"The two small values are outliers, so the defensible mean is 41.0% after deleting them",
+"Nothing has gone wrong; the naive mean of 24.79% is the correct pass rate",
+"Proportions and percentages are mixed; the naive mean of 24.79 badly understates the true mean of 43.2%"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "One field team rated household satisfaction on a 1–5 scale; another team used 1–10. An analyst pools both into one column and reports the mean. What is the best judgement?",
+"code": "",
+"options": [
+"The pooled mean is acceptable as long as the median of the pooled column is reported beside it",
+"The pooled mean is acceptable, because both groups' columns contain valid numbers that fall within the limits of their own instruments, so averaging them is legitimate",
+"The pooled mean describes nothing; verify the instruments first, and treat any rescaling as an assumption to be declared",
+"Divide every 1–10 score by 2 and pool; this conversion is exact, so it needs no justification or disclosure"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "A sex variable was tabulated as entered. The analyst reports: 'Males are the majority, 80 of 160 (50%), and the largest female group has only 41.' What is the correct evaluation?",
+"code": "Female 41   F 22   f 9   FEMALE 8   Male 80",
+"options": [
+"The report is correct, because each label is a distinct category that respondents chose for themselves, and recoding them would impose the analyst's view on the data",
+"The report is correct about the 50%, and only the female figure of 41 needs to be checked for rounding",
+"Females total 39 once the three short labels are discarded as invalid, so males are a clear majority",
+"Inconsistent coding split one category into four; females total 80, equal to males, so there is no majority"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "Station 4's record was pasted twice into a 4-station extract. What does the duplicate do to the mean?",
+"code": "Streamflow (thousand m³) as received: 300  320  340  900  900\n(the second 900 is a repeat of station 4)",
+"options": [
+"It inflates n to 5 and pulls the mean down from 552 to 465",
+"It inflates n to 5 and pulls the mean up from 465 to 732",
+"It inflates n to 5 and pulls the mean up from 465 to 552",
+"It has no effect, because a repeated value leaves the mean unchanged"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "A clarity value of 8.6 slipped into a column documented as a 1–5 scale. Which codebook entry would have caught this before any computation?",
+"code": "",
+"options": [
+"The level of measurement, recorded as nominal, ordinal or interval",
+"A permitted range for each variable, applied as a range check",
+"The variable's exact name, as it appears in every template",
+"The analyst who created the variable and the date it was added"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "An analyst overwrote three values directly in the raw spreadsheet and kept no log. Six months later a reviewer asks what changed. What is the best evaluation?",
+"code": "",
+"options": [
+"The analysis is fine, because audit trails are only required for work submitted to a journal",
+"The analysis is fine, because the corrected values are now in the file, and the current file is the authoritative record that any reviewer should be shown",
+"The analysis is fine provided the analyst can still recall the three corrections when asked",
+"The analysis is not reproducible; the raw file should stay untouched, with every change logged and a cleaned copy produced"
+],
+"domain": "Outliers, data defects & the audit trail"
+},
+{
+"prompt": "Using Sturges' rule, how many classes should a first histogram of n = 50 readings use?",
+"code": "k ≈ 1 + 3.322 · log10(n)",
+"options": [
+"About 7 classes (k ≈ 6.64, rounded up)",
+"About 50 classes (one per reading)",
+"About 17 classes (k ≈ 166 ÷ 10)",
+"About 5 classes (k ≈ 4.59)"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Readings run from 12 to 97 and you have settled on 7 classes. Which class width and starting point are defensible?",
+"code": "",
+"options": [
+"A width of 12, because 85 ÷ 7 = 12.1, and class widths are always rounded down to the nearest whole number so that the classes stay as narrow as possible",
+"A width of 7, because the class width should always equal the number of classes chosen",
+"A width of 85, because using the whole range as the width guarantees that no value is lost",
+"A width rounded up to a convenient number, such as 15, starting at a round limit at or below 12"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Sturges' rule applied to a skewed dataset with one extreme value produces three empty classes in the middle of the histogram. What is the best response?",
+"code": "",
+"options": [
+"Treat the rule as a starting point: chart the ordinary values and report the extreme value separately",
+"Keep doubling the number of classes until no class is empty, then report that histogram",
+"Keep the histogram exactly as it was produced, because Sturges' rule is a law, and departing from it would make the class choice look arbitrary to a reviewer",
+"Delete the extreme value, so that the histogram fills in properly and the rule can be applied"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "A frequency table uses the classes 10–20, 20–30 and 30–40. Which principle is violated, and what is the consequence?",
+"code": "",
+"options": [
+"Equal width — the three classes have different widths, so their bars are not comparable",
+"Mutual exclusivity — a value of 20 or 30 fits two classes, so counts become ambiguous",
+"Exhaustiveness — values below 10 or above 40 have no class to go into, so they are lost",
+"Nothing — overlapping limits are standard practice and every package handles them correctly"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Compute the mean from this grouped distribution.",
+"code": "Class    Frequency\n0–9          4\n10–19        6\n20–29        8\n30–39        2",
+"options": [
+"14.0, using the lower class limits",
+"92.5, dividing the midpoint total by the 4 classes",
+"18.5, using the class midpoints",
+"23.0, using the upper class limits"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Does workshop attendance appear related to passing? Which comparison answers that question?",
+"code": "            Pass   Fail   Total\nAttended      72     48     120\nNot attended  54    126     180\nTotal        126    174     300",
+"options": [
+"Total percentages: 24% of all candidates attended and passed",
+"Column percentages: 57.1% of passers attended versus 42.9% who did not",
+"Row percentages: 60% of attendees passed versus 30% of non-attendees",
+"Raw counts: 72 versus 54 passers, a difference of 18"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Using the same workshop table, a report states: '57.1% of those who passed had attended, so the workshop makes little difference.' What is the best evaluation?",
+"code": "            Pass   Fail   Total\nAttended      72     48     120\nNot attended  54    126     180\nTotal        126    174     300",
+"options": [
+"The report is wrong only in its rounding, since 57.1% should be written as 57% in a summary",
+"The report is correct, because 57.1% is close to an even split between attendees and non-attendees, which shows that attendance barely changed who passed",
+"57.1% is a column profile, not a rate; the rate comparison (60% vs 30%) shows attendees passed at double the rate",
+"The report is correct in substance, but it should have quoted the 24% total percentage instead"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "In the workshop table, 72 ÷ 300 = 24%. Which question does this percentage answer?",
+"code": "",
+"options": [
+"What share of all candidates both attended the workshop and passed",
+"By how many points the workshop raised the pass rate",
+"What share of the workshop attendees went on to pass",
+"What share of those who passed had attended the workshop"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "A researcher believes smoking status influences lung-function category (normal / reduced). How should the cross-tab percentages be computed?",
+"code": "",
+"options": [
+"Over the grand total, so all four cells together sum to 100%",
+"Across the explanatory variable, so each smoking-status group sums to 100%",
+"Down the response variable, so that each lung-function category sums to 100% and the reader sees what share of each category were smokers",
+"Whichever way produces the largest difference"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "What proportion of the readings fall at or below the upper boundary of the third class?",
+"code": "Class   Frequency\n1          3\n2          7\n3          6\n4          4",
+"options": [
+"75%, from three classes out of four",
+"30%, from the third class's own frequency of 6 out of 20",
+"80%, from a cumulative frequency of 16 out of 20",
+"50%, from the first two classes"
+],
+"domain": "Frequency distributions & cross-tabulation"
+},
+{
+"prompt": "Compute the mean and median of the rainfall data.",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"Mean 47.7 mm; median 44.0 mm",
+"Mean 53.0 mm; median 41.0 mm",
+"Mean 53.0 mm; median 42.5 mm",
+"Mean 42.5 mm; median 53.0 mm"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "A planner wants one number for the rainfall of a 'typical' station in this network. Which choice is most defensible?",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"The mode, because the most frequent value is the best choice for continuous data",
+"The midrange, 92.5 mm, because it balances the smallest and largest stations",
+"The mean, 53.0 mm, because it uses every station and is therefore always the honest 'typical' value",
+"The median, 42.5 mm, because the mean of 53.0 mm exceeds nine of the ten stations"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "A follow-up survey's response rates differ by stratum. What is the overall response rate to plan with?",
+"code": "Stratum      Response rate   Households\nUrban            12%           8,000\nPeri-urban       30%           1,500\nRural            60%             500",
+"options": [
+"17.1%, the household-weighted mean",
+"34.0%, the simple average of the three rates",
+"30.0%, the median of the three rates",
+"20.4%, weighting by the number of strata"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "For the same three strata, a coordinator budgets the follow-up on the simple average of the rates. What is the consequence?",
+"code": "Stratum      Response rate   Households\nUrban            12%           8,000\nPeri-urban       30%           1,500\nRural            60%             500",
+"options": [
+"No consequence, because a simple average and a weighted average of rates always agree once there are three or more strata in the design",
+"Responses are understated by 16.9 points, because rural households respond at the highest rate",
+"Responses are overstated by about 4 points, which is too small to affect the budget",
+"Responses are overstated by 16.9 percentage points, because 80% of households sit in the lowest-response stratum"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "A variable records each sampling plot's dominant land-cover class: forest, cropland, built-up or grassland. Which measure of centre is valid?",
+"code": "",
+"options": [
+"The mode — the only valid measure of centre for a nominal variable",
+"The mean, after coding the four classes as 1, 2, 3 and 4",
+"The median, after sorting the four classes alphabetically",
+"The weighted mean, using each plot's area as its weight"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "The values 4, 7, 10 and x have a mean of 8. What is x, and what is the sum of the deviations from the mean?",
+"code": "",
+"options": [
+"x = 11; the deviations sum to 0",
+"x = 11; the deviations sum to 8",
+"x = 9; the deviations sum to 0",
+"x = 8; the deviations sum to 32"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "Nine stations have a mean of 50. A tenth station reading 140 is added. What is the new mean, and how is the median likely to behave?",
+"code": "",
+"options": [
+"The new mean is 59.0; the median moves little, because only one position shifts",
+"The new mean is 95.0, the average of 50 and 140, and the median rises by the same amount",
+"The new mean stays 50.0, because one added value cannot move it",
+"The new mean is 59.0, and the median also rises by exactly 9"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "A municipality reports mean household income of ₱48,000 and median household income of ₱31,000. What is the best reading of the gap?",
+"code": "",
+"options": [
+"One of the two figures must be a computation error, since the mean and median of income should agree",
+"The distribution is right-skewed: a minority of high-income households pulls the mean well above the typical household",
+"The distribution is symmetric, and the ₱17,000 gap is simply rounding in the two published figures",
+"The distribution is left-skewed: most households earn more than ₱48,000, and a few very low incomes pull the mean down"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "A utility needs total monthly supply across its 40 stations and plans to multiply a per-station average by 40. The station data are right-skewed. Which average serves this purpose?",
+"code": "",
+"options": [
+"The median, because skewed data should always be summarised by the median, whatever question the utility is trying to answer with it",
+"The median multiplied by 1.5, which corrects for the right skew before scaling up to 40",
+"The mode, because it reflects the most common station and so gives the most realistic total",
+"The mean, because mean × count reconstructs the total, which is a different question from 'typical'"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "Satisfaction is measured on a 1–5 ordinal scale, and the responses pile up at 5 with a tail toward 1. Which summary is most defensible?",
+"code": "",
+"options": [
+"The median, because the variable is ordinal and its distribution is skewed",
+"The mean, because Likert responses are conventionally treated as interval-level data, so the mean is always the right summary",
+"The range, because it shows the full spread of opinion in one number",
+"The standard deviation, because it captures the typical respondent's view"
+],
+"domain": "Measures of centre"
+},
+{
+"prompt": "Compute the sample standard deviation of 6, 8, 10, 12, 14.",
+"code": "",
+"options": [
+"2.83 — the sum of squares 40, divided by n = 5, gives a variance of 8",
+"3.16 — the sum of squares 40, divided by 4 degrees of freedom, gives 10",
+"4.00 — the largest absolute deviation from the mean of 10",
+"10.00 — the sum of squares 40 divided by 4, reported as the spread"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "For the sample 6, 8, 10, 12, 14, an analyst divides by n and reports s = 2.83. What is the best evaluation?",
+"code": "",
+"options": [
+"Correct for a sample, because n − 1 is the divisor reserved for a full population census",
+"Too small: once the mean is estimated only 4 deviations are free to vary, so dividing by n gives a biased-low estimate",
+"Correct: dividing by n is always right here, because the analyst has exactly 5 observations and every one of them was used in the mean",
+"Too large: dividing by n − 1 would give a smaller and therefore more conservative estimate"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "Which station is more variable relative to its own level?",
+"code": "Station P: mean streamflow 480 thousand m³, s = 24\nStation Q: mean rainfall 12 mm, s = 3",
+"options": [
+"Station P (CV 20%) is relatively more variable than Station Q (CV 4%)",
+"Station P, because its standard deviation of 24 is larger than 3",
+"Station Q (CV 25%) is relatively more variable than Station P (CV 5%)",
+"Neither — different units mean relative variability cannot be compared"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "What share of the sum of squared deviations comes from the value 48?",
+"code": "Data: 10  12  14  16  48",
+"options": [
+"48.0% (its value divided by 100)",
+"20.0% (one value in five)",
+"28.0% (its deviation of 28 out of 100)",
+"78.4% (784 of 1,000)"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "A data-entry typo changes one station's value from 52 to 520 in an otherwise ordinary dataset of 10 stations. Which statistic is least affected?",
+"code": "",
+"options": [
+"The mean",
+"The standard deviation",
+"The interquartile range",
+"The range"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "A dataset has mean 100 and s = 10, and 92% of its values fall within 90 to 110. What does this tell you?",
+"code": "",
+"options": [
+"Chebyshev's theorem has been violated, so the summary must be recomputed",
+"The standard deviation was computed incorrectly, because 92% is impossible",
+"The data are bell-shaped, because most values cluster tightly around the mean, which is exactly what the empirical rule describes",
+"The data are not bell-shaped, because the empirical rule predicts about 68% within ±1 SD"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "With no assumption about shape, what minimum share of values must lie within 2.5 standard deviations of the mean?",
+"code": "",
+"options": [
+"At least 84%, from Chebyshev: 1 − 1/2.5²",
+"At least 60%, from 1 − 1/2.5",
+"At least 75%, the same as for 2 standard deviations",
+"About 98.8%, from the normal curve"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "A strongly skewed variable has mean 40 and s = 8. What can be guaranteed about the share of values between 24 and 56?",
+"code": "",
+"options": [
+"About 95% of the values, by the empirical rule applied at ±2 SD, since the rule holds for any distribution once n is moderate",
+"Nothing at all, because skewed data carry no guaranteed coverage",
+"Exactly 68% of the values, by the empirical rule applied at ±2 SD",
+"At least 75%, by Chebyshev; the 95% figure cannot be claimed without a bell shape"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "An intake must reliably receive at least 440 thousand m³ a month. Which station is the defensible choice?",
+"code": "Station X: mean 500, s = 20\nStation Y: mean 500, s = 180\n(thousand m³ per month)",
+"options": [
+"Station Y: its larger spread means that in many months it delivers far more than 500, which more than offsets its dry months",
+"Station X: 440 is 3 SD below its mean, so by Chebyshev at least 88.9% of months fall in 440–560; for Y, 440 is only 0.33 SD below",
+"Either station: they share the same mean of 500, so on average both deliver the required 440 equally reliably each month",
+"Station X: 440 is 3 SD below its mean, so Chebyshev guarantees that its monthly flow can never fall below 440 thousand m³"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "For the rainfall data, x̄ − 2s comes out at about −18 mm. What does this signal?",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.\n\nx̄ = 53.0 mm, s ≈ 35.67 mm",
+"options": [
+"The data are left-skewed, which is why the interval extends below zero on the low side",
+"The normal model does not fit this floored, right-skewed variable, since negative rainfall is impossible",
+"The computation must be wrong, because x̄ − 2s can never come out negative for any real dataset, whatever its shape",
+"About 2.5% of the months must have had negative rainfall, as the normal curve predicts"
+],
+"domain": "Measures of variability"
+},
+{
+"prompt": "What is the percentile rank of the 46 mm station?",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.\n\nPercentile rank = (number below x + 0.5) / n × 100",
+"options": [
+"70th percentile",
+"46th percentile",
+"60th percentile",
+"65th percentile"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Using the course's c = np/100 rule, what is the 90th percentile of the rainfall data?",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"52 mm — c = 9 is whole, so the 9th value is taken",
+"102.5 mm — c = 9 is whole, so average the 9th and 10th values",
+"92.5 mm — the midrange of the smallest and largest",
+"153 mm — c = 9 rounds up to the 10th value"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Find Q1, Q3 and the IQR of the rainfall data using the c = np/100 rule.",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"Q1 = 38, Q3 = 52, IQR = 14",
+"Q1 = 38, Q3 = 49, IQR = 11",
+"Q1 = 40, Q3 = 49, IQR = 9",
+"Q1 = 36.5, Q3 = 50.5, IQR = 14"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Apply the 1.5 × IQR rule to the rainfall data (Q1 = 38, Q3 = 49).",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"Fences at 21.5 and 65.5; nothing is flagged",
+"Fences at 32.0 and 153.0; nothing can be flagged",
+"Fences at 27.0 and 60.0; 153 and 32 are flagged",
+"Fences at 21.5 and 65.5; only 153 is flagged"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "The 153 mm station has z = (153 − 53.0) / 35.67 ≈ 2.80, below the |z| > 3 convention, yet the IQR rule flags it. How should this be resolved?",
+"code": "Monthly rainfall (mm), 10 stations, sorted ascending:\n32  35  38  40  41  44  46  49  52  153\n\nThe 153 mm station sits on a windward slope; its gauge was\ninspected and found to be working correctly.",
+"options": [
+"Trust the IQR flag: the station inflated the very mean and SD used in its own z-score, so z understates how far out it is",
+"Average the two methods and describe the station as a 'moderate outlier', which is the fairest compromise",
+"Trust the z-score: because |z| is below the conventional threshold of 3, the station is ordinary, which means the IQR rule has produced a false alarm here",
+"Neither method can be used, because n = 10 is too small for any measure of position to be meaningful"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "A student scored 82 on Test A (mean 70, s = 6) and 88 on Test B (mean 80, s = 8). On which test was the performance relatively stronger?",
+"code": "",
+"options": [
+"Test B, because 88 is the higher raw score",
+"Test A (z = 2.0) versus Test B (z = 1.0)",
+"Equal, because both scores are above their means",
+"Test B (z = 1.5) versus Test A (z = 1.2)"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "A report on strongly right-skewed travel times reads: 'median 34 min, SD 21 min'. What is the best critique?",
+"code": "",
+"options": [
+"The SD should be replaced by the range, which is more resistant to extreme values",
+"The pairing is mismatched: skewed data call for median + IQR, as symmetric data call for mean + SD",
+"The median should be replaced by the mode, which is preferred for skewed data",
+"Nothing is wrong: any measure of centre may be paired with any measure of spread, provided both are computed correctly"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Which conclusion does this five-number summary support?",
+"code": "Min 32 · Q1 45 · Median 50 · Q3 55 · Max 140",
+"options": [
+"The middle half is tight, and 140 lies beyond the upper fence of 70, so it is an outlier",
+"The distribution is symmetric, because the median sits exactly midway between Q1 and Q3, so the extremes do not matter",
+"There are no outliers, because the whiskers always reach the minimum and maximum",
+"Both 32 and 140 are outliers, because both lie outside the box from Q1 to Q3"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "On a boxplot of station data, the marker for the mean sits outside the box, above Q3. What does this most likely indicate?",
+"code": "",
+"options": [
+"A plotting error, since the mean must always lie inside the box",
+"Strong right skew, with extreme high values dragging the mean beyond the middle 50%",
+"Strong left skew, with a few unusually low values dragging the median down below the mean",
+"A symmetric distribution whose standard deviation happens to be large"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Why does the chapter recommend the IQR rule rather than z-scores for finding outliers?",
+"code": "",
+"options": [
+"z-scores can only be computed for bell-shaped data, so they fail whenever a distribution is skewed or heavy-tailed",
+"IQR fences are built from positions that extreme values cannot move, while z-scores use a mean and SD the outlier itself inflates",
+"The IQR rule always flags more values than z-scores do, and flagging more values is the safer choice for an analyst",
+"z-scores carry the units of the data, so they cannot be compared across stations or across different variables"
+],
+"domain": "Measures of position & outlier detection"
+},
+{
+"prompt": "Compute Pearson's median skewness and interpret it.",
+"code": "Mean 84, median 72, s = 30",
+"options": [
+"−1.2 — strong left skew",
+"+0.4 — approximately symmetric",
+"+12 — extreme right skew",
+"+1.2 — strong right skew"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "On an easy exam, mean = 81, median = 86 and s = 10. What is the shape?",
+"code": "",
+"options": [
+"Strong left skew (coefficient −1.5), with a few low scores dragging the mean down",
+"Strong right skew (coefficient +1.5), with a few high scores pulling the mean up",
+"Moderate left skew (coefficient −0.5)",
+"Approximately symmetric, because the difference is only 5 points"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "Why is hospital length of stay almost always right-skewed?",
+"code": "",
+"options": [
+"Hospitals deliberately cap the longest stays, which piles patients up at the high end of the distribution",
+"It has a hard floor and no ceiling: stays cannot go below zero, but a few patients stay very long",
+"Most patients stay much longer than the average, so the bulk of the data sits on the right",
+"Length of stay is recorded on an ordinal scale, and ordinal variables are always skewed"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "Two distributions have the same standard deviation, but in the first a much larger share of the variance comes from rare extreme values. How is the first best described?",
+"code": "",
+"options": [
+"Right-skewed — heavy tails always mean positive skew, so kurtosis adds nothing new",
+"Leptokurtic — heavier tails, with extremes more common than the normal curve predicts",
+"Platykurtic — the first distribution must have a flatter, lower peak than the second, which is what kurtosis measures",
+"Mesokurtic — distributions with equal standard deviations always have equal kurtosis"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "Daily rainfall shows an excess kurtosis of +4.1. What does this imply for a flood-risk model that assumes normality?",
+"code": "",
+"options": [
+"The model is fine, because kurtosis describes only the peak",
+"The model will be biased only in its estimate of the mean",
+"The model will underestimate the frequency of extreme rainfall days",
+"The model will overestimate the extremes, because a high kurtosis means a sharp, narrow peak"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "A sample of 15 river discharges shows a skewness of +1.6. Before comparing it with a standard using a t-test, what is the most defensible plan?",
+"code": "",
+"options": [
+"Report only the mean and the t-test, because the t-test requires the mean and the median would contradict it",
+"Lead with median and IQR, and consider a transformation or a nonparametric counterpart, since the shape undermines the t-test",
+"Delete the largest discharges one at a time until the skewness falls below 0.5, then run the t-test on the rest",
+"Run the t-test as planned, because skewness is a cosmetic property of the sample that does not affect the validity of the test"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "A variable shows skewness of 0.12, excess kurtosis near 0, and no values beyond the fences. What can the methods section say?",
+"code": "",
+"options": [
+"Nothing can be concluded about shape until a formal normality test has been run",
+"Nonparametric methods are mandatory, because the skewness coefficient is not exactly zero and any skew invalidates the t-test",
+"The data are leptokurtic, so any parametric intervals will be far too narrow",
+"The distribution is approximately symmetric with no extreme outliers, so the parametric toolkit is defensible"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "Using the working guide in the chapter, how should a Pearson median skewness of +0.74 be described?",
+"code": "",
+"options": [
+"Approximately symmetric",
+"Moderate left skew",
+"Strong right skew",
+"Moderate right skew"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "Which variable is most likely to be left-skewed?",
+"code": "",
+"options": [
+"Age at death in a population with high life expectancy",
+"Daily rainfall totals at a lowland station",
+"Pollutant concentration in river water samples",
+"Household income across a large city"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "A histogram has most observations at the high end and a thin tail stretching toward low values. Where will the mean sit relative to the median?",
+"code": "",
+"options": [
+"Above the median",
+"Exactly at the median",
+"Below the median",
+"It cannot be determined from shape"
+],
+"domain": "Shape: skewness and kurtosis"
+},
+{
+"prompt": "A report must let readers rank 14 provinces, with long names, by annual rainfall. Which form does the job best?",
+"code": "",
+"options": [
+"A line chart that connects the provinces in alphabetical order from left to right",
+"A horizontal bar chart sorted from highest to lowest, with labels beside the bars",
+"A pie chart with one slice per province, each slice in its own colour with a legend",
+"A vertical bar chart in alphabetical order, with the province names rotated 90°"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "Which form should show how a reservoir's level changed over 24 consecutive months?",
+"code": "",
+"options": [
+"A pie chart showing each month's share of the two-year total, so the reader can see which months dominated the reservoir's history",
+"A bar chart sorted from the highest month to the lowest month",
+"A scatterplot with the 24 months placed in random order",
+"A line chart, because slope carries the trend and the months are genuinely ordered"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "An analyst summarises 300 commute times with a single bar showing the mean. What is the best critique?",
+"code": "",
+"options": [
+"A single bar is ideal, because one number is the easiest thing for a reader to grasp, and spread can be mentioned in a footnote",
+"A bar of the mean hides shape, spread and outliers; a histogram or boxplot shows the distribution",
+"A pie chart showing each commute time as a slice would have been clearer",
+"The bar should be coloured more brightly so that the mean stands out"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "A team asks whether stations with higher upstream forest cover record lower turbidity. Both variables are quantitative. Which form reveals the relationship, including curvature and influential points?",
+"code": "",
+"options": [
+"A scatterplot of forest cover against turbidity",
+"A dual-axis line chart with stations on the x-axis",
+"Two pie charts, one for each variable",
+"A stacked bar chart of the two variables"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "A dashboard panel's only message is that this year's compliance rate is 94%. What is the best visual?",
+"code": "",
+"options": [
+"A gauge dial with red, amber and green bands",
+"A pie with a 94% slice and a 6% slice, in 3-D",
+"A single bar reaching 94 on a 0–100 axis",
+"No chart: write '94%' large, with a clear label"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "A pie chart of streamflow share has nine slices in no particular order. In which of Fortino's dimensions does its main defect sit?",
+"code": "",
+"options": [
+"Charts — the wrong form was chosen for a ranking task",
+"Purpose — the intended audience was never identified",
+"Signs — the slice labels use the wrong typeface",
+"Story — the chart contains too much data for one slide"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "Bars drawn on an axis starting at 9.8 make a 3% change look like a fourfold one. Under Fortino's framework, which dimension does this primarily violate?",
+"code": "",
+"options": [
+"Perception — the bars are grouped by proximity alone",
+"Signs — the marks no longer mean what readers assume",
+"Charts — a bar chart can never be used for this data",
+"Story — the chart has no narrative arc for the audience"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "Monthly sensor dropout climbed from 3.1% in January to 6.4% in August, after an April firmware update. Which is the best action title?",
+"code": "",
+"options": [
+"Sensor Dropout by Month, With Firmware Notes",
+"An Analysis of Recent Trends in Sensor Dropout",
+"Sensor dropout has doubled since the April firmware update",
+"Figure 4: Monthly Sensor Dropout Rate, January to August, After the Firmware Update"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "Before designing a chart, an analyst asks: 'Whose decision does this serve, what do they already know, and what exact question must it answer?' Which of Fortino's dimensions is she working in?",
+"code": "",
+"options": [
+"Method",
+"Perception",
+"Purpose",
+"Signs"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "A council needs to look up the exact values of six stations on four variables measured in different units. What is the best visual?",
+"code": "",
+"options": [
+"Four pie charts, one for each of the four variables",
+"A 3-D bar chart displaying all 24 values at once",
+"A single combined chart that uses four separate y-axes",
+"A well-built table with right-aligned numbers and consistent decimals"
+],
+"domain": "Choosing a chart & Fortino's six dimensions"
+},
+{
+"prompt": "A single-series bar chart of rainfall by station paints every bar a different hue. What is the problem?",
+"code": "",
+"options": [
+"Each bar also needs a gradient fill so the colours read clearly",
+"The hues should instead run in rainbow order from red to violet",
+"Nothing — using more colours makes a single-series chart more engaging, and engagement is what keeps the reader looking",
+"It implies the stations differ in kind when only their values differ; one series needs one colour"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A map shows total annual rainfall by province. Which colour scheme fits this job?",
+"code": "",
+"options": [
+"Sequential — one hue running from light to dark",
+"Categorical — a distinct hue for each province",
+"Status — green, amber and red",
+"A rainbow running from red to violet"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A map shows each province's rainfall anomaly: above or below its long-term mean. Which colour scheme fits?",
+"code": "",
+"options": [
+"Sequential — one hue running from light to dark across all provinces",
+"Categorical — a distinct, fixed hue assigned to each province",
+"A single uniform hue, because anomalies are simply numbers",
+"Diverging — two hues with a neutral grey midpoint at zero anomaly"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A chart uses red, amber and green as status colours, and elsewhere the same red is used for 'Series 4'. Why is this a defect?",
+"code": "",
+"options": [
+"Red is never allowed in a data visualisation under any circumstances, because it alarms readers whatever it encodes",
+"Status colours should be reused for every series, to keep the chart consistent",
+"Status colours are reserved; reusing red for a series makes readers read an alarm where none exists",
+"Series colours must always be drawn from a pastel palette instead"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "Quarterly dissolved oxygen rose from 48.0 to 50.4 mg/L. On a bar chart whose axis starts at 47.0, how do the visual and actual changes compare?",
+"code": "",
+"options": [
+"The last bar looks 1.05 times the first, matching the 5% increase",
+"The last bar looks 2.4 times the first, while the actual increase is 2.4%",
+"The last bar looks 3.4 times the first, but the actual increase is only 5%",
+"The bars look identical, because the truncation cancels out"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A line chart of reservoir level uses a y-axis running from 4.0 to 4.6 m rather than from zero. Is this acceptable?",
+"code": "",
+"options": [
+"Yes, provided the axis is clearly labelled — a line encodes change through slope, not quantity through length",
+"No — a line chart of a single measure must always use two y-axes to show its range",
+"Yes, but only if the line is drawn in 3-D so that the reader can judge its height",
+"No — every chart, including a line chart, must start its y-axis at zero, otherwise it exaggerates the change in level"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "To compare rainfall (mm) and reservoir level (m) honestly, both are indexed to January = 100. What are the June values?",
+"code": "January: rainfall 160 mm, reservoir level 4.0 m\nJune:    rainfall 216 mm, reservoir level 4.3 m",
+"options": [
+"Rainfall 216, reservoir level 4.3",
+"Rainfall 135, reservoir level 135",
+"Rainfall 56, reservoir level 0.3",
+"Rainfall 135, reservoir level 107.5"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A palette of nine pale pastels fails the chroma floor and shows adjacent pairs with ΔE below 15. What is the best response?",
+"code": "",
+"options": [
+"Look at the colours on screen and judge by eye whether they are different enough to use",
+"Switch to a full rainbow palette, because rainbow hues are always distinguishable to every reader",
+"Keep each hue but push its lightness and chroma into the passing band, then re-validate the palette computationally",
+"Keep the pastels for the data series, since a soft, pleasant palette makes readers engage with the chart for longer"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "A multi-series chart uses a validated, accessible palette. What should still be added?",
+"code": "",
+"options": [
+"A second encoding — a legend and direct labels — so identity never depends on colour alone",
+"Nothing more — once a palette has passed every validation check, legends and direct labels become redundant clutter",
+"A gradient background behind each series to separate them visually",
+"Thicker borders around every mark so the colours stand out more"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "Why does the chapter single out 3-D extrusion as the worst form of chart junk?",
+"code": "",
+"options": [
+"It adds a dimension carrying no information while making the true height of each bar ambiguous",
+"It makes the chart much slower to render on older computers and projectors used in meetings",
+"It always forces the designer to use far too many colours",
+"It is harder to reproduce when printed in black and white"
+],
+"domain": "Colour, chart junk & axis integrity"
+},
+{
+"prompt": "Which row is NOT a data defect and should be retained?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.",
+"options": [
+"Row 3, Binangonan — the repeated record confirms the first one",
+"Row 9, Napindan Channel — a verified, genuinely high inflow reading",
+"Row 4, Taytay — the zero is a legitimate low reading",
+"Row 10, Jalajala — large values are normal at the lake's edge"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "What is the correct treatment for Row 10 (Jalajala)?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.",
+"options": [
+"Delete it as an outlier, with no further note in the report or the audit trail, since a value that large cannot be real",
+"Keep 22,000 as entered, since the analyst must never change what was recorded",
+"Correct it to 22 µg/L after verifying the field sheet; if that cannot be verified, treat it as missing",
+"Replace it with the network median, so that n is preserved for every computation"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "What is the correct treatment for Row 4 (Taytay)?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.",
+"options": [
+"Recode the 0 as missing, exclude it from chlorophyll computations, and disclose the omission",
+"Replace the 0 with the network mean, so that n is preserved for the chlorophyll statistics",
+"Keep the 0, because it is a recorded number, and recorded numbers must be used exactly as they appear in the extract",
+"Delete the whole Taytay row, including its clarity rating, without noting it anywhere"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "What is the correct treatment for Row 5's rating of 7.8 (Muntinlupa)?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.",
+"options": [
+"Treat it as a unit error and divide it by 1,000, as with the Jalajala reading",
+"Keep 7.8, because a rating above 5 simply shows that Muntinlupa has exceptional clarity compared with the rest of the lake",
+"Scale mismatch: exclude it from the rating mean and re-collect; any rescaling to 3.9 must be declared",
+"Treat it as an outlier and delete the entire Muntinlupa record from the file"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "After cleaning (duplicate removed, Jalajala corrected to 22, Taytay excluded, Napindan retained), what are the mean and median chlorophyll?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.\n\nCleaned, sorted (n = 8): 18 19 20 21 22 23 24 58",
+"options": [
+"Mean 21.5 µg/L; median 25.63 µg/L",
+"Mean 21.0 µg/L; median 21.0 µg/L",
+"Mean 22.82 µg/L; median 21.0 µg/L",
+"Mean 25.63 µg/L; median 21.5 µg/L"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "For the cleaned chlorophyll data, what are the IQR and upper fence, and is Napindan flagged?",
+"code": "Cleaned, sorted (n = 8): 18 19 20 21 22 23 24 58\nUse c = np/100 for the quartiles.",
+"options": [
+"IQR = 5 (Q1 19, Q3 24); upper fence 31.5; Napindan is flagged",
+"IQR = 4 (Q1 19.5, Q3 23.5); upper fence 27.5; nothing is flagged",
+"IQR = 4 (Q1 19.5, Q3 23.5); upper fence 29.5; Napindan at 58 is flagged",
+"IQR = 40 (Q1 18, Q3 58); upper fence 118; nothing is flagged"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "An assistant averaged all ten rows as received and reported a mean chlorophyll of 2,220.1 µg/L. Which defect is chiefly responsible for this absurd figure?",
+"code": "Laguna Lake monitoring network — monthly extract (as received)\nCodebook: Chlorophyll-a in µg/L; Clarity rating on a 1–5 scale\n\nRow  Station            Chl-a (µg/L)   Rating\n 1   Binangonan               18         3.9\n 2   Cardona                  21         4.1\n 3   Binangonan               18         3.9\n 4   Taytay                    0         4.0\n 5   Muntinlupa               24         7.8\n 6   Calamba                  19         3.8\n 7   Sta. Cruz                23         4.2\n 8   Los Baños                20         4.0\n 9   Napindan Channel         58         4.3\n10   Jalajala             22,000         4.1\n\nContext: Taytay's team was on leave and submitted no chlorophyll\nfigure. Muntinlupa's team uses a tablet set to a 1–10 scale.\nNapindan Channel is the lake's main inflow gauge; its readings are\nverified and genuinely high. Jalajala's field sheet reports ng/L.",
+"options": [
+"The zero in Row 4, which inflates the mean by adding an extra observation",
+"Napindan's genuine high reading in Row 9, which is nearly triple the others",
+"The unit error in Row 10, which on its own contributes 22,000 of the 22,201 total",
+"The duplicate in Row 3, which counts Binangonan's reading twice and inflates both the total and the count"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "The cleaned data show right skew (Pearson ≈ +0.94) and one confirmed outlier. Which reporting package is most defensible?",
+"code": "Cleaned (n = 8): mean 25.63, median 21.5, s ≈ 13.23, IQR 4",
+"options": [
+"Lead with median 21.5 and IQR 4; label the mean as a network average; disclose Napindan and the omissions",
+"Delete Napindan, then report the mean and SD of the remaining stations as the single network figure",
+"Report only the mean and the standard deviation, because they are the statistics that use every station's reading in the network",
+"Report the median together with the standard deviation, since that pairing carries the most information"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "Including Napindan, the network CV is about 51.6%; the seven ordinary stations alone have a CV of about 10.3%. An assistant recommends recalibrating every station 'to reduce inconsistency'. What should the corrected figures recommend instead?",
+"code": "Seven ordinary stations: 18 19 20 21 22 23 24 (mean 21, s ≈ 2.16)",
+"options": [
+"Recalibrate every station, because a network CV of 51.6% proves the gauges are unreliable and inconsistent with one another",
+"Recalibrate only Napindan, because its reading disagrees so sharply with every other station",
+"No recalibration: the ordinary stations agree; report Napindan separately and adopt one shared template",
+"Recalibrate the seven ordinary stations, because a CV of 10.3% is too high for lake monitoring"
+],
+"domain": "Integrated case: the Laguna Lake network"
+},
+{
+"prompt": "A slide plots chlorophyll (left axis) and clarity rating (right axis, 3.5 to 8.0) as two lines across the station names, titled 'Greener stations are clearer stations'. Which replacement is most defensible?",
+"code": "",
+"options": [
+"Keep the same dual-axis chart but render it in 3-D, so that the title's claim looks more convincing",
+"Keep the dual-axis chart, but rescale both axes until the two lines overlap exactly, which makes the relationship easier to see",
+"A scatterplot of chlorophyll against rating: one point per station, no lines, a 1–5 axis, Muntinlupa excluded",
+"Replace it with a pie chart showing each station's share of the network's total chlorophyll reading"
+],
+"domain": "Integrated case: the Laguna Lake network"
+}
+];
+const DOMAINS = ["Why description comes first & missing data", "Outliers, data defects & the audit trail", "Frequency distributions & cross-tabulation", "Measures of centre", "Measures of variability", "Measures of position & outlier detection", "Shape: skewness and kurtosis", "Choosing a chart & Fortino's six dimensions", "Colour, chart junk & axis integrity", "Integrated case: the Laguna Lake network"];
+const LETTERS = ["A","B","C","D"];
+const WEAK_THRESHOLD = 0.60;   // domains below this are flagged for review
+/* Response-checking data (encoded). Not displayed anywhere on the page. */
+const _K = "S0lLSkpJSEhISUtJSEpLSktKSUtIS0hJSkpKSElKSktIS0hISElLSElJSktKS0hLSUlLSUlLSElJSElJS0hJSUpJS0tISklLSUhLSElKSktLSEtKSkhLSkhISUpISktKSkhKSg==";
+const _key = () => Array.from(atob(_K)).map(c => "ABCD".indexOf(String.fromCharCode(c.charCodeAt(0)-7)));
+
+const state = { i:0, answers:new Array(QUESTIONS.length).fill(null), submitted:false, profile:{} };
+
+const $ = id => document.getElementById(id);
+const startScreen=$("startScreen"), quizScreen=$("quizScreen"), doneScreen=$("doneScreen"), progress=$("progress");
+
+/* ---- Coverage list on the start screen ---- */
+DOMAINS.forEach(d => {
+  const li=document.createElement("li"); li.textContent=d; $("coverList").appendChild(li);
+});
+$("destNote").textContent = "Responses are sent to " + CONFIG.instructorEmail + " · deadline " + CONFIG.deadlineLabel;
+
+/* ---- Deadline countdown ---- */
+const DEADLINE = new Date(CONFIG.deadline).getTime();
+const isLate = () => Date.now() > DEADLINE;
+function tickDeadline(){
+  const left = DEADLINE - Date.now();
+  const bar = $("deadlineBar"), cd = $("countdown");
+  if(left <= 0){
+    bar.classList.add("late");
+    cd.textContent = "Deadline has passed — submissions are marked late";
+    return;
+  }
+  const h = Math.floor(left/3600000), m = Math.floor(left%3600000/60000), sec = Math.floor(left%60000/1000);
+  cd.textContent = (h>0 ? h+"h " : "") + String(m).padStart(2,"0") + "m " + String(sec).padStart(2,"0") + "s left";
+}
+tickDeadline(); setInterval(tickDeadline, 1000);
+
+/* ---- Start ---- */
+$("startBtn").addEventListener("click", () => {
+  const name=$("fName").value.trim();
+  if(!name){ $("fName").focus(); $("fName").style.borderColor="var(--bad)"; return; }
+  state.profile = {
+    name,
+    studentId: $("fId").value.trim() || "(not given)",
+    section: $("fSection").value.trim() || "(not given)",
+    email: $("fEmail").value.trim() || "(not given)"
+  };
+  startScreen.classList.add("hide");
+  progress.classList.remove("hide");
+  quizScreen.classList.remove("hide");
+  render();
+});
+
+/* ---- Render current question ---- */
+function render(){
+  const q = QUESTIONS[state.i];
+  $("qBadge").textContent = "Q" + (state.i+1);
+  $("qPrompt").textContent = q.prompt;
+  $("qDomain").textContent = q.domain;
+
+  const code = $("qCode");
+  if(q.code && q.code.trim().length){ code.style.display="block"; code.textContent = q.code; }
+  else { code.style.display="none"; }
+
+  const ul = $("qOpts"); ul.innerHTML="";
+  q.options.forEach((opt, idx) => {
+    const li=document.createElement("li");
+    li.className="opt" + (state.answers[state.i]===idx ? " sel":"");
+    li.tabIndex=0;
+    li.setAttribute("role","button");
+    li.innerHTML = '<span class="let">'+LETTERS[idx]+'</span><span class="txt"></span>';
+    li.querySelector(".txt").textContent = opt;
+    const choose = () => {
+      state.answers[state.i]=idx;
+      [...ul.children].forEach(c=>c.classList.remove("sel"));
+      li.classList.add("sel");
+      $("nextBtn").disabled=false;
+      updateProgress();
+    };
+    li.addEventListener("click", choose);
+    li.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); choose(); } });
+    ul.appendChild(li);
+  });
+
+  $("prevBtn").disabled = (state.i===0);
+  $("nextBtn").disabled = (state.answers[state.i]===null);
+  $("nextBtn").textContent = (state.i===QUESTIONS.length-1) ? "Finish" : "Next";
+  updateProgress();
+}
+
+function updateProgress(){
+  const total=QUESTIONS.length;
+  const answered=state.answers.filter(a=>a!==null).length;
+  $("qof").textContent = "Question " + (state.i+1) + " of " + total;
+  $("answeredCount").textContent = answered + " answered";
+  $("barfill").style.width = ((state.i+1)/total*100) + "%";
+}
+
+/* ---- Navigation ---- */
+$("nextBtn").addEventListener("click", () => {
+  if(state.answers[state.i]===null) return;          // next item revealed only after answering
+  if(state.i < QUESTIONS.length-1){ state.i++; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else { finish(); }
+});
+$("prevBtn").addEventListener("click", () => {
+  if(state.i>0){ state.i--; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+});
+$("reviewBtn").addEventListener("click", () => {
+  if(state.submitted) return;
+  doneScreen.classList.add("hide");
+  progress.classList.remove("hide");
+  quizScreen.classList.remove("hide");
+  state.i=QUESTIONS.length-1; render();
+});
+
+/* ---- Finish: completion screen, no score shown ---- */
+function finish(){
+  quizScreen.classList.add("hide");
+  progress.classList.add("hide");
+  doneScreen.classList.remove("hide");
+  $("sName").textContent=state.profile.name;
+  $("sId").textContent=state.profile.studentId;
+  $("sSection").textContent=state.profile.section;
+  $("sAnswered").textContent = state.answers.filter(a=>a!==null).length + " / " + QUESTIONS.length;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---- Silent scoring and diagnostic profile ---- */
+function grade(){
+  const KEY=_key();
+  let correct=0;
+  const detail=[];
+  const byDomain={};
+  DOMAINS.forEach(d => byDomain[d]={correct:0,total:0,missed:[]});
+
+  QUESTIONS.forEach((q,idx) => {
+    const chosen=state.answers[idx];
+    const isCorrect=(chosen===KEY[idx]);
+    if(isCorrect) correct++;
+    byDomain[q.domain].total++;
+    if(isCorrect) byDomain[q.domain].correct++;
+    else byDomain[q.domain].missed.push("Q"+(idx+1));
+    detail.push(
+      "Q"+String(idx+1).padStart(2,"0")+
+      " | "+(chosen===null ? "-" : LETTERS[chosen])+
+      " | key "+LETTERS[KEY[idx]]+
+      " | "+(isCorrect ? "correct" : "wrong")+
+      " | "+q.domain
+    );
+  });
+
+  const total=QUESTIONS.length;
+  const pct=Math.round(correct/total*1000)/10;
+
+  const profile=[]; const weak=[];
+  DOMAINS.forEach(d => {
+    const b=byDomain[d];
+    const p=Math.round(b.correct/b.total*100);
+    const flag = (b.correct/b.total) < WEAK_THRESHOLD ? "  << review" : "";
+    profile.push(d.padEnd(40,".")+" "+b.correct+"/"+b.total+" ("+p+"%)"+flag);
+    if((b.correct/b.total) < WEAK_THRESHOLD) weak.push(d+" ("+b.correct+"/"+b.total+", missed "+b.missed.join(", ")+")");
+  });
+
+  return { correct, total, pct, detail, profile, weak };
+}
+
+/* ---- Send ---- */
+function setStatus(kind,msg){
+  const s=$("statusMsg"); s.className="statusmsg show "+kind; s.textContent=msg;
+}
+
+$("sendBtn").addEventListener("click", async () => {
+  if(state.submitted) return;
+  const r = grade();
+  const late = isLate();
+  const body = {
+    _subject: (late ? "[LATE] " : "") + "[STAT 210 Chapter02 Reinforcement Test] "+state.profile.name+" — "+r.correct+"/"+r.total,
+    to_instructor: CONFIG.instructorEmail,
+    test: CONFIG.testName,
+    submitted_at: new Date().toString(),
+    deadline: CONFIG.deadlineLabel,
+    on_time: late ? "NO — submitted after the deadline" : "Yes",
+    name: state.profile.name,
+    student_number: state.profile.studentId,
+    section: state.profile.section,
+    respondent_email: state.profile.email,
+    score: r.correct + " / " + r.total,
+    percentage: r.pct + "%",
+    items_answered: state.answers.filter(a=>a!==null).length + " / " + r.total,
+    diagnostic_profile: r.profile.join("\n"),
+    areas_for_review: r.weak.length ? r.weak.join("\n") : "None below " + Math.round(WEAK_THRESHOLD*100) + "%",
+    item_breakdown: r.detail.join("\n")
+  };
+
+  if(CONFIG.endpoint.indexOf("REPLACE_WITH_FORMSPREE_ID") !== -1){
+    setStatus("info","The submission address has not been set up yet, so your responses were not sent. Please tell your instructor before closing this page.");
+    return;
+  }
+
+  $("sendBtn").disabled=true; $("reviewBtn").disabled=true;
+  setStatus("info","Sending your responses to your instructor…");
+  try{
+    const res = await fetch(CONFIG.endpoint, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+      body: JSON.stringify(body)
+    });
+    if(res.ok){
+      state.submitted=true;
+      setStatus("good", late ? "Your responses have been sent, but after the 9:00 PM deadline, so they are marked late. You may now close this page." : "Your responses have been sent. You may now close this page.");
+      $("sendBtn").textContent="Sent";
+    } else {
+      $("sendBtn").disabled=false; $("reviewBtn").disabled=false;
+      setStatus("bad","The server rejected the submission. Check your internet connection and select Send again; if it keeps failing, tell your instructor.");
+    }
+  }catch(err){
+    $("sendBtn").disabled=false; $("reviewBtn").disabled=false;
+    setStatus("bad","The responses could not be sent because the connection failed. Check your internet connection and select Send again.");
+  }
+});
+</script>
+</body>
+</html>
